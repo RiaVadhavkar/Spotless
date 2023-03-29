@@ -1,242 +1,270 @@
-import React from "react";
+import { Fragment } from "react";
+import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { BsPersonFill } from "react-icons/bs";
 import logo from "../assets/logo.png";
 
-const Header = () => {
+// <script src="https://kit.fontawesome.com/a362661c96.js" crossorigin="anonymous">
+// </script>
+const navigation = [
+  { name: "List", href: "#", current: true }, // TODO fix highlighting
+  { name: "Favorites", href: "#", current: false },
+  { name: "Stats", href: "#", current: false },
+  { name: "Social", href: "#", current: false },
+  { name: "Settings", href: "#", current: false },
+];
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(" ");
+}
+
+function HeaderStart() {
   return (
-    //   <nav
-    // class="relative flex w-full flex-wrap items-center justify-between bg-neutral-900 py-3 text-neutral-200 shadow-lg lg:flex-wrap lg:justify-start"
-    // data-te-navbar-ref></nav>
-    <nav
-      id="header-nav"
-      class="relative flex w-full flex-wrap items-center justify-between bg-neutral-900 py-3 text-neutral-200 shadow-lg lg:flex-wrap lg:justify-start"
-      data-te-navbar-ref
-      role="navigation"
-      aria-label="main-navigation"
-    >
-      <div class="flex w-full flex-wrap items-center justify-between px-6">
-        <button
-          class="block border-0 bg-transparent py-2 px-2.5 text-neutral-200 hover:no-underline hover:shadow-none focus:no-underline focus:shadow-none focus:outline-none focus:ring-0 lg:hidden"
-          type="button"
-          data-te-collapse-init
-          data-te-target="#navbarSupportedContent4"
-          aria-controls="navbarSupportedContent4"
-          aria-expanded="false"
-          aria-label="Toggle navigation"
-        >
-          <span class="[&>svg]:w-7">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              fill="currentColor"
-              class="h-7 w-7"
-            >
-              <path
-                fill-rule="evenodd"
-                d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75zM3 12a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75a.75.75 0 01-.75-.75z"
-                clip-rule="evenodd"
-              />
-            </svg>
-          </span>
-        </button>
-        <div
-          class="!visible hidden flex-grow basis-[100%] items-center lg:!flex lg:basis-auto"
-          id="navbarSupportedContent4"
-          data-te-collapse-item
-        >
-          <a class="pr-2 text-xl font-semibold text-white" href="#">
-            Navbar
-          </a>
-          <ul
-            class="list-style-none mr-auto flex flex-col pl-0 lg:flex-row"
-            data-te-navbar-nav-ref
-          >
-            <li class="p-2" data-te-nav-item-ref>
-              <a
-                class="text-white disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-                href="#"
-                data-te-nav-link-ref
-              >
-                Dashboard
-              </a>
-            </li>
-            <li class="p-2" data-te-nav-item-ref>
-              <a
-                class="p-0 text-white opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-                href="#"
-                data-te-nav-link-ref
-              >
-                Team
-              </a>
-            </li>
-            <li class="p-2" data-te-nav-item-ref>
-              <a
-                class="p-0 text-white opacity-60 hover:opacity-80 focus:opacity-80 disabled:text-black/30 lg:px-2 [&.active]:text-black/90 dark:[&.active]:text-neutral-400"
-                href="#"
-                data-te-nav-link-ref
-              >
-                Projects
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div class="relative flex items-center">
-          <a
-            class="mr-4 text-white opacity-60 hover:opacity-80 focus:opacity-80"
-            href="#"
-          >
-            <span class="[&>svg]:w-5">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                class="h-5 w-5"
-              >
-                <path d="M2.25 2.25a.75.75 0 000 1.5h1.386c.17 0 .318.114.362.278l2.558 9.592a3.752 3.752 0 00-2.806 3.63c0 .414.336.75.75.75h15.75a.75.75 0 000-1.5H5.378A2.25 2.25 0 017.5 15h11.218a.75.75 0 00.674-.421 60.358 60.358 0 002.96-7.228.75.75 0 00-.525-.965A60.864 60.864 0 005.68 4.509l-.232-.867A1.875 1.875 0 003.636 2.25H2.25zM3.75 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0zM16.5 20.25a1.5 1.5 0 113 0 1.5 1.5 0 01-3 0z" />
-              </svg>
-            </span>
-          </a>
-          <div class="relative" data-te-dropdown-ref>
-            <a
-              class="hidden-arrow mr-4 flex items-center text-white opacity-60 hover:opacity-80 focus:opacity-80"
-              href="#"
-              id="dropdownMenuButton1"
-              role="button"
-              data-te-dropdown-toggle-ref
-              aria-expanded="false"
-            >
-              <span class="[&>svg]:w-5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="h-5 w-5"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M5.25 9a6.75 6.75 0 0113.5 0v.75c0 2.123.8 4.057 2.118 5.52a.75.75 0 01-.297 1.206c-1.544.57-3.16.99-4.831 1.243a3.75 3.75 0 11-7.48 0 24.585 24.585 0 01-4.831-1.244.75.75 0 01-.298-1.205A8.217 8.217 0 005.25 9.75V9zm4.502 8.9a2.25 2.25 0 104.496 0 25.057 25.057 0 01-4.496 0z"
-                    clip-rule="evenodd"
+    <Disclosure as="nav" className="bg-neutral-900">
+      {({ open }) => (
+        <>
+          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div className="relative flex h-20 items-center justify-between">
+              {/* For MOBILE DEVICES */}
+              {/* <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
+                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+                  <span className="sr-only">Open main menu</span>
+                  {open ? (
+                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
+                  ) : (
+                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
+                  )}
+                </Disclosure.Button>
+              </div> */}
+
+              {/* Logo and Name */}
+              <div className="flex auto items-center justify-center sm:items-stretch sm:justify-start">
+                <div className="flex items-center">
+                  <img
+                    className="h-12 w-auto lg:block"
+                    src={logo}
+                    alt="Spotless"
                   />
-                </svg>
-              </span>
-              <span class="absolute -mt-2.5 ml-2 rounded-full bg-red-700 py-0 px-1.5 text-xs text-white">
-                1
-              </span>
-            </a>
-            <ul
-              class="absolute left-auto right-0 z-[1000] float-left m-0 mt-1 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block"
-              aria-labelledby="dropdownMenuButton1"
-              data-te-dropdown-menu-ref
-            >
-              <li>
-                <a
-                  class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-                  href="#"
-                  data-te-dropdown-item-ref
+                  &nbsp;
+                  <span class="text-spotless-green text-5xl font-semibold">
+                    Spot
+                  </span>
+                  <span class="text-white text-5xl font-semibold">less</span>
+                </div>
+              </div>
+
+              {/* Navigation */}
+              {/* <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
+                <div className="hidden sm:ml-6 sm:block">
+                  <div className="flex space-x-4">
+                    {navigation.map((item) => (
+                      <a
+                        key={item.name}
+                        href={item.href}
+                        className={classNames(
+                          item.current
+                            ? "bg-gray-900 text-white"
+                            : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                          "rounded-md px-3 py-2 text-sm font-medium"
+                        )}
+                        aria-current={item.current ? "page" : undefined}
+                      >
+                        {item.name}
+                      </a>
+                    ))}
+                  </div>
+                </div>
+              </div> */}
+
+              {/* Login/Logout Button */}
+              <div className="absolute inset-y-0 right-0 flex w-auto items-center sm:static sm:inset-auto">
+                <button
+                  type="button"
+                  className="flex justify-between items-center w-auto rounded-full bg-spotless-green px-4 py-2 text-white hover:text-white hover:text-opacity-80 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900"
                 >
-                  Action
-                </a>
-              </li>
-              <li>
-                <a
-                  class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-                  href="#"
-                  data-te-dropdown-item-ref
-                >
-                  Another action
-                </a>
-              </li>
-              <li>
-                <a
-                  class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-                  href="#"
-                  data-te-dropdown-item-ref
-                >
-                  Something else here
-                </a>
-              </li>
-            </ul>
+                  <span className="text-xl font-semibold">SIGN UP / LOGIN</span>
+                </button>
+
+                {/* Profile Dropdown */}
+                {/* <Menu as="div" className="relative ml-3">
+                  <div>
+                    <Menu.Button className="flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
+                      <span className="sr-only">Open user menu</span>
+                      <img
+                        className="h-8 w-8 rounded-full"
+                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        alt=""
+                      />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Your Profile
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Settings
+                          </a>
+                        )}
+                      </Menu.Item>
+                      <Menu.Item>
+                        {({ active }) => (
+                          <a
+                            href="#"
+                            className={classNames(
+                              active ? "bg-gray-100" : "",
+                              "block px-4 py-2 text-sm text-gray-700"
+                            )}
+                          >
+                            Sign out
+                          </a>
+                        )}
+                      </Menu.Item>
+                    </Menu.Items>
+                  </Transition>
+                </Menu> */}
+              </div>
+            </div>
           </div>
-          <div class="relative" data-te-dropdown-ref>
-            <a
-              class="hidden-arrow flex items-center whitespace-nowrap transition duration-150 ease-in-out motion-reduce:transition-none"
-              href="#"
-              id="dropdownMenuButton2"
-              role="button"
-              data-te-dropdown-toggle-ref
-              aria-expanded="false"
-            >
-              <img
-                src="https://tecdn.b-cdn.net/img/new/avatars/2.jpg"
-                class="rounded-full"
-                style="height: 25px; width: 25px"
-                alt=""
-                loading="lazy"
-              />
-            </a>
-            <ul
-              class="absolute left-auto right-0 z-[1000] float-left m-0 mt-1 hidden min-w-max list-none overflow-hidden rounded-lg border-none bg-white bg-clip-padding text-left text-base shadow-lg dark:bg-neutral-700 [&[data-te-dropdown-show]]:block"
-              aria-labelledby="dropdownMenuButton2"
-              data-te-dropdown-menu-ref
-            >
-              <li>
-                <a
-                  class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-                  href="#"
-                  data-te-dropdown-item-ref
+
+          {/* <Disclosure.Panel className="sm:hidden">
+            <div className="space-y-1 px-2 pt-2 pb-3">
+              {navigation.map((item) => (
+                <Disclosure.Button
+                  key={item.name}
+                  as="a"
+                  href={item.href}
+                  className={classNames(
+                    item.current
+                      ? "bg-gray-900 text-white"
+                      : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                    "block rounded-md px-3 py-2 text-base font-medium"
+                  )}
+                  aria-current={item.current ? "page" : undefined}
                 >
-                  Action
-                </a>
-              </li>
-              <li>
-                <a
-                  class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-                  href="#"
-                  data-te-dropdown-item-ref
-                >
-                  Another action
-                </a>
-              </li>
-              <li>
-                <a
-                  class="block w-full whitespace-nowrap bg-transparent py-2 px-4 text-sm font-normal text-neutral-700 hover:bg-neutral-100 active:text-neutral-800 active:no-underline disabled:pointer-events-none disabled:bg-transparent disabled:text-neutral-400 dark:text-neutral-200 dark:hover:bg-white/30"
-                  href="#"
-                  data-te-dropdown-item-ref
-                >
-                  Something else here
-                </a>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </div>
-      {/* <div class="navbar-brand">
-        <a
-          class="navbar-item has-text-white is-size-3 has-text-weight-bold"
-          href="index.html"
-        >
-          <img src={logo} alt="logo" />
-          <span class="has-text-success">Spot</span>
-          <span>less</span>
-        </a>
-      </div>
-      <div class="navbar-menu">
-        <div class="navbar-start">
-          <a class="navbar-item has-text-white is-size-4">List</a>
-          <a class="navbar-item has-text-white is-size-4">Favorites</a>
-          <a class="navbar-item has-text-white is-size-4">Stats</a>
-          <a class="navbar-item has-text-white is-size-4">Social</a>
-          <a class="navbar-item has-text-white is-size-4">Settings</a>
-        </div>
-        <div class="navbar-end">
-          <div class="navbar-item">
-            <a class="button has-background-success has-text-white has-text-weight-bold is-rounded">
-              <i class="fa-solid fa-user"></i>&nbsp;LOGOUT
-            </a>
-          </div>
-        </div>
-      </div> */}
-    </nav>
+                  {item.name}
+                </Disclosure.Button>
+              ))}
+            </div>
+          </Disclosure.Panel> */}
+        </>
+      )}
+    </Disclosure>
   );
-};
+}
+
+function HeaderRegistration() {
+  return (
+    <Disclosure as="nav" className="bg-neutral-900">
+      {({ open }) => (
+        <>
+          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div className="relative flex h-20 items-center justify-between">
+              {/* Logo and Name */}
+              <div className="flex auto items-center justify-center sm:items-stretch sm:justify-start">
+                <div className="flex items-center">
+                  <img
+                    className="h-12 w-auto lg:block"
+                    src={logo}
+                    alt="Spotless"
+                  />
+                  &nbsp;
+                  <span class="text-spotless-green text-5xl font-semibold">
+                    Spot
+                  </span>
+                  <span class="text-white text-5xl font-semibold">less</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </Disclosure>
+  );
+}
+
+function Header() {
+  return (
+    <Disclosure as="nav" className="bg-neutral-900">
+      {({ open }) => (
+        <>
+          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            <div className="relative flex h-20 items-center justify-between">
+              {/* Logo and Name */}
+              <div className="flex auto items-center justify-center sm:items-stretch sm:justify-start">
+                <img
+                  className="h-12 w-auto lg:block"
+                  src={logo}
+                  alt="Spotless"
+                />
+                &nbsp;
+                <span class="text-spotless-green text-5xl font-semibold">
+                  Spot
+                </span>
+                <span class="text-white text-5xl font-semibold">less</span>
+              </div>
+
+              {/* Navigation */}
+              <div className="flex grow items-center justify-evenly">
+                {navigation.map((item) => (
+                  <a
+                    key={item.name}
+                    href={item.href}
+                    className={classNames(
+                      item.current
+                        ? "underline underline-offset-8 decoration-2 decoration-spotless-green"
+                        : "hover:underline hover:underline-offset-8 hover:decoration-2 hover:decoration-spotless-green",
+                      "text-white px-3 py-2 text-xl font-medium"
+                    )}
+                    aria-current={item.current ? "page" : undefined}
+                  >
+                    {item.name}
+                  </a>
+                ))}
+              </div>
+
+              {/* Login/Logout Button */}
+              <div className="absolute inset-y-0 right-0 flex w-auto items-center sm:static sm:inset-auto">
+                <button
+                  type="button"
+                  className="flex justify-between items-center w-auto rounded-full bg-spotless-green px-4 py-2 text-white hover:text-white hover:text-opacity-80 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900"
+                >
+                  <BsPersonFill className="h-6 w-6" aria-hidden="true" />
+                  &nbsp;
+                  <span className="text-xl font-semibold">LOGOUT</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+    </Disclosure>
+  );
+}
 
 export default Header;

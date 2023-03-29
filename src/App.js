@@ -1,10 +1,9 @@
-import Header from "./components/Header.js";
-import Navbar from "./components/Navbar";
+import HeaderBase from "./components/Header";
 
 function App() {
   return (
     <div className="App">
-      <Navbar></Navbar>
+      <HeaderBase></HeaderBase>
     </div>
   );
 }
