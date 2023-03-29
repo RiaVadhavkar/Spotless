@@ -1,15 +1,4 @@
 @import url("https://fonts.googleapis.com/css?family=Manrope");
-
-
-body {
-  margin: 0;
-  is-family-primary: 'Manrope';
-  font-family: 'manrope' !important;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
