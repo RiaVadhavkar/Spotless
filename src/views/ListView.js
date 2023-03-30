@@ -6,8 +6,11 @@ export default function ListView() {
     <Disclosure as="body" className="bg-spotless-green text-white">
       {({ open }) => (
         <>
+        {/* Banner */}
           <div class="banner" className="bg-spotless-dark-green h-36"></div>
+          {/* Main Page */}
           <div className="relative flex h-auto items-center justify-between font-semibold mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            {/* User Profile */}
             <section
               class="user-profile"
               className="bg-neutral-900 rounded-2xl h-max w-64 -translate-y-16 flex flex-col items-center justify-center"
