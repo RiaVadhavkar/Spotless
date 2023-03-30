@@ -14,7 +14,7 @@
 ## Architecture
 ### Components
 - header
-  - icon + logo
+  - icon + logo = Profile.js
   - navigation
   - login/logout
 - footer
@@ -40,4 +40,3 @@
 - stats
 - social
 - settings
-

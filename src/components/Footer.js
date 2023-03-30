@@ -1,26 +1,49 @@
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BsPersonFill } from "react-icons/bs";
+import { BsFacebook, BsTwitter, BsInstagram } from "react-icons/bs";
+import { FaTiktok, FaYoutube, FaDiscord } from "react-icons/fa";
 
 function Footer() {
   return (
-    <Disclosure as="nav" className="bg-neutral-900">
+    <Disclosure as="footer" className="bg-neutral-900 text-white">
       {({ open }) => (
         <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-12 items-center justify-between">
-              {/* Login/Logout Button */}
-              <div className="absolute inset-y-0 right-0 flex w-auto items-center sm:static sm:inset-auto">
-                <button
-                  type="button"
-                  className="flex justify-between items-center w-auto rounded-full bg-spotless-green px-4 py-2 text-white hover:text-white hover:text-opacity-80 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900"
-                >
-                  <BsPersonFill className="h-6 w-6" aria-hidden="true" />
-                  &nbsp;
-                  <span className="text-xl font-semibold">LOGOUT</span>
-                </button>
+          <div className="relative flex h-12 items-center justify-between font-semibold mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+            {/* Socials */}
+            <section className="flex auto items-center justify-center gap-5">
+              <BsFacebook
+                className="h-6 w-6 hover:text-facebook-blue"
+                aria-hidden="true"
+              />
+              <BsTwitter
+                className="h-6 w-6 hover:text-twitter-blue"
+                aria-hidden="true"
+              />
+              <BsInstagram
+                className="h-6 w-6 hover:text-instagram-purple"
+                aria-hidden="true"
+              />
+              <FaTiktok
+                className="h-6 w-6"
+                aria-hidden="true"
+              />
+              <FaYoutube
+                className="h-6 w-6 hover:text-youtube-red"
+                aria-hidden="true"
+              />
+              <FaDiscord
+                className="h-6 w-6 hover:text-discord-purple"
+                aria-hidden="true"
+              />
+            </section>
+
+            {/* Copyright */}
+            <section className="flex auto items-center justify-center">
+              <div className="">
+                About&nbsp;|&nbsp;Contact&nbsp;|&nbsp;&copy; 2023 Spotless. All
+                Rights Reserved.
               </div>
-            </div>
+            </section>
           </div>
         </>
       )}
