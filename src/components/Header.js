@@ -1,6 +1,4 @@
-import { Fragment } from "react";
-import { Link } from "react-router-dom";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Disclosure } from "@headlessui/react";
 import { BsPersonFill } from "react-icons/bs";
 
 import logo from "../assets/logo.png";

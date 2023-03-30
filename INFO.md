@@ -24,7 +24,7 @@
     - list-nav
     - table mode
     - list mode
-    - modale
+    - modale => dialog
   - fav
     - fav-nav
     - card (similar to table mode)
