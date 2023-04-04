@@ -1,12 +1,13 @@
-import Header from "./components/Header";
 import Footer from "./components/Footer";
-import ListView from "./views/ListView";
+import Header from "./components/Header";
+import List from "./views/List";
 
 function App() {
   return (
-    <div className="App font-default">
+    // TODO: add class="font-default" to App
+    <div className="App"> 
       <Header></Header>
-      <ListView></ListView>
+      <List></List>
       <Footer></Footer>
     </div>
   );

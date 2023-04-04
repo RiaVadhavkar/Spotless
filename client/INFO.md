@@ -14,7 +14,7 @@
 ## Architecture
 ### Components
 - header
-  - icon + logo = Profile.js
+  - icon + logo = Brand
   - navigation
   - login/logout
 - footer
