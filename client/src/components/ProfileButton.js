@@ -1,6 +1,6 @@
 import { BsPersonFill } from "react-icons/bs";
 
-export default function Profile({ children }) {
+export default function ProfileButton(props) {
   return (
     <section className="absolute inset-y-0 right-0 flex w-auto items-center sm:static sm:inset-auto">
       <button
@@ -9,7 +9,7 @@ export default function Profile({ children }) {
       >
         <BsPersonFill className="h-6 w-6" aria-hidden="true" />
         &nbsp;
-        <span className="text-xl font-semibold">LOGOUT</span>
+        <span className="text-xl font-semibold">{props.build}</span>
       </button>
     </section>
   );
