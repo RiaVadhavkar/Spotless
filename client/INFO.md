@@ -13,11 +13,11 @@
 
 ## Architecture
 ### Components
-- header
-  - icon + logo = Brand
-  - navigation
-  - login/logout
-- footer
+- header = Header.js
+  - icon + logo = Brand.js
+  - navigation = Navigation.js
+  - login/logout = ProfileButton.js
+- footer = Footer.js
 - main-area
   - user-profile
   - list
