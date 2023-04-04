@@ -1,9 +1,8 @@
-import { Fragment } from "react";
-import { Disclosure, Menu, Transition } from "@headlessui/react";
+import { Disclosure } from "@headlessui/react";
 import { BsFacebook, BsTwitter, BsInstagram } from "react-icons/bs";
 import { FaTiktok, FaYoutube, FaDiscord } from "react-icons/fa";
 
-function Footer() {
+export default function Footer() {
   return (
     <Disclosure as="footer" className="bg-neutral-900 text-white">
       {({ open }) => (
@@ -23,10 +22,7 @@ function Footer() {
                 className="h-6 w-6 hover:text-instagram-purple"
                 aria-hidden="true"
               />
-              <FaTiktok
-                className="h-6 w-6"
-                aria-hidden="true"
-              />
+              <FaTiktok className="h-6 w-6" aria-hidden="true" />
               <FaYoutube
                 className="h-6 w-6 hover:text-youtube-red"
                 aria-hidden="true"
@@ -50,5 +46,3 @@ function Footer() {
     </Disclosure>
   );
 }
-
-export default Footer;

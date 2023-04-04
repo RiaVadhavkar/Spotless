@@ -3,7 +3,7 @@ module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     fontFamily: {
-      display: ["Manrope"],
+      default: ["Manrope"],
     },
     extend: {
       colors: {
