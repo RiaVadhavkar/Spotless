@@ -1,8 +1,6 @@
-import { BsPersonFill } from "react-icons/bs";
-import axios from "axios";
 import logo from "../assets/logo.png";
-import { Fragment, useState, useRef } from "react";
-import { Disclosure, Tab, Menu, Transition, Dialog } from "@headlessui/react";
+import { Disclosure } from "@headlessui/react";
+import { BsPersonFill } from "react-icons/bs";
 
 // <script src="https://kit.fontawesome.com/a362661c96.js" crossorigin="anonymous">
 // </script>
