@@ -4,6 +4,7 @@ import Home from "./views/Home";
 import Register from "./views/Register";
 import List from "./views/List";
 import Settings from "./views/Settings";
+import Login from "./views/Login";
 
 
 import { createRoot } from "react-dom/client";
@@ -28,6 +29,7 @@ function App() {
           <Route path="/register" element={<Register />} />
           <Route path="/list" element={<List />} />
           <Route path="/settings" element={<Settings />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </BrowserRouter>
 
