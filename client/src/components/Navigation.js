@@ -1,11 +1,11 @@
 import { Disclosure } from "@headlessui/react";
 
 const navigation = [
-  { name: "List", href: "#", current: true },
-  { name: "Favorites", href: "#", current: false },
-  { name: "Stats", href: "#", current: false },
-  { name: "Social", href: "#", current: false },
-  { name: "Settings", href: "#", current: false },
+  { name: "List", href: "/list", current: false },
+  { name: "Favorites", href: "/favorites", current: false },
+  { name: "Stats", href: "/stats", current: false },
+  { name: "Social", href: "/social", current: false },
+  { name: "Settings", href: "/settings", current: false },
 ];
 
 function classNames(...classes) {

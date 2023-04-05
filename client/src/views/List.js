@@ -5,7 +5,7 @@ import ListNavigation from "../components/ListNavigation";
 
 export default function List() {
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white">
+    <Disclosure as="body" className="bg-spotless-green text-white h-screen">
       {({ open }) => (
         <>
           <Banner></Banner>
