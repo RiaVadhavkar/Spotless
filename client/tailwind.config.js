@@ -16,6 +16,12 @@ module.exports = {
         "youtube-red": "#FF0000",
         "discord-purple": "#5865F2",
       },
+      height: {
+        // '128': '32rem',
+      }
     },
+    plugins: [
+      require('tailwind-scrollbar-hide')
+    ]
   },
 };

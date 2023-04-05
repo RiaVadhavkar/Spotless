@@ -2,7 +2,7 @@ import { Fragment, useState, useRef } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 import axios from "axios";
 
-export default function AddCollectionModal() {
+export default function AddCollectionModal(props) {
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
