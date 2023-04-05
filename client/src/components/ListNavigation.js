@@ -1,6 +1,6 @@
 import { Disclosure, Tab, Menu, Transition } from "@headlessui/react";
-import { BsSearch, BsFillCaretDownFill } from "react-icons/bs";
-import { FaList, FaThLarge } from "react-icons/fa";
+import { BsFillCaretDownFill } from "react-icons/bs";
+import { FaList, FaThLarge, FaSearch } from "react-icons/fa";
 
 export default function ListNavigation() {
   return (
@@ -11,20 +11,20 @@ export default function ListNavigation() {
           <section class="flex flex-row items-center justify-between">
             {/* Search */}
             <section
-              class="search-list"
-              className="bg-neutral-900 flex flex-row w-44 items-center justify-center rounded-full py-2.5"
+              className="search-list"
+              class="bg-neutral-900 flex flex-row w-52 items-center justify-center rounded-2xl py-2.5 gap-1.5 mx-1.5"
             >
-              <BsSearch className="h-4 w-4" aria-hidden="true" />
-              &nbsp;&nbsp;Name
+              <FaSearch class="h-4 w-4" aria-hidden="true" />
+              <span class="opacity-80">Name</span>
             </section>
 
             {/* Status Tabs */}
             <section
-              class="status-tabs"
-              className="bg-neutral-900 rounded-full py-2.5 gap"
+              className="status-tabs"
+              class="bg-neutral-900 rounded-2xl py-2.5 grow mx-1.5"
             >
               <Tab.Group>
-                <Tab.List className="space-x-2 px-4">
+                <Tab.List className="flex space-x-2 px-4 grow justify-around items-center">
                   <Tab>Listened</Tab>
                   <Tab>Planning</Tab>
                   <Tab>Dropped</Tab>
@@ -34,13 +34,13 @@ export default function ListNavigation() {
 
             {/* Sort By Menu */}
             <section
-              class="sort-by-menu"
-              className="rounded-full py-2.5 items-center justify-center"
+              className="sort-by-menu"
+              class="bg-neutral-900 text-white rounded-2xl py-2.5 px-4 mx-1.5 h-full"
             >
-              <Menu as="div" className="relative inline-block text-left">
-                <Menu.Button className="inline-flex w-full justify-center items-center rounded-md bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
+              <Menu as="div">
+                <Menu.Button className="inline-flex gap-1.5 justify-center items-center">
+                  Sort By
                   <BsFillCaretDownFill className="h-4 w-4" aria-hidden="true" />
-                  &nbsp;Sort By
                 </Menu.Button>
 
                 <Transition
@@ -63,11 +63,11 @@ export default function ListNavigation() {
 
             {/* Switch Views */}
             <section
-              class="switch-views"
-              className="flex flex-row bg-neutral-900 rounded-full py-2.5"
+              className="switch-views"
+              class="flex flex-row bg-neutral-900 rounded-2xl py-3 gap-3.5 items-center justify-center w-fit h-full px-4 mx-1.5"
             >
-              <FaList className="h-6 w-6" aria-hidden="true" />
-              <FaThLarge className="h-6 w-6" aria-hidden="true" />
+              <FaList className="h-5 w-5" aria-hidden="true" />
+              <FaThLarge className="h-5 w-5" aria-hidden="true" />
             </section>
           </section>
         </>

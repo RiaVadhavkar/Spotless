@@ -2,6 +2,7 @@ import { Disclosure } from "@headlessui/react";
 import Banner from "../components/Banner";
 import LeftSide from "../components/LeftSide";
 import ListNavigation from "../components/ListNavigation";
+import ListItem from "../components/ListItem";
 
 export default function List() {
   return (
@@ -18,8 +19,8 @@ export default function List() {
             <section class="main-content" className="flex flex-col w-3/4 mt-5">
               {/* List Nav Bar */}
               <ListNavigation></ListNavigation>
+              <ListItem></ListItem>
             </section>
-            
           </div>
         </>
       )}

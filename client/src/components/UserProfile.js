@@ -19,14 +19,14 @@ export default function UserProfile() {
       </h2>
       <section
         class="minutes-listened"
-        className="flex flex-col mt-6 text-sm items-center justify-center"
+        className="flex flex-col my-6 text-sm items-center justify-center"
       >
         Total Minutes Listened
         <h1 class="minutes" className="text-2xl text-spotless-green">
           128,936
         </h1>
       </section>
-      <section
+      {/* <section
         class="genre-overview"
         className="flex flex-col text-sm mb-6 mt-2.5 w-full justify-center items-center"
       >
@@ -43,7 +43,7 @@ export default function UserProfile() {
             &nbsp;rock
           </div>
         </div>
-      </section>
+      </section> */}
     </section>
   );
 }
