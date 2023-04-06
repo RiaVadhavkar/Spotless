@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
+  const navigate = useNavigate()
+
   const [formValues, setFormValues] = useState({
     username: "",
     password: "",
@@ -14,7 +16,7 @@ const Login = () => {
       [name]: value,
     });
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
 
     event.preventDefault();
@@ -25,16 +27,30 @@ const Login = () => {
     form.append("username", formValues.username);
     form.append("password", formValues.password);
 
-    console.log(Array.from(form));
+    // console.log(Array.from(form));
 
-    axios
-      .post(api + "login", form)
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    const loginResponse = await axios.post(api + "login", form);
+
+    // TODO Reroute to List.js view with user information
+
+    if (loginResponse.status === 200) {
+      console.log(loginResponse);
+      axios.get(api + "profile");
+
+      navigate('/list');
+    }
+    else {
+      console.log("Login failed")
+      console.log(loginResponse);
+    }
+      
+    // axios.post(api + "login", form)
+    //   .then(function (response) {
+    //     console.log(response);
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error);
+    //   });
   };
 
   return (
