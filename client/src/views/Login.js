@@ -29,7 +29,7 @@ const Login = () => {
 
     // console.log(Array.from(form));
 
-    const loginResponse = await axios.post(api + "login", form);
+    const loginResponse = await axios.post(api + "login", form, { withCredentials: true });
 
     // TODO Reroute to List.js view with user information
 
@@ -37,7 +37,8 @@ const Login = () => {
       console.log(loginResponse);
 
       const sessionCookie = loginResponse.headers["set-cookie"];
-      axios.get(api + '/profile', { headers: { Cookie: sessionCookie }})
+      console.log(sessionCookie);
+      axios.get(api + 'profile', { headers: { Cookie: sessionCookie }, withCredentials: true})
       .then(function (response) {
         console.log(response.data);
         navigate('/list');
