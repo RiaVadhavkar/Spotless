@@ -35,9 +35,16 @@ const Login = () => {
 
     if (loginResponse.status === 200) {
       console.log(loginResponse);
-      axios.get(api + "profile");
 
-      navigate('/list');
+      const sessionCookie = loginResponse.headers["set-cookie"];
+      axios.get(api + '/profile', { headers: { Cookie: sessionCookie }})
+      .then(function (response) {
+        console.log(response.data);
+        navigate('/list');
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }
     else {
       console.log("Login failed")
