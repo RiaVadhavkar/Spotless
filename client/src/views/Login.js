@@ -36,10 +36,10 @@ const Login = () => {
     if (loginResponse.status === 200) {
       console.log(loginResponse);
 
-      const sessionCookie = document.cookie
-      console.log(sessionCookie);
+      const token = document.cookie
+      console.log(token);
 
-      axios.get(api + 'profile', { withCredentials: true, headers: { Cookie: sessionCookie }})
+      axios.get(api + 'profile', { withCredentials:true, headers: { Authorization: `Bearer ${token}` }})
       .then(function (response) {
         console.log(response.data);
         navigate('/list');
