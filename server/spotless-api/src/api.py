@@ -1,36 +1,70 @@
 import pymysql
 from app import app
 from config import mysql, login_manager
-from flask import flash, request, render_template, jsonify, make_response, redirect, session
+from flask import flash, request, render_template, jsonify, make_response, redirect, session, Response
 import spotify_utils as spotify_utils
 import requests
 import json
 from werkzeug.exceptions import HTTPException
 from flask_login import login_required, login_user, UserMixin, current_user, logout_user
+from werkzeug.security import check_password_hash
+import jwt
+from datetime import datetime, timedelta
+
+# JWT_SECRET = 'secret_key'
+# JWT_ALGORITHM = 'HS256'
+
+# def create_jwt(user):
+#     payload = {
+#         'sub': user.id,
+#         'exp': datetime.utcnow() + timedelta(minutes=15)
+#     }
+#     jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
+#     return jwt_token.decode('utf-8')
 
 class User(UserMixin):
-    def __init__(self, id):
+    def __init__(self, id, secret_key):
         self.id = id
+        self.secret_key = secret_key
 
     @staticmethod
     def get_user_by_id(id):
         # Load user object from database or other data source
         # You can use this method to retrieve a user object given an ID
         # and return None if the user does not exist
-        return User(id)  # Replace this with your own implementation    
-          
+        return User(id, "your_secret_key")  # Replace this with your own implementation    
+
     def get_id(self):
         return str(self.id)
-    
+
     def is_authenticated(self):
         return True
-    
+
     def is_active(self):
         return True
-    
+
     def is_anonymous(self):
         return False
     
+    def get_user_auth_token(self, expires_in=timedelta(days=60)):
+        current_date = datetime.today()
+        """Generate a JWT token for the user"""
+        token_payload = {
+            'id': self.id,
+            'exp': current_date + expires_in
+        }
+        token = jwt.encode(token_payload, self.secret_key, algorithm='HS256')
+        return token
+    
+    @staticmethod
+    def verify_auth_token(token, secret_key):
+        """Verify the authenticity of a JWT token"""
+        try:
+            data = jwt.decode(token, secret_key, algorithms=['HS256'])
+            return User(data['id'], secret_key)
+        except:
+            return None
+
 @login_manager.user_loader
 def load_user(user_id):
     # Load the user from the database
@@ -74,7 +108,8 @@ def process_album():
         query = collection_query
         cursor.executemany(collection_query, collection_values)
 
-        # # Adding null review and rating to user list
+        # Adding null review and rating to user list
+        # TODO: Add to U_Collection_Status and get status
         if current_user.is_authenticated:
             print("Current user:", current_user.get_id())
             user_collection = [(current_user.get_id(), album['Collection_URI']) for album in album_list]
@@ -218,7 +253,8 @@ def register():
             cursor.close()
         if conn:
             conn.close()
-    return redirect('/login')
+    resp = {'error': 'An error occurred while processing the request.'}
+    return jsonify(resp), 500
 
 @app.route('/login', methods=["POST"])
 def login():
@@ -236,9 +272,15 @@ def login():
             account = cursor.fetchone()
             
             if account:
-                user = User(id=username)
+                user = User(id=username, secret_key=app.secret_key)
                 login_user(user)
-                return {'login': 'successful.'}, 200
+                # token = create_jwt(user)
+                token = current_user.get_user_auth_token()
+
+                resp = Response("Login successful")
+                resp.set_cookie('token', token, httponly=True, samesite='None')
+                print("Token from login:", token)
+                return resp
             else:
                 print("Login unsuccessful. Incorrect username or password.")
                 return redirect('/login')
@@ -293,8 +335,27 @@ def delete_user():
 @app.route('/profile')
 @login_required
 def profile():
-    # This view is only accessible to authenticated users
-    return {'profile_name': current_user.get_id()}, 200
+    try:
+        print("In /profile")
+        # Get the token from the authorization header
+        auth_header = request.headers.get('Authorization')
+        token = auth_header.split()[1]
+        print("Token:", token)
+        # Decode the token to get the user ID
+        payload = jwt.decode(token, app.secret_key, algorithms=['HS256'])
+        print("Payload:", payload)
+        user_id = payload['id']
+
+        # Load the user object using the ID
+        user = User.get_user_by_id(user_id)
+
+        return {'profile_name': user.get_id()}, 200
+
+    except jwt.ExpiredSignatureError:
+        return {'error': 'Token has expired'}, 401
+
+    except jwt.InvalidTokenError:
+        return {'error': 'Invalid token'}, 401
 
 # @app.route('/login', methods=["GET","POST"])
 # def login():
