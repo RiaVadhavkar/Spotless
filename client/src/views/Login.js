@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { SessionContext } from "../App";
 
 const Login = () => {
   const navigate = useNavigate();
+
+  const { setSessionToken, setSessionUsername } = useContext(SessionContext);
 
   const [formValues, setFormValues] = useState({
     username: "",
@@ -21,25 +24,22 @@ const Login = () => {
 
     event.preventDefault();
 
-    // console.log(formValues);
-
     const form = new FormData();
     form.append("username", formValues.username);
     form.append("password", formValues.password);
 
-    // console.log(Array.from(form));
-
     const loginResponse = await axios.post(api + "login", form, { withCredentials: true });
-
-    // TODO Reroute to List.js view with user information
 
     if (loginResponse.status === 200) {
       console.log(loginResponse);
 
-      const token = document.cookie
-      console.log(token);
+      const token = loginResponse.data.token;
+      const name = loginResponse.data.name;
 
-      axios.get(api + 'profile', { withCredentials:true, headers: { Authorization: `Bearer ${token}` }})
+      setSessionToken(token);
+      setSessionUsername(name);
+
+      axios.get(api + 'profile', { withCredentials:true , headers: { Authorization : `Bearer ${token}` }})
       .then(function (response) {
         console.log(response.data);
         navigate('/list');
@@ -54,14 +54,6 @@ const Login = () => {
       console.log("Login failed")
       console.log(loginResponse);
     }
-      
-    // axios.post(api + "login", form)
-    //   .then(function (response) {
-    //     console.log(response);
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error);
-    //   });
   };
 
   return (

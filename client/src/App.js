@@ -16,11 +16,18 @@ import {
   RouterProvider,
   Link,
 } from "react-router-dom";
+import { createContext, useState } from "react";
+
+export const SessionContext = createContext("session");
 
 function App() {
+  const [sessionToken, setSessionToken] = useState("");
+  const [sessionUsername, setSessionUsername] = useState("");
+
   return (
     // TODO: add class="font-default" to App
     <div className="App" class="h-screen">
+      <SessionContext.Provider value={{ sessionToken, setSessionToken, sessionUsername, setSessionUsername }}>
       <Header></Header>
 
       <BrowserRouter>
@@ -34,6 +41,7 @@ function App() {
       </BrowserRouter>
 
       <Footer></Footer>
+      </SessionContext.Provider>
     </div>
   );
 }
