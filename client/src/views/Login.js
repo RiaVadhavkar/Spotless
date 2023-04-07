@@ -3,7 +3,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [formValues, setFormValues] = useState({
     username: "",
@@ -36,9 +36,10 @@ const Login = () => {
     if (loginResponse.status === 200) {
       console.log(loginResponse);
 
-      const sessionCookie = loginResponse.headers["set-cookie"];
+      const sessionCookie = document.cookie
       console.log(sessionCookie);
-      axios.get(api + 'profile', { headers: { Cookie: sessionCookie }, withCredentials: true})
+
+      axios.get(api + 'profile', { withCredentials: true, headers: { Cookie: sessionCookie }})
       .then(function (response) {
         console.log(response.data);
         navigate('/list');
@@ -46,6 +47,8 @@ const Login = () => {
       .catch(function (error) {
         console.log(error);
       });
+
+      // navigate('/list');
     }
     else {
       console.log("Login failed")
