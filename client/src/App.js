@@ -16,13 +16,28 @@ import {
   RouterProvider,
   Link,
 } from "react-router-dom";
-import { createContext, useState } from "react";
+import { createContext, useState, useEffect } from "react";
 
-export const SessionContext = createContext("session");
+export const SessionContext = createContext();
 
 function App() {
   const [sessionToken, setSessionToken] = useState("");
   const [sessionUsername, setSessionUsername] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    const username = localStorage.getItem("username");
+
+    if (token && username) {
+      setSessionToken(token);
+      setSessionUsername(username);
+    }
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("token", sessionToken);
+    localStorage.setItem("username", sessionUsername);
+  }, [sessionToken, sessionUsername]);
 
   return (
     // TODO: add class="font-default" to App
