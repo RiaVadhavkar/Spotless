@@ -24,7 +24,7 @@
     },
     "update": {
         "update_review_query": "UPDATE U_Review SET Review = %s WHERE U_review = %s AND Reivew_collection_URI = %s;",
-        "update_rate_query": "UPDATE U_Rate SET Rate_username = %s, Rate_collection_URI = %s, Rating = %s;",
+        "update_rate_query": "UPDATE U_Rate SET Rating = %s WHERE Rate_username = %s AND Rate_collection_URI = %s;",
         "update_status_query": "UPDATE U_Collection_Status SET Status = %s WHERE Collection_username = %s AND Collection_URI = %s;"
     },
     "credentials": {
