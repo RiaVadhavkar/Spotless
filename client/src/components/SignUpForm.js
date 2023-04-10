@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 
-
 export default function Login() {
   const [formValues, setFormValues] = useState({
     username: "",
@@ -76,14 +75,12 @@ export default function Login() {
         </div>
         <div class="flex justify-center items-center">OR</div>
         <div class="flex justify-center items-center">
-          <Link to="/login">
-            <button
-              type="submit"
-              class="text-white  py-2 rounded-full text-2xl ring ring-white"
-            >
-              Login
-            </button>
-          </Link>
+          <button
+            type="submit"
+            class="text-white ring ring-white w-1/3 py-2 rounded-full text-2xl"
+          >
+            <Link to="/login">Login</Link>
+          </button>
         </div>
       </form>
     </div>

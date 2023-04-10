@@ -1,4 +1,4 @@
-import Login from "./Login";
+import SignUpForm from "./SignUpForm";
 
 export default function RegistrationBox() {
   return (
@@ -13,8 +13,7 @@ export default function RegistrationBox() {
           <span class="text-white">less!</span>
         </div>
       </div>
-
-      <Login></Login>
+      <SignUpForm></SignUpForm>
     </div>
   );
 }
