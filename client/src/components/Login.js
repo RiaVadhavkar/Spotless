@@ -79,7 +79,7 @@ export default function Login() {
           <Link to="/login">
             <button
               type="submit"
-              class="text-white ring ring-white w-1/3 py-2 rounded-full text-2xl"
+              class="text-white  py-2 rounded-full text-2xl ring ring-white"
             >
               Login
             </button>
