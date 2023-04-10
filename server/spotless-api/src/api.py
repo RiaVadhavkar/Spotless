@@ -1,6 +1,6 @@
 import pymysql
 from app import app
-from config import mysql, login_manager
+from config import mysql, login_manager, queries
 from flask import flash, request, render_template, jsonify, make_response, redirect, session, Response
 import spotify_utils as spotify_utils
 import requests
@@ -10,17 +10,7 @@ from flask_login import login_required, login_user, UserMixin, current_user, log
 from werkzeug.security import check_password_hash
 import jwt
 from datetime import datetime, timedelta
-
-# JWT_SECRET = 'secret_key'
-# JWT_ALGORITHM = 'HS256'
-
-# def create_jwt(user):
-#     payload = {
-#         'sub': user.id,
-#         'exp': datetime.utcnow() + timedelta(minutes=15)
-#     }
-#     jwt_token = jwt.encode(payload, JWT_SECRET, JWT_ALGORITHM)
-#     return jwt_token.decode('utf-8')
+import bcrypt
 
 class User(UserMixin):
     def __init__(self, id, secret_key):
@@ -32,7 +22,7 @@ class User(UserMixin):
         # Load user object from database or other data source
         # You can use this method to retrieve a user object given an ID
         # and return None if the user does not exist
-        return User(id, "your_secret_key")  # Replace this with your own implementation    
+        return User(id, app.secret_key)  # Replace this with your own implementation    
 
     def get_id(self):
         return str(self.id)
@@ -60,11 +50,26 @@ class User(UserMixin):
     def verify_auth_token(token, secret_key):
         """Verify the authenticity of a JWT token"""
         try:
+            print("verify:", token)
             data = jwt.decode(token, secret_key, algorithms=['HS256'])
             return User(data['id'], secret_key)
-        except:
-            return None
+        except jwt.ExpiredSignatureError:
+            print('jwt.ExpiredSignatureError')
+            return None  # Token has expired
+        except (jwt.InvalidTokenError, KeyError):
+            print('jwt.InvalidTokenError')
+            return None  # Invalid token
+        
+def get_user_from_header(request):
+    auth_header = request.headers.get('Authorization')
+    # Extract token
+    token = ""
+    if auth_header:
+        token = auth_header.split()[1]
 
+    # Get user from token
+    user = User.verify_auth_token(token, app.secret_key)
+    return user
 @login_manager.user_loader
 def load_user(user_id):
     # Load the user from the database
@@ -73,126 +78,106 @@ def load_user(user_id):
     user = User.get_user_by_id(user_id)
     return user
 
-# TODO: Add functionality to add based off of logged in user
-@app.route('/spotify/album', methods=['POST'])
-def process_album():
+@app.route('/add/album/<status>', methods=['POST'])
+def process_album(status):
     # Get the album URL from the header
     album_url = request.json.get('collection_url')
     if not spotify_utils.check_spotify_url(album_url):
-        resp = {'error': 'Bad url'}
-        return jsonify(resp), 500
+        return Response(response="Not valid Spotify link.", status=400)
     
     album_list, album_genre_list, track_list, track_artist_list, artist_list, artist_collection_list, track_collection_list = spotify_utils.get_spotify_data(album_url)
     
     if album_list is None:
-        resp = {'error': 'Bad url'}
-        return jsonify(resp), 500 
+        return Response(response="Not valid Spotify link.", status=400)
     
-    # Declare the conn variable outside the try block and set its initial value to None
-    conn = None
-    cursor = None
-    data = None
-    query = None
-
     try:
-        # Get the connection to db
-        conn = mysql.connect()
+        # Connect to the database and get a cursor object
+        with mysql.connect() as conn, conn.cursor() as cursor:
+            # Insert the data into the Collection table
+            collection_values = [(album['Collection_URI'], album['Collection_name'], album['Type'], album['Cover_image'], album['Release_date']) for album in album_list]
+            collection_query = queries['collections'].get('collection_query')
+            cursor.executemany(collection_query, collection_values)
 
-        # Get the cursor object
-        cursor = conn.cursor()
+            # Adding null review and rating to user list
+            # TODO: Add to U_Collection_Status and get status
+            # TODO: Switch logic to check headers for token to get user
+            if request.headers:
+                user = get_user_from_header(request)
+                if user is None:
+                    return Response(response="Bad token.", status=400)
+                
+                user_collection = [(user.get_id(), album['Collection_URI']) for album in album_list]
+                user_collection_query = queries['collections'].get('user_collection_query')
+                user_rate_query = queries['collections'].get('user_rate_query')
+                user_review_query = queries['collections'].get('user_review_query')
+                
+                cursor.executemany(user_collection_query, user_collection) 
+                cursor.executemany(user_rate_query, user_collection) 
+                cursor.executemany(user_review_query, user_collection)
 
-        # Insert the data into the Collection table
-        collection_values = [(album['Collection_URI'], album['Collection_name'], album['Type'], album['Cover_image'], album['Release_date']) for album in album_list]
-        collection_query = "INSERT IGNORE INTO Collection (Collection_URI, Collection_name, Type, Cover_image, Release_date) VALUES (%s, %s, %s, %s, %s)"
-        data = collection_values
-        query = collection_query
-        cursor.executemany(collection_query, collection_values)
+                user_status_query = queries['collections'].get('user_review_query')
+                user_status = [(user.get_id(), album['Collection_URI'], status) for album in album_list]
+                cursor.executemany(user_status_query, user_status)
 
-        # Adding null review and rating to user list
-        # TODO: Add to U_Collection_Status and get status
-        if current_user.is_authenticated:
-            print("Current user:", current_user.get_id())
-            user_collection = [(current_user.get_id(), album['Collection_URI']) for album in album_list]
-            user_collection_query = "INSERT IGNORE INTO U_Collection (Collection_username, Collection_URI) VALUES (%s, %s)"
-            user_rate_query = "INSERT IGNORE INTO U_Rate (Rate_username, Rate_collection_URI) VALUES (%s, %s)"
-            user_review_query = "INSERT IGNORE INTO U_Review (U_Review, Reivew_collection_URI) VALUES (%s, %s)"
-            data = user_collection
-            query = user_collection_query
-            cursor.executemany(query, data) 
-            query = user_rate_query
-            cursor.executemany(query, data) 
-            query = user_review_query
-            cursor.executemany(query, data)
+            # Insert data into the Track table
+            track_values = [(track['Track_URI'], track['Track_name'], track['Track_length'], track['Track_no']) for track in track_list]
+            track_query =  queries['collections'].get('track_query')
+            cursor.executemany(track_query, track_values)
 
-        # Insert data into the Track table
-        track_values = [(track['Track_URI'], track['Track_name'], track['Track_length']) for track in track_list]
-        track_query = "INSERT IGNORE INTO Track (Track_URI, Track_name, Track_length) VALUES (%s, %s, %s)"
-        data = track_values
-        query = track_query        
-        cursor.executemany(track_query, track_values)
+            # Insert the data into the Artist table
+            artist_values = [(artist['Artist_URI'], artist['Artist_name'], artist['Image']) for artist in artist_list]
+            artist_query = queries['collections'].get('artist_query')
+            cursor.executemany(artist_query, artist_values)
 
-        # Insert the data into the Artist table
-        artist_values = [(artist['Artist_URI'], artist['Artist_name'], artist['Image']) for artist in artist_list]
-        artist_query = "INSERT IGNORE INTO Artist (Artist_URI, Artist_name, Image) VALUES (%s, %s, %s)"
-        data = artist_values
-        query = artist_query
-        cursor.executemany(artist_query, artist_values)
-
-        # Commit the changes to the database
-        conn.commit()
-
-        # Insert data into the Has_Track table
-        has_track_values = [(track_artist['HasT_artist_URI'], track_artist['HasT_track_URI']) for track_artist in track_artist_list]
-        has_track_query = "INSERT IGNORE INTO Has_Track (HasT_artist_URI, HasT_track_URI) VALUES (%s, %s)"
-        data = has_track_values
-        query = has_track_query              
-        cursor.executemany(has_track_query, has_track_values)
-
-        # Insert the data into the Collection_Genre table
-        collection_genre_values = [(album_genre['CG_collection_URI'], album_genre['genre']) for album_genre in album_genre_list]
-        collection_genre_query = "INSERT IGNORE INTO Collection_Genre (CG_collection_URI, Collec_genre) VALUES (%s, %s)"
-        data = collection_genre_values
-        query = collection_genre_query            
-        cursor.executemany(collection_genre_query, collection_genre_values)
-
-        # Insert the data into the Has_Collection table
-        has_collection_values = [(artist_collection['HasC_artist_URI'], artist_collection['HasC_collection_URI']) for artist_collection in artist_collection_list]
-        has_collection_query = "INSERT IGNORE INTO Has_Collection (HasC_artist_URI, HasC_collection_URI) VALUES (%s, %s)"
-        data = has_collection_values
-        query = has_collection_query            
-        cursor.executemany(has_collection_query, has_collection_values)
-
-        # Insert the data into the Track_in_Collection table
-        track_collection_values = [(track_collection['TiC_track_URI'], track_collection['TiC_collect_URI']) for track_collection in track_collection_list]
-        track_collection_query = "INSERT IGNORE INTO Track_In_Collection (TiC_track_URI, TiC_collect_URI) VALUES (%s, %s)"
-        data = track_collection_values
-        query = track_collection_query            
-        cursor.executemany(track_collection_query, track_collection_values)
-        
-        # Commit the changes to the database
-        conn.commit()
-    except Exception as e:
-        print(e)
-        print("Data:", data)
-        print("Query:", query)
-        resp = {'error': 'An error occurred while processing the request.'}
-        return jsonify(resp), 500
-
-    finally:
-        # Check if the cursor variable is not None before closing it
-        if cursor is not None:
-            cursor.close()
-
-        # Check if the conn variable is not None before closing it
-        if conn is not None:
+            # Commit the changes to the database
             conn.commit()
-            conn.close()
-            print("Data added to db.")
-            resp = {'message': 'Data added to db.'}
-            return jsonify(resp), 200
 
-    resp = {'error': 'An error occurred while processing the request.'}
-    return jsonify(resp), 500
+            # Insert data into the Has_Track table
+            has_track_values = [(track_artist['HasT_artist_URI'], track_artist['HasT_track_URI']) for track_artist in track_artist_list]
+            has_track_query = queries['collections'].get('has_track_query')         
+            cursor.executemany(has_track_query, has_track_values)
+
+            # Insert the data into the Collection_Genre table
+            collection_genre_values = [(album_genre['CG_collection_URI'], album_genre['genre']) for album_genre in album_genre_list]
+            collection_genre_query = queries['collections'].get('collection_genre_query')         
+            cursor.executemany(collection_genre_query, collection_genre_values)
+
+            # Insert the data into the Has_Collection table
+            has_collection_values = [(artist_collection['HasC_artist_URI'], artist_collection['HasC_collection_URI']) for artist_collection in artist_collection_list]
+            has_collection_query = queries['collections'].get('has_collection_query')           
+            cursor.executemany(has_collection_query, has_collection_values)
+
+            # Insert the data into the Track_in_Collection table
+            track_collection_values = [(track_collection['TiC_track_URI'], track_collection['TiC_collect_URI']) for track_collection in track_collection_list]
+            track_collection_query = queries['collections'].get('track_collection_query')          
+            cursor.executemany(track_collection_query, track_collection_values)
+            
+            # Commit the changes to the database
+            conn.commit()
+
+            return Response(response=f"{album_list[0].get('Collection_name')} by {artist_list[0].get('Artist_name')} is added.",
+                            status=200)
+    except Exception as e:
+        return handle_exception(e)  
+
+@app.route('/users/add', methods=["GET","POST"])
+def update_collection():
+    try:
+        # Check headers if exists
+        if not request.headers:
+            return Response(response="Invalid header data.", status=401)
+        # Get the token from the authorization header
+        auth_header = request.headers.get('Authorization')
+        # Extract token
+        token = ""
+        if auth_header:
+            token = auth_header.split()[1]
+
+        # Get user from token
+        user = User.verify_auth_token(token, app.secret_key)
+
+    except Exception as e:
+        return Response(response={'Error':e}, status=401)
 
 @app.route('/users/add', methods=["GET","POST"])
 def user_add_link():
@@ -207,219 +192,258 @@ def index():
         collection_url = request.form.get('link')
         data = {"collection_url": collection_url}
         response = requests.post(url, json=data)
-        print(response)
-        return jsonify(response.json())
+        return jsonify(response.text)
     return render_template('index.html')
 
 @app.route('/register', methods=['POST'])
 def register():
-    if request.method != 'POST':
-        resp = {'error': 'An error occurred while processing the request.',
-                'reason': 'Invalid request method.'}
-        return jsonify(resp), 400
+    # Make sure there is a form sent
+    if not request.form:
+        return Response(response="Invalid form data.", status=400)
 
     username = request.form.get('username')
     password = request.form.get('password')
     if not username or not password:
-        resp = {'error': 'An error occurred while processing the request.',
-                'reason': 'No username or password in form.'}
-        return jsonify(resp), 400
+        return Response(response="No username or password in form.", status=400)
 
-    conn = None
-    cursor = None
-    try: 
-        conn = mysql.connect()
-        cursor = conn.cursor()
-
+    with mysql.connect() as conn, conn.cursor() as cursor:
         data = [username]
-        query = "SELECT Username FROM User WHERE Username = %s"
+        query = queries['credentials'].get('user_in_db_query')
         cursor.execute(query, data)
         queryRes = cursor.fetchone()
         if queryRes:
-            print("Username already exists")
-            resp = {'error': 'Username already exists.'}
-            return jsonify(resp), 409
-
+            return Response(response="Username already exists.", status=400)
+        # hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        # data = [username, hashed_password.decode('utf-8'), None]
         data = [username, password, None]
-        query = "INSERT IGNORE INTO User (Username, Password, User_profile_pic) VALUES (%s, %s, %s)"
+        query = queries['credentials'].get('register_query')
         cursor.execute(query, data)
         conn.commit()
-    except Exception as e:
-        print(e)
-        resp = {'error': 'An error occurred while processing the request.'}
-        return jsonify(resp), 500
-    finally:
-        if cursor:
-            cursor.close()
-        if conn:
-            conn.close()
-    resp = {'error': 'An error occurred while processing the request.'}
-    return jsonify(resp), 500
+
+    return Response(response="User registered successfully.", status=200)
 
 @app.route('/login', methods=["POST"])
 def login():
-    if request.method == "POST" and 'username' in request.form and 'password' in request.form:
-        try: 
-            username = request.form.get('username')
-            password = request.form.get('password')
-            
-            conn = mysql.connect()
-            cursor = conn.cursor()
-
-            data = [username, password]
-            query = "SELECT Username, Password FROM User WHERE Username = %s AND Password = %s"
-            cursor.execute(query, data)
-            account = cursor.fetchone()
-            
-            if account:
-                user = User(id=username, secret_key=app.secret_key)
-                login_user(user)
-                # token = create_jwt(user)
-                token = current_user.get_user_auth_token()
-
-                resp = Response("Login successful")
-                resp.set_cookie('token', token, httponly=True, samesite='None')
-                print("Token from login:", token)
-                return resp
-            else:
-                print("Login unsuccessful. Incorrect username or password.")
-                return redirect('/login')
-        
-        except Exception as e:
-            print(e)
-            resp = {'error': 'An error occurred while processing the request.'}
-            return jsonify(resp), 500
-        
-        finally:
-            if conn is not None and cursor is not None:
-                conn.close()
-                cursor.close()
-    else:
-        resp = {'error': 'An error occurred while processing the request.',
-                'reason': 'No username or password in form.'}
-        return jsonify(resp), 500
-                   
-@app.route('/logout')
-@login_required
-def logout():
-    username = current_user.get_id()
-    print("Logging out:", username)
-    # Logging out user
-    logout_user()
-    # Redirect user to login page
-    return redirect('/login')
-        
-@app.route('/user/delete')
-@login_required
-def delete_user():
-    try:
-        conn = mysql.connect()
-        cursor = conn.cursor()
-        username = current_user.get_id()
-
-        query = "DELETE FROM User WHERE Username = %s"
-        cursor.execute(query, (username,))
-        conn.commit()
-        flash('Your account has been deleted!', 'success')
-        logout_user()
-        return redirect('/')
-    except Exception as e:
-        print(e)
-        flash('An error occurred while deleting your account.', 'danger')
-        return redirect('/user/profile')
-    finally:
-        if conn is not None and cursor is not None:
-            cursor.close()
-            conn.close()
+    # Make sure there is a form sent
+    if not request.form:
+        return Response(response="Invalid form data.", status=400)
     
-@app.route('/profile')
-@login_required
-def profile():
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    if not (username and password):
+        return Response(response="No username or password in form.", status=401)
+
+    with mysql.connect() as conn, conn.cursor() as cursor:
+        # hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        # data = [username, hashed_password.decode('utf-8')]
+        data = [username, password]
+        query = queries['credentials'].get('login_query')
+        cursor.execute(query, data)
+        account = cursor.fetchone()
+
+        if account:
+            user = User(id=username, secret_key=app.secret_key)
+            login_user(user)
+            token = current_user.get_user_auth_token()
+
+            resp = Response(response=json.dumps({'token': token,
+                                                 'name': username}), 
+                                              status=200, 
+                                              mimetype='application/json')
+            resp.set_cookie('token', token, httponly=True, samesite='None', secure=True)
+            print("Token from login:", token)
+            return resp
+        
+    return Response(response="Login unsuccessful. Incorrect username or password.", status=400)
+            
+@app.route('/logout')
+def logout():
     try:
-        print("In /profile")
+        # Check headers if exists
+        if not request.headers:
+            return Response(response="Invalid header data.", status=401)
         # Get the token from the authorization header
         auth_header = request.headers.get('Authorization')
-        token = auth_header.split()[1]
-        print("Token:", token)
-        # Decode the token to get the user ID
-        payload = jwt.decode(token, app.secret_key, algorithms=['HS256'])
-        print("Payload:", payload)
-        user_id = payload['id']
+        # Extract token
+        token = ""
+        if auth_header:
+            token = auth_header.split()[1]
 
-        # Load the user object using the ID
-        user = User.get_user_by_id(user_id)
+        # Get user from token
+        user = User.verify_auth_token(token, app.secret_key)
+        if not user:
+            return Response(response='Bad Token.', status=401)
+        # Destroy token
+        resp = Response(response='Logout successful', status=200)
+        resp.set_cookie('token', '', expires=0)
+        return resp
+    
+    except Exception as e: 
+        return handle_exception(e)   
+    
+@app.route('/user/delete')
+def delete_user(methods=["POST"]):
+    try:
+        # Check headers if exists
+        if not request.headers:
+            return Response(response="Invalid header data.", status=400)
+        # Get the token from the authorization header
+        auth_header = request.headers.get('Authorization')
+        # Extract token
+        token = ""
+        if auth_header:
+            token = auth_header.split()[1]
 
-        return {'profile_name': user.get_id()}, 200
+        # Get user from token
+        user = User.verify_auth_token(token, app.secret_key)
+        user_id = user.get_id()
 
-    except jwt.ExpiredSignatureError:
-        return {'error': 'Token has expired'}, 401
+        with mysql.connect() as conn, conn.cursor() as cursor:
+            query = queries['credentials'].get('delete_query')
+            cursor.execute(query, (user_id,))
+            conn.commit()
+            flash('Your account has been deleted!', 'success')
+            resp = Response(response=f"Your account has been deleted. Goodbye {user_id}.", status=200)
+            resp.set_cookie('token', '', expires=0)
 
-    except jwt.InvalidTokenError:
-        return {'error': 'Invalid token'}, 401
-
-# @app.route('/login', methods=["GET","POST"])
-# def login():
-#     url = spotify_utils.authenticate_user()
-#     # print(url)
-#     return redirect(url)
-
-# @app.route('/callback', methods=["GET", "POST"])
-# def callback():
-#     code = request.args.get('code')
-#     print(code)
-#     token_info = sp_oauth.get_access_token(code)
-#     access_token = token_info['access_token']
-#     refresh_token = token_info['refresh_token']
-
-#     # Save the access_token and refresh_token to a database or session for later use
-#         # Declare the conn variable outside the try block and set its initial value to None
-    # conn = None
-    # cursor = None
-    # data = None
-    # query = None
-
-    # try:
-
-    #     # Read user information
-    #     sp = spotipy.Spotify(sp_oauth)
-    #     user = sp.me()
-    #     username_uri = user['uri']
-        # profile_picture = user['images'][0]['url']
-        # display_name = user['display_name']
-
-        # # Get the connection to db
-        # conn = mysql.connect()
-
-        # # Get the cursor object 1z4g3DjTBBZKhvAroFlhOM
-        # cursor = conn.cursor()
-
-        # # Look to delete User(password) 
-        # user_values = [username_uri, "filler_password", profile_picture, access_token, refresh_token, display_name]
-        # print(user_values)
-        # query = "INSERT IGNORE INTO User (Username_URI, Password, User_profile_pic, User_token, User_refresh_token, Display_name) VALUES(%s, %s, %s, %s, %s)"
-        # cursor.execute(query, user_values)
-#     except Exception as e:
-#         print(e)
-#         print("Data:", data)
-#         print("Query:", query)
-#         if conn is not None and cursor is not None:
-#             conn.close()
-#             cursor.close()
-#             print("Data added to db.")
-#         resp = {'error': 'An error occurred while processing the request.'}
-#         return jsonify(resp), 500
-#     finally:
-#         # Check if the conn variable is not None before closing it
-#         if conn is not None and cursor is not None:
-#             conn.close()
-#             cursor.close()
-#             return redirect('/')
+            return resp
+    except Exception as e:
+        flash('An error occurred while deleting your account.', 'danger')
+        return handle_exception(e)
         
-#     return redirect('/') # To the home screen
+@app.route('/profile')
+def profile():
+    try:
+        # Check headers if exists
+        if not request.headers:
+            return Response(response="Invalid header data.", status=400)
+        # Get the token from the authorization header
+        auth_header = request.headers.get('Authorization')
+        # Extract token
+        token = ""
+        if auth_header:
+            token = auth_header.split()[1]
 
-# @app.route('/logout', methods=["GET", "POST"])
-# def logout():
-#     pass
+        # Get user from token
+        user = User.verify_auth_token(token, app.secret_key)
+        print('user:', user)
+        user_id = user.get_id()
+
+        return {'profile_name': user_id}, 200
+    
+    except Exception as e:
+        return handle_exception(e)
+
+@app.route('/<username>/collection/<type>/<collection_uri>', methods=['PUT'])
+def update_user_collection(username, type, collection_uri):
+    user = get_user_from_header(request)
+    if not user:
+        return Response(response="Bad token", status=400)
+    if username != user.get_id():
+        return Response(response="Username does not equal user from token?", status=400)
+    query = ""
+    val = ""
+    if type == "review":
+        query = queries['update'].get('update_review_query')
+        val = request.form.get('review')
+    elif type == "rate":
+        query = queries['update'].get('update_rate_query')
+        # val = Button value
+    elif type == "status":
+        query = queries['update'].get('update_status_query')
+        # val = Button value
+    else:
+        return Response(response="Type is wrong.", status=400)
+    
+    with mysql.connect() as conn, conn.cursor() as cursor:
+        cursor.execute(query, [username, collection_uri, val])
+        
+    return Response(response="Updated.", status=200)
+@app.route('/<username>/collection')
+def get_user_list(username):
+    # Check headers if exists
+    if not request.headers:
+        return Response(response="Invalid header data.", status=400)
+    # Get the token from the authorization header
+    auth_header = request.headers.get('Authorization')
+    # Extract token
+    token = ""
+    if auth_header:
+        token = auth_header.split()[1]
+
+    # Get user from token
+    user = User.verify_auth_token(token, app.secret_key)
+    user_id = user.get_id()
+    if user_id != username:
+        return Response(response="Bad token or username.", status=403)
+
+    user_collections_list = []
+    with mysql.connect() as conn, conn.cursor() as cursor:
+        # Get user collections
+        query = queries['collections'].get('user_list_query')
+        cursor.execute(query, [username])
+        collections = cursor.fetchall()
+        # Get the columns for the collections table
+        collection_cols = [col[0] for col in cursor.description]
+        # Loop through each collection
+        for collection in collections:
+            collection_dict = {}
+            # Map the collection columns to the corresponding values
+            for i, col_name in enumerate(collection_cols):
+                collection_dict[col_name] = collection[i]
+            # Get tracks for the collection
+            query = queries['collections'].get('tracks_by_collection_query')
+            cursor.execute(query, [collection[2]])
+            tracks = cursor.fetchall()
+            # Get the columns for the tracks table
+            track_cols = [col[0] for col in cursor.description]
+            tracks_list = []
+            # Loop through each track
+            for track in tracks:
+                track_dict = {}
+                # Map the track columns to the corresponding values
+                for i, col_name in enumerate(track_cols):
+                    track_dict[col_name] = track[i]
+                tracks_list.append(track_dict)
+            collection_dict['tracks'] = tracks_list
+            user_collections_list.append(collection_dict)
+    # Return the collections as a JSON response
+    user_collections = {'collection_items': user_collections_list}
+    return jsonify(user_collections)
+
+@app.route('/<username>/stats')
+def get_user_stats(username):
+    # Check headers if exists
+    if not request.headers:
+        return Response(response="Invalid header data.", status=400)
+    # Get the token from the authorization header
+    auth_header = request.headers.get('Authorization')
+    # Extract token
+    token = ""
+    if auth_header:
+        token = auth_header.split()[1]
+
+    # Get user from token
+    user = User.verify_auth_token(token, app.secret_key)
+    user_id = user.get_id()
+    if user_id != username:
+        return Response(response="Bad token or username.", status=403)
+
+    stats = {}
+
+    with mysql.connect() as conn, conn.cursor() as cursor:
+        for query_name, name in [('collections_by_year_query', 'collections_by_year'), 
+                                 ('collections_by_rating_query', 'collections_by_rating'),
+                                 ('collection_count_by_status_query', 'collection_by_status'),
+                                 ('total_minutes_listened_by_collection_status_complete_query', 'minutes_collection_complete'),
+                                 ('total_minutes_listened_by_collection_status_planned_query', 'minutes_collection_planned'),
+                                 ('total_minutes_listened_by_collection_query', 'minutes_collection_full')]:
+            query = queries['stats'].get(query_name)
+            cursor.execute(query, [username])
+            stats[name] = cursor.fetchall()
+
+    return jsonify(stats)
 
 @app.errorhandler(HTTPException)
 def handle_exception(e):
@@ -437,4 +461,3 @@ def handle_exception(e):
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0")
-
