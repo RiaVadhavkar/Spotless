@@ -8,9 +8,8 @@ import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
   const navigate = useNavigate();
-  // const { sessionToken, setSessionToken, sessionUsername, setSessionUsername } = useContext(SessionContext); 
-  const cont  = useContext(SessionContext); 
-  console.log(cont)
+  const { sessionToken, setSessionToken, sessionUsername, setSessionUsername } = useContext(SessionContext);  
+  console.log(sessionToken);
 
   const handleDelete = async (event) => {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
@@ -20,11 +19,11 @@ export default function Settings() {
     // console.log(sessionUsername);
     // console.log(sessionToken);
 
-    axios.get(api + 'user/delete', { withCredentials:true , headers: { Authorization : `Bearer ${"HI"}` }})
+    axios.get(api + 'user/delete', { withCredentials:true , headers: { Authorization : `Bearer ${sessionToken}` }})
       .then(function (response) {
       console.log(response.data);
-      // setSessionToken("");
-      // setSessionUsername("");
+      setSessionToken("");
+      setSessionUsername("");
       navigate('/register');
     }).catch(function (error) {
       console.log(error);
