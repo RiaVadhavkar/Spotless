@@ -1,6 +1,10 @@
 import user_profile from "../assets/users/ashley.jpeg";
+import { SessionContext } from "../App";
+import { useContext } from "react";
 
 export default function UserProfile() {
+  const { sessionUsername } = useContext(SessionContext);
+
   return (
     <section
       class="user-profile"
@@ -12,7 +16,7 @@ export default function UserProfile() {
         alt="Spotless User"
       />
       <h1 class="username" className="mt-6 text-3xl font-bold">
-        ashley
+        {sessionUsername}
       </h1>
       <h2 class="social-stats" className="mt-2.5 text-sm font-bold">
         6 followers&nbsp;|&nbsp;18 following

@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { SessionContext } from "../App";
 
+const Login = () => {
+  const navigate = useNavigate();
 
-export default function Login() {
+  const { setSessionToken, setSessionUsername } = useContext(SessionContext);
+
   const [formValues, setFormValues] = useState({
     username: "",
     password: "",
@@ -15,36 +19,48 @@ export default function Login() {
       [name]: value,
     });
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
 
     event.preventDefault();
-
-    // console.log(formValues);
 
     const form = new FormData();
     form.append("username", formValues.username);
     form.append("password", formValues.password);
 
-    // console.log(Array.from(form));
+    const loginResponse = await axios.post(api + "login", form, { withCredentials: true });
 
-    axios
-      .post(api + "register", form)
+    if (loginResponse.status === 200) {
+      console.log(loginResponse);
+
+      const token = loginResponse.data.token;
+      const name = loginResponse.data.name;
+
+      setSessionToken(token);
+      setSessionUsername(name);
+
+      axios.get(api + 'profile', { withCredentials:true , headers: { Authorization : `Bearer ${token}` }})
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
+        navigate('/list');
       })
       .catch(function (error) {
         console.log(error);
       });
+
+      // navigate('/list');
+    }
+    else {
+      console.log("Login failed")
+      console.log(loginResponse);
+    }
   };
 
   return (
     <div class="flex justify-center items-center font-semibold h-4/5">
       <form
-        class="flex flex-col gap-5 justify-center w-4/5"
         onSubmit={handleSubmit}
       >
-        <div class="flex justify-center items-center">
           <input
             type="text"
             name="username"
@@ -52,10 +68,8 @@ export default function Login() {
             onChange={handleInputChange}
             id="username"
             placeholder="Username"
-            class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-50 h-12"
+            class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-100  h-12"
           />
-        </div>
-        <div class="flex justify-center items-center">
           <input
             type="password"
             name="password"
@@ -63,29 +77,16 @@ export default function Login() {
             onChange={handleInputChange}
             id="password"
             placeholder="Password"
-            class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-50 h-12"
+            class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-100 h-12"
           />
-        </div>
-        <div class="flex justify-center items-center">
-          <button
-            type="submit"
-            class="text-white bg-spotless-green w-4/6 py-2.5 rounded-full text-3xl"
-          >
-            Sign Up
-          </button>
-        </div>
-        <div class="flex justify-center items-center">OR</div>
-        <div class="flex justify-center items-center">
-          <Link to="/login">
             <button
               type="submit"
-              class="text-white ring ring-white w-1/3 py-2 rounded-full text-2xl"
             >
               Login
             </button>
-          </Link>
-        </div>
       </form>
     </div>
-  );
+  )
 }
+
+export default Login
