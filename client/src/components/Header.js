@@ -2,17 +2,20 @@ import { Disclosure } from "@headlessui/react";
 import Brand from "./Brand";
 import ProfileButton from "./ProfileButton";
 import Navigation from "./Navigation";
+import { SessionContext } from "../App";
+import { useContext } from "react";
 
 export default function Header() {
-  const profileButtonText = "LOGOUT";
+  const { sessionToken } = useContext(SessionContext);
+  const profileButtonBool = (sessionToken) ? true : false;
   return (
     <Disclosure as="header" className="bg-neutral-900">
       {({ open }) => (
         <>
           <div className="relative flex h-20 items-center justify-between mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
             <Brand></Brand>
-            <Navigation></Navigation>
-            <ProfileButton build={profileButtonText}></ProfileButton>
+            { (sessionToken) ? <Navigation></Navigation> : null }
+            <ProfileButton build={profileButtonBool}></ProfileButton>
           </div>
         </>
       )}

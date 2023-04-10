@@ -6,15 +6,10 @@ import List from "./views/List";
 import Settings from "./views/Settings";
 import Login from "./views/Login";
 
-
-import { createRoot } from "react-dom/client";
 import {
   BrowserRouter,
   Routes,
   Route,
-  createBrowserRouter,
-  RouterProvider,
-  Link,
 } from "react-router-dom";
 import { createContext, useState, useEffect } from "react";
 
