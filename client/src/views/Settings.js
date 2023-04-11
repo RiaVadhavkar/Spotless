@@ -1,6 +1,4 @@
 import { Disclosure } from "@headlessui/react";
-import { Link } from "react-router-dom";
-import RegistrationBox from "../components/RegistrationBox";
 import { useContext } from "react";
 import { SessionContext } from "../App";
 import axios from "axios";
@@ -8,16 +6,12 @@ import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
   const navigate = useNavigate();
-  const { sessionToken, setSessionToken, sessionUsername, setSessionUsername } = useContext(SessionContext);  
-  console.log(sessionToken);
+  const { sessionToken, setSessionToken, setSessionUsername } = useContext(SessionContext);  
 
   const handleDelete = async (event) => {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
 
     event.preventDefault();
-
-    // console.log(sessionUsername);
-    // console.log(sessionToken);
 
     axios.get(api + 'user/delete', { withCredentials:true , headers: { Authorization : `Bearer ${sessionToken}` }})
       .then(function (response) {
