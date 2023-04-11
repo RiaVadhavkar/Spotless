@@ -1,8 +1,12 @@
-import { Fragment, useState, useRef } from "react";
+import { Fragment, useState, useRef, useContext } from "react";
+import { SessionContext } from "../App";
 import { Transition, Dialog } from "@headlessui/react";
+
 import axios from "axios";
 
 export default function AddCollection() {
+  const { sessionToken } = useContext(SessionContext);
+
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -13,14 +17,23 @@ export default function AddCollection() {
     setIsOpen(true);
   }
 
+  const statuses = ["Planned", "Complete", "Dropped"];
+  const [status, setStatus] = useState(statuses[0]);
+
   const spotifyURL = useRef("");
 
   function addURLtoList(URL) {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
 
+    console.log(sessionToken);
+
     axios
-      .post(api + "spotify/album", {
+      .post(api + "add/album/" + status, {
         collection_url: URL,
+      }, 
+      {
+        headers: { Authorization: `Bearer ${sessionToken}` },
+        withCredentials: true,
       })
       .then(function (response) {
         console.log(response);
@@ -79,6 +92,17 @@ export default function AddCollection() {
                       <label>
                         Album URL
                         <input id="link" ref={spotifyURL} type="text" />
+                      </label>
+                      <label>
+                        <select 
+                          id="status"
+                          onChange={(e) => setStatus(e.target.value)}
+                          defaultValue={status}
+                        >
+                          {statuses.map((status) => (
+                            <option value={status}>{status}</option>
+                          ))}
+                        </select>
                       </label>
                     </form>
                   </div>
