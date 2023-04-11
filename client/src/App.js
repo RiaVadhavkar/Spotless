@@ -20,8 +20,8 @@ function App() {
   const [sessionUsername, setSessionUsername] = useState("");
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    const username = localStorage.getItem("username");
+    const token = sessionStorage.getItem("token");
+    const username = sessionStorage.getItem("username");
 
     if (token && username) {
       setSessionToken(token);
@@ -30,8 +30,8 @@ function App() {
   }, []);
 
   useEffect(() => {
-    localStorage.setItem("token", sessionToken);
-    localStorage.setItem("username", sessionUsername);
+    sessionStorage.setItem("token", sessionToken);
+    sessionStorage.setItem("username", sessionUsername);
   }, [sessionToken, sessionUsername]);
 
   return (
