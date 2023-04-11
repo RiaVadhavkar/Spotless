@@ -38,9 +38,9 @@ function App() {
     // TODO: add class="font-default" to App
     <div className="App" class="h-screen">
       <SessionContext.Provider value={{ sessionToken, setSessionToken, sessionUsername, setSessionUsername }}>
-      <Header></Header>
-
+      
       <BrowserRouter>
+        <Header></Header>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/register" element={<Register />} />
