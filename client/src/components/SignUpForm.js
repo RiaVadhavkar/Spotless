@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
   const [formValues, setFormValues] = useState({
     username: "",
     password: "",
@@ -31,6 +33,7 @@ export default function Login() {
       .post(api + "register", form)
       .then(function (response) {
         console.log(response);
+        navigate("/login");
       })
       .catch(function (error) {
         console.log(error);
