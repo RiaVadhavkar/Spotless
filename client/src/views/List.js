@@ -14,7 +14,7 @@ export default function List() {
 
   useEffect(() => {
     getAlbums();
-  }, []);
+  }, [sessionUsername, sessionToken]);
 
   async function getAlbums() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
