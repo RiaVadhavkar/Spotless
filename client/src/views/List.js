@@ -3,27 +3,37 @@ import Banner from "../components/Banner";
 import LeftSide from "../components/LeftSide";
 import ListNavigation from "../components/ListNavigation";
 import ListItem from "../components/ListItem";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useCallback } from "react";
 import { SessionContext } from "../App";
 import axios from "axios";
 
 export default function List() {
   const { sessionUsername, sessionToken } = useContext(SessionContext);
   const [albums, setAlbums] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
+  const getAlbums = useCallback( async () => {
+    
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-
-    axios.get(api + "/" + sessionUsername + "/collection",
+    await axios.get(api + "/" + sessionUsername + "/collection",
      { withCredentials: true, headers: { Authorization: `Bearer ${sessionToken}` } })
-     .then(function (response) {
+      .then(function (response) {
         console.log(response.data);
         setAlbums(response.data);
+        setIsLoading(false);
       })
       .catch(function (error) {
         console.log(error);
       });
-  }, [sessionUsername, sessionToken]);
+  }, [sessionToken, sessionUsername])
+
+  useEffect(() => {
+    getAlbums();
+  }, [getAlbums]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-screen">
@@ -39,6 +49,10 @@ export default function List() {
             <section class="main-content" className="flex flex-col w-3/4 mt-5">
               {/* List Nav Bar */}
               <ListNavigation></ListNavigation>
+              {/* List Items */}
+              {/* {albums.map((album) => (
+                <ListItem album={album}></ListItem>
+              ))} */}
               <ListItem></ListItem>
             </section>
           </div>

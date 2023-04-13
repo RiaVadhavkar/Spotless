@@ -1,7 +1,7 @@
 import sour from "../assets/albums/sour.jpg";
 import { FaStar, FaStarHalfAlt } from "react-icons/fa";
 
-export default function ListItem() {
+export default function ListItem(props) {
   return (
     <div
       className="list-item"
