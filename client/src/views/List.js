@@ -3,7 +3,7 @@ import Banner from "../components/Banner";
 import LeftSide from "../components/LeftSide";
 import ListNavigation from "../components/ListNavigation";
 import ListItem from "../components/ListItem";
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../App";
 import axios from "axios";
 
@@ -12,27 +12,30 @@ export default function List() {
   const [albums, setAlbums] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  const getAlbums = useCallback( async () => {
-    
+  useEffect(() => {
+    getAlbums();
+  }, []);
+
+  async function getAlbums() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios.get(api + "/" + sessionUsername + "/collection",
      { withCredentials: true, headers: { Authorization: `Bearer ${sessionToken}` } })
       .then(function (response) {
-        console.log(response.data);
-        setAlbums(response.data);
+        setAlbums(response.data.collection_items);
+        console.log(albums);
         setIsLoading(false);
       })
       .catch(function (error) {
         console.log(error);
       });
-  }, [sessionToken, sessionUsername])
-
-  useEffect(() => {
-    getAlbums();
-  }, [getAlbums]);
+  };
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="flex flex-col items-center justify-center h-screen">
+        <h1 className="text-4xl font-bold">Loading...</h1>
+      </div>
+    );
   }
 
   return (
@@ -50,10 +53,22 @@ export default function List() {
               {/* List Nav Bar */}
               <ListNavigation></ListNavigation>
               {/* List Items */}
-              {/* {albums.map((album) => (
-                <ListItem album={album}></ListItem>
-              ))} */}
-              <ListItem></ListItem>
+              { (albums.length === 0) ? (
+                <div className="flex flex-col items-center justify-center h-96">
+                  <h1 className="text-4xl font-bold">No Albums in Collection</h1>
+                  <h1 className="text-4xl font-bold">Add Some!</h1>
+                  </div>
+                  ) : (
+                    <></>
+                  )}
+              {albums.map((album) => {
+                  return (
+                    <ListItem
+                      key={album.Collection_URI}
+                      album={album}
+                    ></ListItem>
+                  );
+                })}
             </section>
           </div>
         </>
