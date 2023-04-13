@@ -40,6 +40,7 @@ export default function Settings() {
         console.log(response.data);
         setSessionToken("");
         setSessionUsername("");
+        setError(false);
         navigate('/login');
       })
       .catch(function (error) {
@@ -81,7 +82,7 @@ export default function Settings() {
                 >
                   <label class="text-3xl mb-2">Change Password</label>
                   <input
-                    class="text-3xl mb-2"
+                    class="text-2xl mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
                     type="password"
                     name="password"
                     value={formValues.password}
@@ -90,7 +91,7 @@ export default function Settings() {
                     placeholder="New Password"
                   />
                   <input
-                    class="text-3xl mb-2"
+                    class="text-2xl mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
                     type="password"
                     name="confirmedPassword"
                     value={formValues.confirmedPassword}
