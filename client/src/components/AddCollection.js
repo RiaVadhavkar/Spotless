@@ -22,10 +22,13 @@ export default function AddCollection() {
 
   const spotifyURL = useRef("");
 
-  function addURLtoList(URL) {
+  const addURLtoList = (URL) => (event) => {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
 
     console.log(sessionToken);
+    console.log(URL);
+
+    event.preventDefault();
 
     axios
       .post(api + "add/album/" + status, {
@@ -100,7 +103,7 @@ export default function AddCollection() {
                           defaultValue={status}
                         >
                           {statuses.map((status) => (
-                            <option value={status}>{status}</option>
+                            <option key={status} value={status}>{status}</option>
                           ))}
                         </select>
                       </label>
