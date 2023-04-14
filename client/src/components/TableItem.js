@@ -1,12 +1,9 @@
-import { Fragment, useState, useRef, useContext } from "react";
-import { SessionContext } from "../App";
+import temptation from "../assets/albums/temptation.jpg";
+import { FaStar, FaStarHalfAlt, FaCommentAlt } from "react-icons/fa";
+import { Fragment, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 
-import axios from "axios";
-
-export default function AddCollection() {
-  const { sessionToken } = useContext(SessionContext);
-
+export default function TableItem() {
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -17,46 +14,51 @@ export default function AddCollection() {
     setIsOpen(true);
   }
 
-  const statuses = ["Planning", "Complete", "Dropped"];
-  const [status, setStatus] = useState(statuses[0]);
-
-  const spotifyURL = useRef("");
-
-  const addURLtoList = (URL) => (event) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-
-    console.log(sessionToken);
-    console.log(URL);
-
-    event.preventDefault();
-
-    axios
-      .post(
-        api + "add/album/" + status,
-        {
-          collection_url: URL,
-        },
-        {
-          headers: { Authorization: `Bearer ${sessionToken}` },
-          withCredentials: true,
-        }
-      )
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
   return (
     <div>
-      <button
-        class="add-collection-button"
-        className="bg-spotless-dark-green font-bold ring ring-white -translate-y-8 p-2.5 rounded-full h-auto w-64 flex flex-col items-center justify-center"
+      <div
+        className="table-item"
+        class="grid grid-cols-3 bg-neutral-900 h-56 w-96 rounded m-3.5 items-center"
         onClick={openModal}
       >
-        ADD COLLECTION
-      </button>
+        <div
+          className="left-col"
+          class="flex flex-col justify-center items-center"
+        >
+          <img src={temptation} alt="temptation" class="w-24 mb-2.5" />
+          <div
+            className="item-rating-tag"
+            class="flex items-center justify-center"
+          >
+            Rating
+          </div>
+          <div
+            className="item-rating"
+            class="flex flex-cols items-center justify-center"
+          >
+            <FaStar className="h-5 w-5" aria-hidden="true" />
+            <FaStar className="h-5 w-5" aria-hidden="true" />
+            <FaStar className="h-5 w-5" aria-hidden="true" />
+            <FaStar className="h-5 w-5" aria-hidden="true" />
+            <FaStarHalfAlt className="h-5 w-5" aria-hidden="true" />
+          </div>
+          <div class="flex items-center justify-center mt-2.5">EP</div>
+        </div>
+
+        <div
+          className="right-col"
+          class="col-span-2 flex flex-col justify-start pr-2.5 py-3.5 h-full"
+        >
+          <div class="col-span-3 text-lg mb-2.5">
+            The Name Chapter: TEMPTATION
+          </div>
+          <div class="text-sm mb-2.5"> TOMORROW X TOGETHER</div>
+          <div class="text-sm">Review:</div>
+          <div class="text-sm">
+            <p>amazing EP. farewell, neverland is the best one out of the 5</p>
+          </div>
+        </div>
+      </div>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -90,13 +92,18 @@ export default function AddCollection() {
                   >
                     Add Collection to List
                   </Dialog.Title>
-                  <div className="p-2.5">
+                  {/* <div className="p-2.5">
                     <form
                       onSubmit={addURLtoList(spotifyURL.current.value)}
                       class="flex justify-between items-center"
                     >
                       <span class="text-white">Album URL</span>
-                      <input id="link" ref={spotifyURL} type="text" class="text-spotless-green rounded p-1 flex grow mx-2"/>
+                      <input
+                        id="link"
+                        ref={spotifyURL}
+                        type="text"
+                        class="text-spotless-green rounded p-1 flex grow mx-2"
+                      />
                       <select
                         id="status"
                         onChange={(e) => setStatus(e.target.value)}
@@ -108,7 +115,7 @@ export default function AddCollection() {
                         ))}
                       </select>
                     </form>
-                  </div>
+                  </div> */}
 
                   <div className="flex pt-4 items-center justify-end gap-3">
                     <button

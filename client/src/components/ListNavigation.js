@@ -25,8 +25,8 @@ export default function ListNavigation() {
             >
               <Tab.Group>
                 <Tab.List className="flex space-x-2 px-4 grow justify-around items-center">
-                  <Tab>Listened</Tab>
                   <Tab>Planning</Tab>
+                  <Tab>Complete</Tab>
                   <Tab>Dropped</Tab>
                 </Tab.List>
               </Tab.Group>
@@ -66,8 +66,16 @@ export default function ListNavigation() {
               className="switch-views"
               class="flex flex-row bg-neutral-900 rounded-2xl py-3 gap-3.5 items-center justify-center w-fit h-full px-4 mx-1.5"
             >
-              <FaList className="h-5 w-5" aria-hidden="true" />
-              <FaThLarge className="h-5 w-5" aria-hidden="true" />
+              <FaList
+                className="h-5 w-5"
+                aria-hidden="true"
+                onClick={"/list"}
+              />
+              <FaThLarge
+                className="h-5 w-5"
+                aria-hidden="true"
+                onClick={"/table"}
+              />
             </section>
           </section>
         </>

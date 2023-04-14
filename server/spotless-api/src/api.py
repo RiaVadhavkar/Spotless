@@ -70,6 +70,7 @@ def get_user_from_header(request):
     # Get user from token
     user = User.verify_auth_token(token, app.secret_key)
     return user
+
 @login_manager.user_loader
 def load_user(user_id):
     # Load the user from the database
@@ -82,6 +83,8 @@ def load_user(user_id):
 def process_album(status):
     # Get the album URL from the header
     album_url = request.json.get('collection_url')
+    if not album_url:
+        return Response(response="Not valid Spotify link.", status=400) 
     if not spotify_utils.check_spotify_url(album_url):
         return Response(response="Not valid Spotify link.", status=400)
     
@@ -98,11 +101,18 @@ def process_album(status):
             collection_query = queries['collections'].get('collection_query')
             cursor.executemany(collection_query, collection_values)
 
-            # Adding null review and rating to user list
-            # TODO: Add to U_Collection_Status and get status
-            # TODO: Switch logic to check headers for token to get user
+            # Adding null review, rating and status to user list
             if request.headers:
-                user = get_user_from_header(request)
+                # user = get_user_from_header(request)
+                auth_header = request.headers.get('Authorization')
+                print(request.headers)
+                # Extract token
+                token = ""
+                if auth_header:
+                    token = auth_header.split()[1]
+
+                # Get user from token
+                user = User.verify_auth_token(token, app.secret_key)
                 if user is None:
                     return Response(response="Bad token.", status=400)
                 
@@ -115,7 +125,7 @@ def process_album(status):
                 cursor.executemany(user_rate_query, user_collection) 
                 cursor.executemany(user_review_query, user_collection)
 
-                user_status_query = queries['collections'].get('user_review_query')
+                user_status_query = queries['collections'].get('user_status_query')
                 user_status = [(user.get_id(), album['Collection_URI'], status) for album in album_list]
                 cursor.executemany(user_status_query, user_status)
 
@@ -155,10 +165,11 @@ def process_album(status):
             # Commit the changes to the database
             conn.commit()
 
+            # I should return album data so that they can update now
             return Response(response=f"{album_list[0].get('Collection_name')} by {artist_list[0].get('Artist_name')} is added.",
                             status=200)
     except Exception as e:
-        return handle_exception(e)  
+        return handle_exception(e)
 
 @app.route('/users/add', methods=["GET","POST"])
 def update_collection():
@@ -213,15 +224,48 @@ def register():
         queryRes = cursor.fetchone()
         if queryRes:
             return Response(response="Username already exists.", status=400)
-        # hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        # data = [username, hashed_password.decode('utf-8'), None]
-        data = [username, password, None]
+        hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+        data = [username, hashed_password.decode('utf-8'), None]
         query = queries['credentials'].get('register_query')
         cursor.execute(query, data)
         conn.commit()
 
     return Response(response="User registered successfully.", status=200)
 
+# @app.route('/login', methods=["POST"])
+# def login():
+#     # Make sure there is a form sent
+#     if not request.form:
+#         return Response(response="Invalid form data.", status=400)
+    
+#     username = request.form.get('username')
+#     password = request.form.get('password')
+
+#     if not (username and password):
+#         return Response(response="No username or password in form.", status=401)
+
+#     with mysql.connect() as conn, conn.cursor() as cursor:
+#         hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
+#         data = [username, hashed_password.decode('utf-8')]
+#         query = queries['credentials'].get('login_query')
+#         cursor.execute(query, data)
+#         account = cursor.fetchone()
+
+#         if account:
+#             user = User(id=username, secret_key=app.secret_key)
+#             login_user(user)
+#             token = current_user.get_user_auth_token()
+
+#             resp = Response(response=json.dumps({'token': token,
+#                                                  'name': username}), 
+#                                               status=200, 
+#                                               mimetype='application/json')
+#             resp.set_cookie('token', token, httponly=True, samesite='None', secure=True)
+#             print("Token from login:", token)
+#             return resp
+        
+#     return Response(response="Login unsuccessful. Incorrect username or password.", status=400)
+            
 @app.route('/login', methods=["POST"])
 def login():
     # Make sure there is a form sent
@@ -235,28 +279,27 @@ def login():
         return Response(response="No username or password in form.", status=401)
 
     with mysql.connect() as conn, conn.cursor() as cursor:
-        # hashed_password = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt())
-        # data = [username, hashed_password.decode('utf-8')]
-        data = [username, password]
-        query = queries['credentials'].get('login_query')
+        data = [username]
+        query = queries['credentials'].get('user_in_db_query')
         cursor.execute(query, data)
         account = cursor.fetchone()
 
         if account:
-            user = User(id=username, secret_key=app.secret_key)
-            login_user(user)
-            token = current_user.get_user_auth_token()
+            stored_password = account[1].encode('utf-8')
+            if bcrypt.checkpw(password.encode('utf-8'), stored_password):
+                user = User(id=username, secret_key=app.secret_key)
+                token = user.get_user_auth_token()
 
-            resp = Response(response=json.dumps({'token': token,
-                                                 'name': username}), 
-                                              status=200, 
-                                              mimetype='application/json')
-            resp.set_cookie('token', token, httponly=True, samesite='None', secure=True)
-            print("Token from login:", token)
-            return resp
+                resp = Response(response=json.dumps({'token': token,
+                                                     'name': username}), 
+                                                  status=200, 
+                                                  mimetype='application/json')
+                resp.set_cookie('token', token, httponly=True, samesite='None', secure=True)
+                print("Token from login:", token)
+                return resp
         
     return Response(response="Login unsuccessful. Incorrect username or password.", status=400)
-            
+
 @app.route('/logout')
 def logout():
     try:
@@ -335,31 +378,22 @@ def profile():
     except Exception as e:
         return handle_exception(e)
 
-@app.route('/<username>/collection/<type>/<collection_uri>', methods=['PUT'])
+@app.route('/update/album/<type>/<collection_uri>', methods=['PUT'])
 def update_user_collection(username, type, collection_uri):
     user = get_user_from_header(request)
     if not user:
         return Response(response="Bad token", status=400)
     if username != user.get_id():
         return Response(response="Username does not equal user from token?", status=400)
-    query = ""
-    val = ""
-    if type == "review":
-        query = queries['update'].get('update_review_query')
-        val = request.form.get('review')
-    elif type == "rate":
-        query = queries['update'].get('update_rate_query')
-        # val = Button value
-    elif type == "status":
-        query = queries['update'].get('update_status_query')
-        # val = Button value
-    else:
+    if type not in ['rate', 'review', 'status']:
         return Response(response="Type is wrong.", status=400)
     
     with mysql.connect() as conn, conn.cursor() as cursor:
+        query = queries['update'].get(f'update_{type}_query')
+        val = request.json.get('value')
         cursor.execute(query, [username, collection_uri, val])
-        
     return Response(response="Updated.", status=200)
+
 @app.route('/<username>/collection')
 def get_user_list(username):
     # Check headers if exists
@@ -457,6 +491,11 @@ def handle_exception(e):
         "description": e.description,
     })
     response.content_type = "application/json"
+    return response
+
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Credentials'] = 'true'
     return response
 
 if __name__ == "__main__":

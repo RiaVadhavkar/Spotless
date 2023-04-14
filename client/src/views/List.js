@@ -72,7 +72,7 @@ export default function List() {
             </section>
           </div>
         </>
-      )}
+      )}  
     </Disclosure>
   );
 }
