@@ -9,8 +9,10 @@ export default function Settings() {
   const { sessionToken, setSessionToken, setSessionUsername } = useContext(SessionContext);  
 
   const [error, setError] = useState(false);
+  const [wrongPasswordError, setWrongPasswordError] = useState(false);
 
   const [formValues, setFormValues] = useState({
+    olddPassword: "",
     password: "",
     confirmedPassword: "",
   });
@@ -31,8 +33,9 @@ export default function Settings() {
       return;
     }
     const form = new FormData();
-    form.append("password", formValues.password);
-    await axios.post(api + "user/change-password", form, {
+    form.append("old_password", formValues.oldPassword)
+    form.append("new_password", formValues.password);
+    await axios.post(api + "update/password", form, {
        withCredentials: true, 
        headers: { Authorization : `Bearer ${sessionToken}` 
       }})
@@ -45,6 +48,7 @@ export default function Settings() {
       })
       .catch(function (error) {
         console.log(error);
+        setWrongPasswordError(true);
       });
     };
     
@@ -84,6 +88,15 @@ export default function Settings() {
                   <input
                     class="text-2xl mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
                     type="password"
+                    name="oldPassword"
+                    value={formValues.oldPassword}
+                    onChange={handleInputChange}
+                    id="oldPassword"
+                    placeholder="Previous Password"
+                  />
+                  <input
+                    class="text-2xl mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
+                    type="password"
                     name="password"
                     value={formValues.password}
                     onChange={handleInputChange}
@@ -102,6 +115,11 @@ export default function Settings() {
                   {error && (
                     <p class="text-red-600 text-3xl mb-2">
                       Passwords do not match
+                    </p>
+                  )}
+                  {wrongPasswordError && (
+                    <p class="text-red-600 text-3xl mb-2">
+                      Wrong Password
                     </p>
                   )}
                   <button
