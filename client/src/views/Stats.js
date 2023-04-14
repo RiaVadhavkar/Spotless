@@ -1,10 +1,10 @@
 import { Disclosure } from "@headlessui/react";
 import Banner from "../components/Banner";
 import LeftSide from "../components/LeftSide";
-import ListNavigation from "../components/ListNavigation";
-import ListItem from "../components/ListItem";
+import BarPie from "../components/BarPie";
+import TextStats from "../components/TextStats";
 
-export default function List() {
+export default function Stats() {
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-screen">
       {({ open }) => (
@@ -18,16 +18,12 @@ export default function List() {
             {/* Main Content */}
             <section class="main-content" className="flex flex-col w-3/4 mt-5">
               {/* List Nav Bar */}
-              <ListNavigation></ListNavigation>
-              <ListItem></ListItem>
-              <ListItem></ListItem>
-              <ListItem></ListItem>
-              <ListItem></ListItem>
-              <ListItem></ListItem>
+              <TextStats></TextStats>
+              <BarPie></BarPie>
             </section>
           </div>
         </>
-      )}  
+      )}
     </Disclosure>
   );
 }
