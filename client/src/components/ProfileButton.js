@@ -9,7 +9,7 @@ export default function ProfileButton() {
         className="flex justify-between items-center w-auto rounded-full bg-spotless-green px-4 py-2 text-white hover:text-white hover:text-opacity-80 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-900"
       >
         &nbsp;
-        <span className="text-xl font-semibold">LOGIN</span>
+        <span className="text-xl font-semibold">SIGN UP&nbsp;/&nbsp;LOGIN</span>
       </button>
       </Link>
     </div>
