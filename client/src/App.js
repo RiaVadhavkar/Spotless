@@ -9,6 +9,7 @@ import Favorites from "./views/Favorites";
 import Stats from "./views/Stats";
 import Social from "./views/Social";
 import Settings from "./views/Settings";
+import axios from "axios";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createContext, useState, useEffect } from "react";
@@ -18,6 +19,8 @@ export const SessionContext = createContext();
 function App() {
   const [sessionToken, setSessionToken] = useState("");
   const [sessionUsername, setSessionUsername] = useState("");
+  const [albums, setAlbums] = useState([]);
+  const [albumsLength, setAlbumsLength] = useState(0);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -34,6 +37,20 @@ function App() {
     sessionStorage.setItem("username", sessionUsername);
   }, [sessionToken, sessionUsername]);
 
+  async function getAlbums() {
+    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    await axios.get(api + "user/collection",
+     { withCredentials: true, headers: { Authorization: `Bearer ${sessionToken}` } })
+      .then(function (response) {
+        setAlbums(response.data.collection_items);
+        setAlbumsLength(response.data.collection_items.length);
+        console.log(albums);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  };
+
   return (
     // TODO: add class="font-default" to App
     <div className="App" class="h-screen">
@@ -43,6 +60,8 @@ function App() {
           setSessionToken,
           sessionUsername,
           setSessionUsername,
+          albums,
+          getAlbums,
         }}
       >
         <BrowserRouter>

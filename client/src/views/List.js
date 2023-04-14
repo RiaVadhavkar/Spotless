@@ -8,35 +8,22 @@ import { SessionContext } from "../App";
 import axios from "axios";
 
 export default function List() {
-  const { sessionUsername, sessionToken } = useContext(SessionContext);
-  const [albums, setAlbums] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { sessionUsername, sessionToken, albums, getAlbums } = useContext(SessionContext);
+  // const [isLoading, setIsLoading] = useState(fal);
 
   useEffect(() => {
-    getAlbums();
+    if (sessionUsername && sessionToken) {
+      getAlbums();
+    }
   }, [sessionUsername, sessionToken]);
 
-  async function getAlbums() {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-    await axios.get(api + "/" + sessionUsername + "/collection",
-     { withCredentials: true, headers: { Authorization: `Bearer ${sessionToken}` } })
-      .then(function (response) {
-        setAlbums(response.data.collection_items);
-        console.log(albums);
-        setIsLoading(false);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex flex-col items-center justify-center h-screen">
-        <h1 className="text-4xl font-bold">Loading...</h1>
-      </div>
-    );
-  }
+  // if (isLoading) {
+  //   return (
+  //     <div className="flex flex-col items-center justify-center h-screen">
+  //       <h1 className="text-4xl font-bold">Loading...</h1>
+  //     </div>
+  //   );
+  // }
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-screen">
