@@ -61,6 +61,7 @@ function App() {
           sessionUsername,
           setSessionUsername,
           albums,
+          albumsLength,
           getAlbums,
         }}
       >

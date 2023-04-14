@@ -5,7 +5,7 @@ import { Transition, Dialog } from "@headlessui/react";
 import axios from "axios";
 
 export default function AddCollection() {
-  const { sessionToken } = useContext(SessionContext);
+  const { sessionToken, getAlbums } = useContext(SessionContext);
 
   let [isOpen, setIsOpen] = useState(false);
 
@@ -43,7 +43,7 @@ export default function AddCollection() {
       )
       .then(function (response) {
         console.log(response);
-        window.location.reload();
+        getAlbums();
       })
       .catch(function (error) {
         console.log(error);

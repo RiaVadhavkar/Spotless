@@ -8,14 +8,14 @@ import { SessionContext } from "../App";
 import axios from "axios";
 
 export default function List() {
-  const { sessionUsername, sessionToken, albums, getAlbums } = useContext(SessionContext);
+  const { sessionUsername, sessionToken, albums, getAlbums, albumsLength } = useContext(SessionContext);
   // const [isLoading, setIsLoading] = useState(fal);
 
   useEffect(() => {
     if (sessionUsername && sessionToken) {
       getAlbums();
     }
-  }, [sessionUsername, sessionToken]);
+  }, [sessionUsername, sessionToken, albumsLength]);
 
   // if (isLoading) {
   //   return (
