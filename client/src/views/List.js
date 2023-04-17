@@ -3,9 +3,8 @@ import Banner from "../components/Banner";
 import LeftSide from "../components/LeftSide";
 import ListNavigation from "../components/ListNavigation";
 import ListItem from "../components/ListItem";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { SessionContext } from "../App";
-import axios from "axios";
 
 export default function List() {
   const { sessionUsername, sessionToken, albums, getAlbums, albumsLength } = useContext(SessionContext);

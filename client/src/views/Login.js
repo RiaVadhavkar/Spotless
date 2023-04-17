@@ -9,6 +9,8 @@ const Login = () => {
 
   const { setSessionToken, setSessionUsername } = useContext(SessionContext);
 
+  const [loginError, setLoginError] = useState(false);
+
   const [formValues, setFormValues] = useState({
     username: "",
     password: "",
@@ -29,38 +31,56 @@ const Login = () => {
     form.append("username", formValues.username);
     form.append("password", formValues.password);
 
-    const loginResponse = await axios.post(api + "login", form, {
+    await axios.post(api + "login", form, {
       withCredentials: true,
-    });
+    })
+    .then(function (response) {
+      console.log(response);
 
-    if (loginResponse.status === 200) {
-      console.log(loginResponse);
-
-      const token = loginResponse.data.token;
-      const name = loginResponse.data.name;
+      const token = response.data.token;
+      const name = response.data.name;
 
       setSessionToken(token);
       setSessionUsername(name);
 
-      axios
-        .get(api + "profile", {
-          withCredentials: true,
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .then(function (response) {
-          console.log(response.data);
-          navigate("/list");
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
-
-      // navigate('/list');
-    } else {
+      navigate("/list");
+    })
+    .catch(function (error) {
       console.log("Login failed");
-      console.log(loginResponse);
-    }
-  };
+      console.log(error);
+      setLoginError(true);
+    });
+  }
+
+    // if (loginResponse.status === 200) {
+    //   console.log(loginResponse);
+
+    //   const token = loginResponse.data.token;
+    //   const name = loginResponse.data.name;
+
+    //   setSessionToken(token);
+    //   setSessionUsername(name);
+
+    //   navigate("/list");
+
+      // axios
+      //   .get(api + "profile", {
+      //     withCredentials: true,
+      //     headers: { Authorization: `Bearer ${token}` },
+      //   })
+      //   .then(function (response) {
+      //     console.log(response.data);
+          
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error);
+      //   });
+  //   } else {
+  //     console.log("Login failed");
+  //     console.log(loginResponse);
+  //     setLoginError(true);
+  //   }
+  // };
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-full">
@@ -105,6 +125,11 @@ const Login = () => {
                       class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-50 h-12"
                     />
                   </div>
+                  {loginError &&
+                    <div class="flex justify-center items-center">
+                      <p class="text-red-500">*Invalid username or password</p>
+                    </div>
+                  }
                   <div class="flex justify-center items-center">
                     <button
                       type="submit"
