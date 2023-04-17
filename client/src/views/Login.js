@@ -1,13 +1,19 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Disclosure } from "@headlessui/react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { SessionContext } from "../App";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const navigate = useNavigate();
+  const { sessionUsername, sessionToken, setSessionToken, setSessionUsername } = useContext(SessionContext);
 
-  const { setSessionToken, setSessionUsername } = useContext(SessionContext);
+  useEffect( () => {
+    if (sessionToken && sessionUsername) {
+      navigate("/list");
+    }
+  }, [sessionToken, sessionUsername]);
 
   const [loginError, setLoginError] = useState(false);
 
@@ -138,6 +144,15 @@ const Login = () => {
                       Login
                     </button>
                   </div>
+                  <div class="flex justify-center items-center">OR</div>
+        <div class="flex justify-center items-center">
+          <button
+            type="submit"
+            class="text-white ring ring-white w-1/3 py-2 rounded-full text-1xl"
+          >
+            <Link to="/register">Create an account</Link>
+          </button>
+        </div>
                 </form>
               </div>
             </div>

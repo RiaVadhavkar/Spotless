@@ -1,8 +1,20 @@
 import { Disclosure } from "@headlessui/react";
 import { Link } from "react-router-dom";
 import HomeBox from "../components/HomeBox";
+import { useContext, useEffect } from "react";
+import { SessionContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 export default function Home() {
+  const { sessionUsername, sessionToken } = useContext(SessionContext);
+  const navigate = useNavigate();
+
+  useEffect( () => {
+    if (sessionToken && sessionUsername) {
+      navigate("/list");
+    }
+  }, [sessionToken, sessionUsername]);
+
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-full">
       {({ open }) => (

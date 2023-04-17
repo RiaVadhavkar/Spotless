@@ -3,8 +3,21 @@ import Banner from "../components/Banner";
 import LeftSide from "../components/LeftSide";
 import SocialNavigation from "../components/SocialNavigation";
 import SocialItem from "../components/SocialItem";
+import { useContext, useEffect } from "react";
+import { SessionContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 export default function Social() {
+  const { sessionUsername, sessionToken } = useContext(SessionContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!sessionToken || !sessionUsername) {
+      console.log("Not logged in");
+      navigate("/login");
+    }
+  }, [sessionToken, sessionUsername]);
+  
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-screen">
       {({ open }) => (

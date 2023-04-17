@@ -1,12 +1,19 @@
 import { Disclosure } from "@headlessui/react";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { SessionContext } from "../App";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 export default function Settings() {
   const navigate = useNavigate();
-  const { sessionToken, setSessionToken, setSessionUsername } = useContext(SessionContext);  
+  const { sessionToken, sessionUsername, setSessionToken, setSessionUsername } = useContext(SessionContext);  
+
+  useEffect(() => {
+    if (!sessionToken || !sessionUsername) {
+      console.log("Not logged in");
+      navigate("/login");
+    }
+  }, [sessionToken, sessionUsername]);
 
   const [error, setError] = useState(false);
   const [wrongPasswordError, setWrongPasswordError] = useState(false);

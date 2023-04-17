@@ -5,24 +5,21 @@ import ListNavigation from "../components/ListNavigation";
 import ListItem from "../components/ListItem";
 import { useContext, useEffect } from "react";
 import { SessionContext } from "../App";
+import { useNavigate } from "react-router-dom";
 
 export default function List() {
+  const navigate = useNavigate();
   const { sessionUsername, sessionToken, albums, getAlbums, albumsLength } = useContext(SessionContext);
-  // const [isLoading, setIsLoading] = useState(fal);
 
   useEffect(() => {
     if (sessionUsername && sessionToken) {
       getAlbums();
     }
+    else {
+      console.log("Not logged in");
+      navigate("/login");
+    }
   }, [sessionUsername, sessionToken, albumsLength]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex flex-col items-center justify-center h-screen">
-  //       <h1 className="text-4xl font-bold">Loading...</h1>
-  //     </div>
-  //   );
-  // }
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-screen">
