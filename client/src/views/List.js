@@ -3,13 +3,20 @@ import Banner from "../components/Banner";
 import LeftSide from "../components/LeftSide";
 import ListNavigation from "../components/ListNavigation";
 import ListItem from "../components/ListItem";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import TableItem from "../components/TableItem";
 
 export default function List() {
   const navigate = useNavigate();
   const { sessionUsername, sessionToken, albums, getAlbums, albumsLength } = useContext(SessionContext);
+
+  const [listView, setListView] = useState(true);
+
+  const handleToggle = () => {
+    setListView(!listView);
+  };
 
   useEffect(() => {
     if (sessionUsername && sessionToken) {
@@ -20,6 +27,24 @@ export default function List() {
       navigate("/login");
     }
   }, [sessionUsername, sessionToken, albumsLength]);
+
+  const listItems = albums.map((album) => {
+    return (
+      <ListItem
+        key={album.Collection_URI}
+        album={album}
+      ></ListItem>
+    );
+  });
+
+  const tableItems = albums.map((album) => {
+    return (
+      <TableItem
+        key={album.Collection_URI}
+        album={album}
+      ></TableItem>
+    );
+  });
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-screen">
@@ -34,7 +59,7 @@ export default function List() {
             {/* Main Content */}
             <section class="main-content" className="flex flex-col w-3/4 mt-5">
               {/* List Nav Bar */}
-              <ListNavigation></ListNavigation>
+              <ListNavigation toggle = {handleToggle}></ListNavigation>
               {/* List Items */}
               { (albums.length === 0) ? (
                 <div className="flex flex-col items-center justify-center h-96">
@@ -44,14 +69,15 @@ export default function List() {
                   ) : (
                     <></>
                   )}
-              {albums.map((album) => {
-                  return (
-                    <ListItem
-                      key={album.Collection_URI}
-                      album={album}
-                    ></ListItem>
-                  );
-                })}
+                {listView ? (
+                  <div className="list-items">
+                    {listItems}
+                  </div>
+                ) : (
+                  <div className="table-items" class="grid grid-cols-2 items-center justify-items-center">
+                    {tableItems}
+                  </div>
+                )}
             </section>
           </div>
         </>
