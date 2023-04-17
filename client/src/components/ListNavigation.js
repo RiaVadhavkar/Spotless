@@ -2,7 +2,7 @@ import { Disclosure, Tab, Menu, Transition } from "@headlessui/react";
 import { BsFillCaretDownFill } from "react-icons/bs";
 import { FaList, FaThLarge, FaSearch } from "react-icons/fa";
 
-export default function ListNavigation() {
+export default function ListNavigation(props) {
   return (
     <Disclosure as="list-navigation" className="bg-spotless-green text-white">
       {({ open }) => (
@@ -69,12 +69,12 @@ export default function ListNavigation() {
               <FaList
                 className="h-5 w-5"
                 aria-hidden="true"
-                onClick={"/list"}
+                onClick={props.toggle}
               />
               <FaThLarge
                 className="h-5 w-5"
                 aria-hidden="true"
-                onClick={"/table"}
+                onClick={props.toggle}
               />
             </section>
           </section>

@@ -1,9 +1,15 @@
-import temptation from "../assets/albums/temptation.jpg";
-import { FaStar, FaStarHalfAlt, FaCommentAlt } from "react-icons/fa";
+import { FaStar, FaStarHalfAlt, FaRegStar, FaCommentAlt } from "react-icons/fa";
 import { Fragment, useState } from "react";
 import { Transition, Dialog } from "@headlessui/react";
 
-export default function TableItem() {
+export default function TableItem(props) {
+  const year = props.album.Release_date.split(" ")[3];
+  const type = props.album.Type.charAt(0).toUpperCase() + props.album.Type.slice(1);
+  const numFullStars = Math.floor(props.album.Rating);
+  const numHalfStars = Math.floor((props.album.Rating - numFullStars) * 2);
+  const ifHalfStar = numHalfStars === 1 ? true : false;
+  const numEmptyStars = 5 - numFullStars - numHalfStars;
+
   let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -25,7 +31,7 @@ export default function TableItem() {
           className="left-col"
           class="flex flex-col justify-center items-center"
         >
-          <img src={temptation} alt="temptation" class="w-24 mb-2.5" />
+          <img src={props.album.Cover_image} alt="temptation" class="w-24 mb-2.5" />
           <div
             className="item-rating-tag"
             class="flex items-center justify-center"
@@ -36,11 +42,19 @@ export default function TableItem() {
             className="item-rating"
             class="flex flex-cols items-center justify-center"
           >
-            <FaStar className="h-5 w-5" aria-hidden="true" />
-            <FaStar className="h-5 w-5" aria-hidden="true" />
-            <FaStar className="h-5 w-5" aria-hidden="true" />
-            <FaStar className="h-5 w-5" aria-hidden="true" />
-            <FaStarHalfAlt className="h-5 w-5" aria-hidden="true" />
+            {Array.from(
+        { length: numFullStars },
+        (_, i) => <FaStar className="h-5 w-5" aria-hidden="true" />
+      )}
+      {ifHalfStar ? (
+        <FaStarHalfAlt className="h-5 w-5" aria-hidden="true" />
+      ) : (
+        <></>
+      )}
+      {Array.from(
+        { length: numEmptyStars },
+        (_, i) => <FaRegStar className="h-5 w-5" aria-hidden="true" />
+      )}
           </div>
           <div class="flex items-center justify-center mt-2.5">EP</div>
         </div>
@@ -50,12 +64,12 @@ export default function TableItem() {
           class="col-span-2 flex flex-col justify-start pr-2.5 py-3.5 h-full"
         >
           <div class="col-span-3 text-lg mb-2.5">
-            The Name Chapter: TEMPTATION
+            {props.album.Collection}
           </div>
-          <div class="text-sm mb-2.5"> TOMORROW X TOGETHER</div>
+          <div class="text-sm mb-2.5">{ props.album.Artists }</div>
           <div class="text-sm">Review:</div>
           <div class="text-sm">
-            <p>amazing EP. farewell, neverland is the best one out of the 5</p>
+            <p>Review goes here ! </p>
           </div>
         </div>
       </div>
