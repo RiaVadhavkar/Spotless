@@ -10,9 +10,9 @@ export default function Home() {
   const navigate = useNavigate();
 
   useEffect( () => {
-    if (sessionToken && sessionUsername) {
-      navigate("/list");
-    }
+    // if (sessionToken && sessionUsername) {
+    //   navigate("/list");
+    // }
   }, [sessionToken, sessionUsername]);
 
   return (

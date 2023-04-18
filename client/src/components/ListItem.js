@@ -10,7 +10,7 @@ export default function ListItem(props) {
   return (
     <div
       className="list-item"
-      class="grid grid-cols-8 bg-neutral-900 min-h-80 rounded mt-3.5 items-center"
+      class="grid grid-cols-8 bg-neutral-900 min-h-80 rounded my-3.5 items-center"
     >
       <img src={props.album.Cover_image} alt="temptation" class="ml-6 my-2.5 w-12" />
       <div class="col-span-3 text-lg">{props.album.Collection}</div>

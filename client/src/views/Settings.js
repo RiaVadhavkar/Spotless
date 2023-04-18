@@ -9,10 +9,10 @@ export default function Settings() {
   const { sessionToken, sessionUsername, setSessionToken, setSessionUsername } = useContext(SessionContext);  
 
   useEffect(() => {
-    if (!sessionToken || !sessionUsername) {
-      console.log("Not logged in");
-      navigate("/login");
-    }
+    // if (!sessionToken || !sessionUsername) {
+    //   console.log("Not logged in");
+    //   navigate("/login");
+    // }
   }, [sessionToken, sessionUsername]);
 
   const [error, setError] = useState(false);
