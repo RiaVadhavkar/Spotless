@@ -4,12 +4,14 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { SessionContext } from "../App";
 import { Link } from "react-router-dom";
+import { RiErrorWarningFill } from "react-icons/ri";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { sessionUsername, sessionToken, setSessionToken, setSessionUsername } = useContext(SessionContext);
+  const { sessionUsername, sessionToken, setSessionToken, setSessionUsername } =
+    useContext(SessionContext);
 
-  useEffect( () => {
+  useEffect(() => {
     if (sessionToken && sessionUsername) {
       navigate("/list");
     }
@@ -37,50 +39,51 @@ const Login = () => {
     form.append("username", formValues.username);
     form.append("password", formValues.password);
 
-    await axios.post(api + "login", form, {
-      withCredentials: true,
-    })
-    .then(function (response) {
-      console.log(response);
+    await axios
+      .post(api + "login", form, {
+        withCredentials: true,
+      })
+      .then(function (response) {
+        console.log(response);
 
-      const token = response.data.token;
-      const name = response.data.name;
+        const token = response.data.token;
+        const name = response.data.name;
 
-      setSessionToken(token);
-      setSessionUsername(name);
+        setSessionToken(token);
+        setSessionUsername(name);
 
-      navigate("/list");
-    })
-    .catch(function (error) {
-      console.log("Login failed");
-      console.log(error);
-      setLoginError(true);
-    });
-  }
+        navigate("/list");
+      })
+      .catch(function (error) {
+        console.log("Login failed");
+        console.log(error);
+        setLoginError(true);
+      });
+  };
 
-    // if (loginResponse.status === 200) {
-    //   console.log(loginResponse);
+  // if (loginResponse.status === 200) {
+  //   console.log(loginResponse);
 
-    //   const token = loginResponse.data.token;
-    //   const name = loginResponse.data.name;
+  //   const token = loginResponse.data.token;
+  //   const name = loginResponse.data.name;
 
-    //   setSessionToken(token);
-    //   setSessionUsername(name);
+  //   setSessionToken(token);
+  //   setSessionUsername(name);
 
-    //   navigate("/list");
+  //   navigate("/list");
 
-      // axios
-      //   .get(api + "profile", {
-      //     withCredentials: true,
-      //     headers: { Authorization: `Bearer ${token}` },
-      //   })
-      //   .then(function (response) {
-      //     console.log(response.data);
-          
-      //   })
-      //   .catch(function (error) {
-      //     console.log(error);
-      //   });
+  // axios
+  //   .get(api + "profile", {
+  //     withCredentials: true,
+  //     headers: { Authorization: `Bearer ${token}` },
+  //   })
+  //   .then(function (response) {
+  //     console.log(response.data);
+
+  //   })
+  //   .catch(function (error) {
+  //     console.log(error);
+  //   });
   //   } else {
   //     console.log("Login failed");
   //     console.log(loginResponse);
@@ -131,11 +134,15 @@ const Login = () => {
                       class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-50 h-12"
                     />
                   </div>
-                  {loginError &&
-                    <div class="flex justify-center items-center">
-                      <p class="text-red-500">*Invalid username or password</p>
+                  {loginError && (
+                    <div class="flex justify-center items-center text-red-600">
+                      <RiErrorWarningFill
+                        className="h-5 w-5"
+                        aria-hidden="true"
+                      />
+                      &nbsp;Invalid Username or Password
                     </div>
-                  }
+                  )}
                   <div class="flex justify-center items-center">
                     <button
                       type="submit"
@@ -145,14 +152,14 @@ const Login = () => {
                     </button>
                   </div>
                   <div class="flex justify-center items-center">OR</div>
-        <div class="flex justify-center items-center">
-          <button
-            type="submit"
-            class="text-white ring ring-white w-1/3 py-2 rounded-full text-1xl"
-          >
-            <Link to="/register">Create an account</Link>
-          </button>
-        </div>
+                  <div class="flex justify-center items-center">
+                    <button
+                      type="submit"
+                      class="text-white ring ring-white w-1/3 py-2 rounded-full text-2xl"
+                    >
+                      <Link to="/register">Sign Up</Link>
+                    </button>
+                  </div>
                 </form>
               </div>
             </div>
