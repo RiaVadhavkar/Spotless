@@ -4,10 +4,10 @@ import { FaTiktok, FaYoutube, FaDiscord } from "react-icons/fa";
 
 export default function Footer() {
   return (
-    <Disclosure as="footer" className="bg-neutral-900 text-white">
+    <Disclosure as="footer" className="bg-neutral-900 text-white z-50">
       {({ open }) => (
         <>
-          <div className="relative flex h-12 items-center justify-between font-semibold mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
+          <div className="relative flex h-12 bg-neutral-900 items-center justify-between font-semibold mx-auto max-w-7xl px-2 sm:px-6 lg:px-8 z-50">
             {/* Socials */}
             <section className="flex auto items-center justify-center gap-5">
               <BsFacebook
