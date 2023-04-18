@@ -109,7 +109,7 @@ export default function TableItem(props) {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-neutral-900 text-white p-6 text-left shadow-xl transition-all w-1/2">
+                <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-neutral-900 text-white p-6 text-left shadow-xl transition-all w-4/5">
                   <div
                     className="details-modale"
                     class="grid grid-cols-5 items-center"
