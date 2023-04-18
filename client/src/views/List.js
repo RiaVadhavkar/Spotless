@@ -47,7 +47,7 @@ export default function List() {
   });
 
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white h-screen">
+    <Disclosure as="body" className="bg-spotless-green text-white h-full">
       {({ open }) => (
         <>
           <Banner></Banner>

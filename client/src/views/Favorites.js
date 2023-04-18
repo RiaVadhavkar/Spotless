@@ -12,14 +12,14 @@ export default function Favorites() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!sessionToken || !sessionUsername) {
-      console.log("Not logged in");
-      navigate("/login");
-    }
+    // if (!sessionToken || !sessionUsername) {
+    //   console.log("Not logged in");
+    //   navigate("/login");
+    // }
   }, [sessionToken, sessionUsername]);
 
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white h-screen">
+    <Disclosure as="body" className="bg-spotless-green text-white h-full">
       {({ open }) => (
         <>
           <Banner></Banner>
