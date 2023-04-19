@@ -4,7 +4,7 @@ import Home from "./views/Home";
 import Register from "./views/Register";
 import Login from "./views/Login";
 import List from "./views/List";
-import ListTable from "./views/ListTable";
+// import ListTable from "./views/ListTable";
 import Favorites from "./views/Favorites";
 import Stats from "./views/Stats";
 import Social from "./views/Social";
@@ -72,7 +72,7 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/list" element={<List />} />
-            <Route path="/table" element={<ListTable />} />
+            {/* <Route path="/table" element={<ListTable />} /> */}
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/social" element={<Social />} />

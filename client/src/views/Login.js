@@ -8,14 +8,17 @@ import { RiErrorWarningFill } from "react-icons/ri";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { sessionUsername, sessionToken, setSessionToken, setSessionUsername } =
+  const { setSessionToken, setSessionUsername } =
     useContext(SessionContext);
 
   useEffect(() => {
-    if (sessionToken && sessionUsername) {
+    const token = sessionStorage.getItem("token");
+    const username = sessionStorage.getItem("username");
+  
+    if (token && username) {
       navigate("/list");
     }
-  }, [sessionToken, sessionUsername]);
+  }, []);
 
   const [loginError, setLoginError] = useState(false);
 

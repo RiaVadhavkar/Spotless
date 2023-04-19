@@ -19,14 +19,20 @@ export default function List() {
   };
 
   useEffect(() => {
-    if (sessionUsername && sessionToken) {
-      getAlbums();
-    }
-    else {
+    const token = sessionStorage.getItem("token");
+    const username = sessionStorage.getItem("username");
+
+    if (!token || !username) {
       console.log("Not logged in");
       navigate("/login");
     }
-  }, [sessionUsername, sessionToken, albumsLength]);
+  }, []);
+
+  useEffect(() => {
+    if (sessionUsername && sessionToken) {
+      getAlbums();
+    }
+  }, [sessionUsername, sessionToken ,albumsLength]);
 
   const listItems = albums.map((album) => {
     return (

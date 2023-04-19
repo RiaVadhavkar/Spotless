@@ -5,14 +5,16 @@ import { SessionContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 export default function Home() {
-  const { sessionUsername, sessionToken } = useContext(SessionContext);
   const navigate = useNavigate();
 
-  useEffect( () => {
-    if (sessionToken && sessionUsername) {
+  useEffect(() => {
+    const token = sessionStorage.getItem("token");
+    const username = sessionStorage.getItem("username");
+
+    if (token && username) {
       navigate("/list");
     }
-  }, [sessionToken, sessionUsername]);
+  }, []);
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-full">
