@@ -5,6 +5,7 @@ const navigation = [
   { name: "Favorites", href: "/favorites", current: false },
   { name: "Stats", href: "/stats", current: false },
   { name: "Social", href: "/social", current: false },
+  { name: "Admin", href: "/admin", current: false },
   { name: "Settings", href: "/settings", current: false },
 ];
 

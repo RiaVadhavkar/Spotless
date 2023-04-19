@@ -4,10 +4,10 @@ import Home from "./views/Home";
 import Register from "./views/Register";
 import Login from "./views/Login";
 import List from "./views/List";
-// import ListTable from "./views/ListTable";
 import Favorites from "./views/Favorites";
 import Stats from "./views/Stats";
 import Social from "./views/Social";
+import Admin from "./views/Admin";
 import Settings from "./views/Settings";
 import axios from "axios";
 
@@ -39,8 +39,11 @@ function App() {
 
   async function getAlbums() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-    await axios.get(api + "user/collection",
-     { withCredentials: true, headers: { Authorization: `Bearer ${sessionToken}` } })
+    await axios
+      .get(api + "user/collection", {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      })
       .then(function (response) {
         setAlbums(response.data.collection_items);
         setAlbumsLength(response.data.collection_items.length);
@@ -49,7 +52,7 @@ function App() {
       .catch(function (error) {
         console.log(error);
       });
-  };
+  }
 
   return (
     // TODO: add class="font-default" to App
@@ -72,10 +75,10 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/list" element={<List />} />
-            {/* <Route path="/table" element={<ListTable />} /> */}
             <Route path="/favorites" element={<Favorites />} />
             <Route path="/stats" element={<Stats />} />
             <Route path="/social" element={<Social />} />
+            <Route path="/admin" element={<Admin />} />
             <Route path="/settings" element={<Settings />} />
           </Routes>
         </BrowserRouter>
