@@ -96,43 +96,44 @@ export default function AddCollection() {
                       onSubmit={(e) =>
                         addURLtoList(spotifyURL.current.value, e)
                       }
-                      class="flex justify-between items-center"
                     >
-                      <span class="text-white">Album URL</span>
-                      <input
-                        id="link"
-                        ref={spotifyURL}
-                        type="text"
-                        class="text-spotless-green rounded p-1 flex grow mx-2"
-                      />
-                      <select
-                        id="status"
-                        onChange={(e) => setStatus(e.target.value)}
-                        defaultValue={status}
-                        class="text-spotless-green rounded font-bold p-1"
-                      >
-                        {statuses.map((status) => (
-                          <option key={status} value={status}>
-                            {status}
-                          </option>
-                        ))}
-                      </select>
+                      <div class="flex justify-between items-center">
+                        <span class="text-white">Album URL</span>
+                        <input
+                          id="link"
+                          ref={spotifyURL}
+                          type="text"
+                          class="text-spotless-green rounded p-1 flex grow mx-2"
+                        />
+                        <select
+                          id="status"
+                          onChange={(e) => setStatus(e.target.value)}
+                          defaultValue={status}
+                          class="text-spotless-green rounded font-bold p-1"
+                        >
+                          {statuses.map((status) => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
                       <div className="flex pt-4 items-center justify-end gap-3">
-                      <button 
-                        type="submit"
-                        onClick={closeModal}
-                        class="inline-flex justify-center rounded-md border border-transparent bg-spotless-dark-green px-4 py-2 text-sm font-medium text-white hover:bg-spotless-green focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-                      >
-                        Add
-                      </button>
-                    <button
-                      type="button"
-                      class="inline-flex justify-center rounded-md border border-transparent bg-white bg-opacity-25 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                        <button
+                          type="submit"
+                          onClick={closeModal}
+                          class="inline-flex justify-center rounded-md border border-transparent bg-spotless-dark-green px-4 py-2 text-sm font-medium text-white hover:bg-spotless-green focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                        >
+                          Add
+                        </button>
+                        <button
+                          type="button"
+                          class="inline-flex justify-center rounded-md border border-transparent bg-white bg-opacity-25 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                          onClick={closeModal}
+                        >
+                          Cancel
+                        </button>
+                      </div>
                     </form>
                   </div>
                 </Dialog.Panel>
