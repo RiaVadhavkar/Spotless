@@ -8,12 +8,27 @@ import {
     FaPlusCircle,
     FaMinusCircle, } from 'react-icons/fa';
 import TrackItem from "../components/TrackItem";
+import axios from "axios";
+import { SessionContext } from "../App";
+import { useContext } from "react";
 
 export default function CollectionModal(props) {
+    const { sessionToken, getAlbums } = useContext(SessionContext);
     const year = props.album.Release_date.split(" ")[3];
     const type = props.album.Type.charAt(0).toUpperCase() + props.album.Type.slice(1);
     const rating = props.album.Rating;
     const albumLink = "https://open.spotify.com/album/" + props.album.Collection_URI;
+    const numTracks = props.album.tracks.length;
+    let albumHours = 0;
+    props.album.tracks.forEach((track) => {
+        albumHours += (track.Track_length / 1000 / 60 / 60);
+    });
+    let albumMinutes = Math.floor((albumHours - Math.floor(albumHours)) * 60);
+    let albumSeconds = Math.floor((((albumHours - Math.floor(albumHours)) * 60) - albumMinutes) * 60);
+    albumHours < 0 ? albumHours = 0 : albumHours = Math.floor(albumHours);
+
+    let albumTime = albumHours + " hrs " + albumMinutes + " min " + albumSeconds + " sec"
+    albumHours == 0 ? albumTime = albumMinutes + " min " + albumSeconds + " sec" : albumTime = albumTime;
     
     const albumTracks = props.album.tracks.map((track, index) => {
         return (
@@ -21,8 +36,83 @@ export default function CollectionModal(props) {
         );
     });
 
-    // const handleDelete = () => {
-    //     const api = "
+    const handleDelete = async (event) => {
+        event.preventDefault();
+        const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+        
+        await axios
+            .post(api + "delete/album",
+        {
+          collection_uri: props.album.Collection_URI,
+        },
+        {
+          headers: { Authorization: `Bearer ${sessionToken}` },
+          withCredentials: true,
+        }
+      )
+      .then(function (response) {
+        console.log(response);
+        getAlbums();
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    };
+
+    const handleUpdate = async (event) => {
+        
+    };
+
+    const updateStatus = async (event) => {
+        event.preventDefault();
+        const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+
+        await axios.post(api + "update/album", {
+            collection_uri: props.album.Collection_URI,
+            type: 'status',
+            value: "",
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    };
+
+    const updateRating = async (event) => {
+        event.preventDefault();
+        const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+
+        await axios.post(api + "update/album", {
+            collection_uri: props.album.Collection_URI,
+            type: 'rate',
+            value: 10,
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    };
+
+    const handleReview = async (event) => {
+        event.preventDefault();
+        const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+
+        await axios.post(api + "update/album", {
+            collection_uri: props.album.Collection_URI,
+            type: 'review',
+            value: 10,
+        })
+        .then(function (response) {
+            console.log(response);
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    };
 
   return (
     <Transition appear show={props.isOpen} as={Fragment}>
@@ -70,7 +160,7 @@ export default function CollectionModal(props) {
                         className="play=on-spotify"
                         class="flex flex-row items-center justify-center"
                       >
-                        <a href={albumLink} target='_blank'>
+                        <a href={albumLink} target='_blank' rel='noreferrer'>
                             <FaSpotify className="h-5 w-5" aria-hidden="true" />
                             &nbsp;Play on Spotify
                         </a>
@@ -119,10 +209,11 @@ export default function CollectionModal(props) {
                         Year:&nbsp;{year}
                       </div>
                       <div class="flex items-center justify-center mt-2.5">
-                        Number:&nbsp;SONG COUNT
+                        Number:&nbsp;{ numTracks }
                       </div>
                       <div class="flex items-center justify-center mt-2.5">
-                        Time:&nbsp;TOTAL TIME
+                        Time:&nbsp;{ albumTime }
+
                       </div>
                       <div
                         className="item-rating-tag"
