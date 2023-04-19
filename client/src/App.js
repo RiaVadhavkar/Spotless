@@ -53,7 +53,7 @@ function App() {
 
   return (
     // TODO: add class="font-default" to App
-    <div className="App" class="h-full">
+    <div className="App" class="h-screen">
       <SessionContext.Provider
         value={{
           sessionToken,
