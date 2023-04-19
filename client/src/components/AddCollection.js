@@ -117,17 +117,14 @@ export default function AddCollection() {
                           </option>
                         ))}
                       </select>
-                    </form>
-                  </div>
-
-                  <div className="flex pt-4 items-center justify-end gap-3">
-                    <button
-                      type="button"
-                      class="inline-flex justify-center rounded-md border border-transparent bg-spotless-dark-green px-4 py-2 text-sm font-medium text-white hover:bg-spotless-green focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-                      onClick={closeModal}
-                    >
-                      Add
-                    </button>
+                      <div className="flex pt-4 items-center justify-end gap-3">
+                      <button 
+                        type="submit"
+                        onClick={closeModal}
+                        class="inline-flex justify-center rounded-md border border-transparent bg-spotless-dark-green px-4 py-2 text-sm font-medium text-white hover:bg-spotless-green focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                      >
+                        Add
+                      </button>
                     <button
                       type="button"
                       class="inline-flex justify-center rounded-md border border-transparent bg-white bg-opacity-25 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
@@ -135,6 +132,8 @@ export default function AddCollection() {
                     >
                       Cancel
                     </button>
+                  </div>
+                    </form>
                   </div>
                 </Dialog.Panel>
               </Transition.Child>
