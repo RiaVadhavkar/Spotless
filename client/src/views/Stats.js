@@ -8,15 +8,17 @@ import { SessionContext } from "../App";
 import { useNavigate } from "react-router-dom";
 
 export default function Stats() {
-  const { sessionUsername, sessionToken } = useContext(SessionContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    // if (!sessionToken || !sessionUsername) {
-    //   console.log("Not logged in");
-    //   navigate("/login");
-    // }
-  }, [sessionToken, sessionUsername]);
+    const token = sessionStorage.getItem("token");
+    const username = sessionStorage.getItem("username");
+
+    if (!token || !username) {
+      console.log("Not logged in");
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-full">

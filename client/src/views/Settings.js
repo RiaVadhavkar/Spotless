@@ -9,11 +9,14 @@ export default function Settings() {
   const { sessionToken, sessionUsername, setSessionToken, setSessionUsername } = useContext(SessionContext);  
 
   useEffect(() => {
-    // if (!sessionToken || !sessionUsername) {
-    //   console.log("Not logged in");
-    //   navigate("/login");
-    // }
-  }, [sessionToken, sessionUsername]);
+    const token = sessionStorage.getItem("token");
+    const username = sessionStorage.getItem("username");
+
+    if (!token || !username) {
+      console.log("Not logged in");
+      navigate("/login");
+    }
+  }, []);
 
   const [error, setError] = useState(false);
   const [wrongPasswordError, setWrongPasswordError] = useState(false);
