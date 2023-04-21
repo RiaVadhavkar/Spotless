@@ -80,13 +80,17 @@ export default function CollectionModal(props) {
 
     const handleUpdate = async (event) => {
         event.preventDefault();
-        console.log(review);
-        console.log(status);
-        console.log(rating);
-        updateStatus();
-        updateRating();
-        handleReview();
+        if (status != props.album.Status) {
+            updateStatus();
+        }
+        if (rating != props.album.Rating) {
+            updateRating();
+        }
+        if (review != props.album.Review) {
+            handleReview();
+        }
         getAlbums();
+        props.closeModal();
     };
 
     const updateStatus = () => {
