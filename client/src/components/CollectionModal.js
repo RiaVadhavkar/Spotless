@@ -1,5 +1,5 @@
 import React from 'react'
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useContext } from 'react'
 import { Transition, Dialog } from '@headlessui/react'
 import {
     FaSpotify,
@@ -10,13 +10,11 @@ import {
 import TrackItem from "../components/TrackItem";
 import axios from "axios";
 import { SessionContext } from "../App";
-import { useContext } from "react";
 
 export default function CollectionModal(props) {
     const { sessionToken, getAlbums } = useContext(SessionContext);
     const year = props.album.Release_date.split(" ")[3];
     const type = props.album.Type.charAt(0).toUpperCase() + props.album.Type.slice(1);
-    const rating = props.album.Rating;
     const albumLink = "https://open.spotify.com/album/" + props.album.Collection_URI;
     const numTracks = props.album.tracks.length;
     let albumHours = 0;
@@ -26,9 +24,30 @@ export default function CollectionModal(props) {
     let albumMinutes = Math.floor((albumHours - Math.floor(albumHours)) * 60);
     let albumSeconds = Math.floor((((albumHours - Math.floor(albumHours)) * 60) - albumMinutes) * 60);
     albumHours < 0 ? albumHours = 0 : albumHours = Math.floor(albumHours);
-
     let albumTime = albumHours + " hrs " + albumMinutes + " min " + albumSeconds + " sec"
-    albumHours == 0 ? albumTime = albumMinutes + " min " + albumSeconds + " sec" : albumTime = albumTime;
+    albumHours === 0 ? albumTime = albumMinutes + " min " + albumSeconds + " sec" : albumTime = albumTime;
+
+    const [rating, setRating] = useState(props.album.Rating);
+    const incrementRating = (event) => {
+        event.preventDefault();
+        let val = rating + .5;
+        if (val > 5) {
+            val = 5;
+        }
+        setRating(val)
+    }
+    const decrementRating = (event) => {
+        event.preventDefault();
+        let val = rating - .5;
+        if (val < 0) {
+            val = 0;
+        }
+        setRating(val)
+    }
+    const [status, setStatus] = useState(props.album.Status);
+    const statuses = ["Planning", "Complete", "Dropped"];
+
+    const [review, setReview] = useState(props.album.Review);
     
     const albumTracks = props.album.tracks.map((track, index) => {
         return (
@@ -60,18 +79,29 @@ export default function CollectionModal(props) {
     };
 
     const handleUpdate = async (event) => {
-        
+        event.preventDefault();
+        console.log(review);
+        console.log(status);
+        console.log(rating);
+        updateStatus();
+        updateRating();
+        handleReview();
+        getAlbums();
     };
 
-    const updateStatus = async (event) => {
-        event.preventDefault();
+    const updateStatus = () => {
         const api = "https://spotless-test-api.discovery.cs.vt.edu/";
 
-        await axios.post(api + "update/album", {
+        axios.post(api + "update/album", {
             collection_uri: props.album.Collection_URI,
             type: 'status',
-            value: "",
-        })
+            value: status,
+        },
+        {
+          headers: { Authorization: `Bearer ${sessionToken}` },
+          withCredentials: true,
+        }
+        )
         .then(function (response) {
             console.log(response);
         })
@@ -80,15 +110,19 @@ export default function CollectionModal(props) {
         });
     };
 
-    const updateRating = async (event) => {
-        event.preventDefault();
+    const updateRating = () => {
         const api = "https://spotless-test-api.discovery.cs.vt.edu/";
 
-        await axios.post(api + "update/album", {
+        axios.post(api + "update/album", {
             collection_uri: props.album.Collection_URI,
             type: 'rate',
-            value: 10,
-        })
+            value: rating,
+        },
+        {
+          headers: { Authorization: `Bearer ${sessionToken}` },
+          withCredentials: true,
+        }
+        )
         .then(function (response) {
             console.log(response);
         })
@@ -97,15 +131,19 @@ export default function CollectionModal(props) {
         });
     };
 
-    const handleReview = async (event) => {
-        event.preventDefault();
+    const handleReview = () => {
         const api = "https://spotless-test-api.discovery.cs.vt.edu/";
 
-        await axios.post(api + "update/album", {
+        axios.post(api + "update/album", {
             collection_uri: props.album.Collection_URI,
             type: 'review',
-            value: 10,
-        })
+            value: review,
+        },
+        {
+          headers: { Authorization: `Bearer ${sessionToken}` },
+          withCredentials: true,
+        }
+        )
         .then(function (response) {
             console.log(response);
         })
@@ -141,6 +179,7 @@ export default function CollectionModal(props) {
                 leaveTo="opacity-0 scale-95"
               >
                 <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-neutral-900 text-white p-6 text-left shadow-xl transition-all w-4/5">
+                  <form onSubmit={handleUpdate}>
                   <div
                     className="details-modale"
                     class="grid grid-cols-5 items-center"
@@ -188,14 +227,14 @@ export default function CollectionModal(props) {
                         className="item-rating"
                         class="flex flex-cols items-center justify-evenly w-3/4"
                       >
-                        <button>
+                        <button onClick={decrementRating}>
                           <FaMinusCircle
                             className="h-5 w-5"
                             aria-hidden="true"
                           />
                         </button>
                         <div>{rating}</div>
-                        <button>
+                        <button onClick={incrementRating}>
                           <FaPlusCircle
                             className="h-5 w-5"
                             aria-hidden="true"
@@ -238,15 +277,34 @@ export default function CollectionModal(props) {
                     >
                       <div class="text-xl mb-2.5">{props.album.Collection}</div>
                       <div class="mb-2.5">{props.album.Artists}</div>
+                      <select
+                          id="status"
+                          onChange={(e) => setStatus(e.target.value)}
+                          defaultValue={status}
+                          class="text-spotless-green rounded font-bold p-1"
+                        >
+                          {statuses.map((status) => (
+                            <option key={status} value={status}>
+                              {status}
+                            </option>
+                          ))}
+                        </select>
                       <div class="relative w-full min-w-[200px]">
                         <textarea
-                          class="peer h-full min-h-[100px] w-full resize-none rounded-[7px] border border-spotless-green border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-spotless-green placeholder-shown:border-t-spotless-green focus:border-2 focus:border-spotless-green focus:border-t-transparent focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50"
-                          placeholder=" "
-                        ></textarea>
+                            class="peer h-full min-h-[100px] w-full resize-none rounded-[7px] border border-spotless-green border-t-transparent bg-transparent px-3 py-2.5 font-sans text-sm font-normal text-blue-gray-700 outline outline-0 transition-all placeholder-shown:border placeholder-shown:border-spotless-green placeholder-shown:border-t-spotless-green focus:border-2 focus:border-spotless-green focus:border-t-transparent focus:outline-0 disabled:resize-none disabled:border-0 disabled:bg-blue-gray-50"
+                            id="review"
+                            name="review"
+                            value={review}
+                            onChange={(e) => setReview(e.target.value)}
+                        />
                         <label class="before:content[' '] after:content[' '] pointer-events-none absolute left-0 -top-1.5 flex h-full w-full select-none text-[11px] font-normal leading-tight text-spotless-green transition-all before:pointer-events-none before:mt-[6.5px] before:mr-1 before:box-border before:block before:h-1.5 before:w-2.5 before:rounded-tl-md before:border-t before:border-l before:border-spotless-green before:transition-all after:pointer-events-none after:mt-[6.5px] after:ml-1 after:box-border after:block after:h-1.5 after:w-2.5 after:flex-grow after:rounded-tr-md after:border-t after:border-r after:border-spotless-green after:transition-all peer-placeholder-shown:text-sm peer-placeholder-shown:leading-[3.75] peer-placeholder-shown:text-spotless-green peer-placeholder-shown:before:border-transparent peer-placeholder-shown:after:border-transparent peer-focus:text-[11px] peer-focus:leading-tight peer-focus:text-spotless-green peer-focus:before:border-t-2 peer-focus:before:border-l-2 peer-focus:before:border-spotless-green peer-focus:after:border-t-2 peer-focus:after:border-r-2 peer-focus:after:border-spotless-green peer-disabled:text-transparent peer-disabled:before:border-transparent peer-disabled:after:border-transparent peer-disabled:peer-placeholder-shown:text-blue-gray-500">
                           Review
                         </label>
                       </div>
+                      <input
+                        type="submit"
+                        value="Save"
+                      />
                     </div>
 
                     {/* List of Tracks in Collection */}
@@ -257,6 +315,7 @@ export default function CollectionModal(props) {
                         {albumTracks}
                     </div>
                   </div>
+                  </form>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
