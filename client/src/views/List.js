@@ -32,7 +32,7 @@ export default function List() {
     if (sessionUsername && sessionToken) {
       getAlbums();
     }
-  }, [sessionUsername, sessionToken ,albumsLength]);
+  }, [sessionUsername, sessionToken]);
 
   const listItems = albums.map((album) => {
     return (
