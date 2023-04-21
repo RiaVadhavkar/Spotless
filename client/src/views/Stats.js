@@ -2,6 +2,7 @@ import { Disclosure } from "@headlessui/react";
 import Banner from "../components/Banner";
 import LeftSide from "../components/LeftSide";
 import BarPie from "../components/BarPie";
+import ReleaseYearGraph from "../components/ReleaseYearGraph";
 import TextStats from "../components/TextStats";
 import { useContext, useEffect } from "react";
 import { SessionContext } from "../App";
@@ -21,7 +22,7 @@ export default function Stats() {
   }, []);
 
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white h-full">
+    <Disclosure as="body" className="bg-spotless-green text-white h-full overflow-y-scroll no-scrollbar">
       {({ open }) => (
         <>
           <Banner></Banner>
@@ -31,10 +32,11 @@ export default function Stats() {
             <LeftSide></LeftSide>
 
             {/* Main Content */}
-            <section class="main-content" className="flex flex-col w-3/4 mt-5">
+            <section class="main-content" className="flex flex-col w-3/4 my-5">
               {/* List Nav Bar */}
               <TextStats></TextStats>
               <BarPie></BarPie>
+              <ReleaseYearGraph></ReleaseYearGraph>
             </section>
           </div>
         </>

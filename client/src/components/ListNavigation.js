@@ -26,7 +26,7 @@ export default function ListNavigation(props) {
               <Tab.Group>
                 <Tab.List className="flex space-x-2 px-4 grow justify-around items-center">
                   <Tab>Planning</Tab>
-                  <Tab>Complete</Tab>
+                  <Tab>Completed</Tab>
                   <Tab>Dropped</Tab>
                 </Tab.List>
               </Tab.Group>

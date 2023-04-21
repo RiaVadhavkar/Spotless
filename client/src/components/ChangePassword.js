@@ -3,10 +3,8 @@ import { useContext, useState, useEffect } from "react";
 import { SessionContext } from "../App";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import ChangePassword from "../components/ChangePassword";
-import ChangeProfilePic from "../components/ChangeProfilePic";
 
-export default function Settings() {
+export default function ChangePassword() {
   const navigate = useNavigate();
   const { sessionToken, sessionUsername, setSessionToken, setSessionUsername } =
     useContext(SessionContext);
@@ -88,32 +86,52 @@ export default function Settings() {
   };
 
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white h-full">
-      {({ open }) => (
-        <>
-          <div className="relative flex h-full items-center justify-center font-semibold mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div
-              className="home-page-box"
-              class="flex flex-col justify-center items-center bg-neutral-900 h-3/4 min-h-[31.25rem] w-11/12 rounded"
-            >
-              <h1 class="text-4xl font-bold mb-4">
-                <u>Settings</u>
-              </h1>
-              <div class="flex flex-row justify-center items-center w-full">
-                <ChangePassword></ChangePassword>
-                <ChangeProfilePic></ChangeProfilePic>
-              </div>
-              <button
-                type="submit"
-                class="text-white bg-red-600 px-6 py-2.5 rounded-full text-3xl my-2"
-                onClick={handleDelete}
-              >
-                Delete Profile
-              </button>
-            </div>
-          </div>
-        </>
-      )}
-    </Disclosure>
+    <div class="flex flex-col items-center justify-center w-full">
+      <form
+        class="flex flex-col items-center justify-center w-full"
+        onSubmit={handlePasswordChange}
+      >
+        <label class="text-2xl mb-2">Change Password</label>
+        <input
+          class="text-lg mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
+          type="password"
+          name="oldPassword"
+          value={formValues.oldPassword}
+          onChange={handleInputChange}
+          id="oldPassword"
+          placeholder="Previous Password"
+        />
+        <input
+          class="text-lg mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
+          type="password"
+          name="password"
+          value={formValues.password}
+          onChange={handleInputChange}
+          id="password"
+          placeholder="New Password"
+        />
+        <input
+          class="text-lg mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
+          type="password"
+          name="confirmedPassword"
+          value={formValues.confirmedPassword}
+          onChange={handleInputChange}
+          id="confirmedPassword"
+          placeholder="Confirm New Password"
+        />
+        {error && (
+          <p class="text-red-600 text-xl mb-2">Passwords Do Not Match</p>
+        )}
+        {wrongPasswordError && (
+          <p class="text-red-600 text-xl mb-2">Wrong Password</p>
+        )}
+        <button
+          type="submit"
+          class="text-white bg-spotless-dark-green px-6 py-2.5 rounded-full text-lg"
+        >
+          Change Password
+        </button>
+      </form>
+    </div>
   );
 }
