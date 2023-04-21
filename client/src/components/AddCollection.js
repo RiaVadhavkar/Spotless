@@ -17,7 +17,7 @@ export default function AddCollection() {
     setIsOpen(true);
   }
 
-  const statuses = ["Planning", "Complete", "Dropped"];
+  const statuses = ["Planning", "Completed", "Dropped"];
   const [status, setStatus] = useState(statuses[0]);
 
   const spotifyURL = useRef("");

@@ -2,16 +2,9 @@ import { Bar, Pie } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 
 export default function BarPie() {
-  const labels = [
-    "0",
-    "1",
-    "2",
-    "3",
-    "4",
-    "5",
-  ];
-  const data = {
-    labels: labels,
+  const barData = {
+    labels: ["0", "1", "2", "3", "4", "5"],
+    // labelsColor: "#FFFFFF",
     datasets: [
       {
         label: "Rating",
@@ -33,17 +26,94 @@ export default function BarPie() {
           "rgb(153, 102, 255)",
         ],
         borderWidth: 2,
-        color: '#FFFFFF',
+        color: "#FFFFFF",
       },
     ],
   };
 
+  const barOptions = {
+    scales: {
+      y: {
+        beginAtZero: true,
+        title: {
+          display: true,
+          text: "# of Collections",
+          font: { weight: "bold" },
+          color: "white",
+        },
+        ticks: {
+          color: "white",
+        },
+      },
+      x: {
+        title: {
+          display: true,
+          text: "Stars",
+          font: { weight: "bold" },
+          color: "white",
+        },
+        ticks: {
+          color: "white",
+        },
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: "Rating",
+        font: { weight: "bold", size: 18, color: "#FFFFFF" },
+        padding: { bottom: 20 },
+        color: "#FFFFFF",
+      },
+      legend: {
+        labels: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+  };
+
+  const pieData = {
+    labels: ["Planning", "Completed", "Dropped"],
+    datasets: [
+      {
+        data: [30, 50, 20],
+        backgroundColor: ["#1f783e", "#FFFFFF", "#29A053"],
+        hoverBackgroundColor: ["#1f783e", "#FFFFFF", "#29A053"],
+        borderColor: ["rgb(23 23 23)"],
+      },
+    ],
+  };
+
+  const pieOptions = {
+    plugins: {
+      title: {
+        display: true,
+        text: "Status Distribution",
+        font: { weight: "bold", size: 18, color: "#FFFFFF" },
+        padding: { bottom: 20 },
+        color: "#FFFFFF",
+      },
+      legend: {
+        labels: {
+          color: "#FFFFFF",
+        },
+      },
+    },
+  };
+
   return (
-    <section class="flex items-center justify-center bg-neutral-900 rounded-2xl mt-3">
+    <section class="flex items-center justify-center bg-neutral-900 rounded-2xl my-2">
       {/* <section class="grid grid-cols-4 w-full justify-items-center my-6"> */}
-        {/* <div className="w-full h-52"> */}
-          <Bar data={data}/>
-        {/* </div> */}
+      <div class="flex w-full justify-center items-center my-4">
+        <div class="w-2/3 px-4">
+          <Bar data={barData} options={barOptions} />
+        </div>
+        <div class="w-1/3">
+          {" "}
+          <Pie data={pieData} options={pieOptions} />
+        </div>
+      </div>
       {/* </section> */}
     </section>
   );

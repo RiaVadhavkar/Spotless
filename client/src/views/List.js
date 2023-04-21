@@ -53,7 +53,7 @@ export default function List() {
   });
 
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white h-full">
+    <Disclosure as="body" className="bg-spotless-green text-white h-full overflow-y-scroll no-scrollbar">
       {({ open }) => (
         <>
           <Banner></Banner>
