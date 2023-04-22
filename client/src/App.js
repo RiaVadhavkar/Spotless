@@ -19,23 +19,30 @@ export const SessionContext = createContext();
 function App() {
   const [sessionToken, setSessionToken] = useState("");
   const [sessionUsername, setSessionUsername] = useState("");
+  const [admin, setAdmin] = useState(false);
   const [albums, setAlbums] = useState([]);
   const [albumsLength, setAlbumsLength] = useState(0);
+  
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     const username = sessionStorage.getItem("username");
+    const admin = sessionStorage.getItem("admin");
 
     if (token && username) {
       setSessionToken(token);
       setSessionUsername(username);
+    }
+    if (admin) {
+      setAdmin(admin);
     }
   }, []);
 
   useEffect(() => {
     sessionStorage.setItem("token", sessionToken);
     sessionStorage.setItem("username", sessionUsername);
-  }, [sessionToken, sessionUsername]);
+    sessionStorage.setItem("admin", admin);
+  }, [sessionToken, sessionUsername, admin]);
 
   async function getAlbums() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
@@ -66,6 +73,8 @@ function App() {
           albums,
           albumsLength,
           getAlbums,
+          admin,
+          setAdmin,
         }}
       >
         <BrowserRouter>

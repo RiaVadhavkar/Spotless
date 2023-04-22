@@ -6,7 +6,7 @@ import { BsFillPersonFill } from "react-icons/bs";
 
 export default function ProfileButtonLogout() {
   const navigate = useNavigate();
-  const { sessionToken, setSessionToken, setSessionUsername } =
+  const { sessionToken, setSessionToken, setSessionUsername, setAdmin } =
     useContext(SessionContext);
 
   const handleLogout = async (event) => {
@@ -23,6 +23,7 @@ export default function ProfileButtonLogout() {
         console.log(response.data);
         setSessionToken("");
         setSessionUsername("");
+        setAdmin(false);
         navigate("/login");
       })
       .catch(function (error) {
