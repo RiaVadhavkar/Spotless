@@ -8,7 +8,7 @@ import { RiErrorWarningFill } from "react-icons/ri";
 
 const Login = () => {
   const navigate = useNavigate();
-  const { setSessionToken, setSessionUsername } =
+  const { setSessionToken, setSessionUsername, setAdmin, admin } =
     useContext(SessionContext);
 
   useEffect(() => {
@@ -51,9 +51,13 @@ const Login = () => {
 
         const token = response.data.token;
         const name = response.data.name;
+        const admin = response.data.admin;
 
         setSessionToken(token);
         setSessionUsername(name);
+        setAdmin(admin);
+
+        console.log(admin);
 
         navigate("/list");
       })
@@ -63,36 +67,6 @@ const Login = () => {
         setLoginError(true);
       });
   };
-
-  // if (loginResponse.status === 200) {
-  //   console.log(loginResponse);
-
-  //   const token = loginResponse.data.token;
-  //   const name = loginResponse.data.name;
-
-  //   setSessionToken(token);
-  //   setSessionUsername(name);
-
-  //   navigate("/list");
-
-  // axios
-  //   .get(api + "profile", {
-  //     withCredentials: true,
-  //     headers: { Authorization: `Bearer ${token}` },
-  //   })
-  //   .then(function (response) {
-  //     console.log(response.data);
-
-  //   })
-  //   .catch(function (error) {
-  //     console.log(error);
-  //   });
-  //   } else {
-  //     console.log("Login failed");
-  //     console.log(loginResponse);
-  //     setLoginError(true);
-  //   }
-  // };
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-full">

@@ -8,7 +8,7 @@ import ChangeProfilePic from "../components/ChangeProfilePic";
 
 export default function Settings() {
   const navigate = useNavigate();
-  const { sessionToken, sessionUsername, setSessionToken, setSessionUsername } =
+  const { sessionToken, sessionUsername, setSessionToken, setSessionUsername, setAdmin } =
     useContext(SessionContext);
 
   useEffect(() => {
@@ -57,6 +57,7 @@ export default function Settings() {
         console.log(response.data);
         setSessionToken("");
         setSessionUsername("");
+        setAdmin(false);
         setError(false);
         navigate("/login");
       })
@@ -80,6 +81,7 @@ export default function Settings() {
         console.log(response.data);
         setSessionToken("");
         setSessionUsername("");
+        setAdmin(false);
         navigate("/register");
       })
       .catch(function (error) {
