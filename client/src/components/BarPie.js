@@ -74,7 +74,7 @@ export default function BarPie() {
   };
 
   const pieData = {
-    labels: ["Planning", "Completed", "Dropped"],
+    labels: ["Planning", "Complete", "Dropped"],
     datasets: [
       {
         data: [30, 50, 20],

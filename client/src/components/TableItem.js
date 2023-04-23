@@ -30,7 +30,7 @@ export default function TableItem(props) {
     <div>
       <div
         className="table-item"
-        class="grid grid-cols-3 bg-neutral-900 h-56 w-96 rounded m-3.5 items-center"
+        class="grid grid-cols-3 bg-neutral-900 h-56 w-96 rounded-2xl m-3.5 items-center"
         onClick={openModal}
       >
         <div
