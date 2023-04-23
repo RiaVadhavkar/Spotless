@@ -26,7 +26,7 @@ export default function ListNavigation(props) {
               <Tab.Group>
                 <Tab.List className="flex space-x-2 px-4 grow justify-around items-center">
                   <Tab>Planning</Tab>
-                  <Tab>Completed</Tab>
+                  <Tab>Complete</Tab>
                   <Tab>Dropped</Tab>
                 </Tab.List>
               </Tab.Group>
@@ -43,7 +43,7 @@ export default function ListNavigation(props) {
                   <BsFillCaretDownFill className="h-4 w-4" aria-hidden="true" />
                 </Menu.Button>
 
-                <Transition
+                {/* <Transition
                   enter="transition ease-out duration-100"
                   enterFrom="transform opacity-0 scale-95"
                   enterTo="transform opacity-100 scale-100"
@@ -57,7 +57,7 @@ export default function ListNavigation(props) {
                     <Menu.Item>Year</Menu.Item>
                     <Menu.Item>Type</Menu.Item>
                   </Menu.Items>
-                </Transition>
+                </Transition> */}
               </Menu>
             </section>
 
@@ -67,12 +67,12 @@ export default function ListNavigation(props) {
               class="flex flex-row bg-neutral-900 rounded-2xl py-3 gap-3.5 items-center justify-center w-fit h-full px-4 mx-1.5"
             >
               <FaList
-                className="h-5 w-5"
+                class="h-5 w-5"
                 aria-hidden="true"
                 onClick={props.toggle}
               />
               <FaThLarge
-                className="h-5 w-5"
+                class="h-5 w-5"
                 aria-hidden="true"
                 onClick={props.toggle}
               />

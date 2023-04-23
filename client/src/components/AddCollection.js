@@ -1,6 +1,7 @@
 import { Fragment, useState, useRef, useContext } from "react";
 import { SessionContext } from "../App";
 import { Transition, Dialog } from "@headlessui/react";
+import { FaPlus } from "react-icons/fa";
 
 import axios from "axios";
 
@@ -17,7 +18,7 @@ export default function AddCollection() {
     setIsOpen(true);
   }
 
-  const statuses = ["Planning", "Completed", "Dropped"];
+  const statuses = ["Planning", "Complete", "Dropped"];
   const [status, setStatus] = useState(statuses[0]);
 
   const spotifyURL = useRef("");
@@ -120,18 +121,19 @@ export default function AddCollection() {
                       </div>
                       <div className="flex pt-4 items-center justify-end gap-3">
                         <button
-                          type="submit"
-                          onClick={closeModal}
-                          class="inline-flex justify-center rounded-md border border-transparent bg-spotless-dark-green px-4 py-2 text-sm font-medium text-white hover:bg-spotless-green focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
-                        >
-                          Add
-                        </button>
-                        <button
                           type="button"
                           class="inline-flex justify-center rounded-md border border-transparent bg-white bg-opacity-25 px-4 py-2 text-sm font-medium text-white hover:bg-red-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
                           onClick={closeModal}
                         >
                           Cancel
+                        </button>
+                        <button
+                          type="submit"
+                          onClick={closeModal}
+                          class="inline-flex justify-center items-center rounded-md border border-transparent bg-spotless-dark-green px-4 py-2 text-sm font-bold text-white hover:bg-spotless-green focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2"
+                        >
+                          <FaPlus className="h-4 w-4" aria-hidden="true" />
+                          &nbsp;Add
                         </button>
                       </div>
                     </form>
