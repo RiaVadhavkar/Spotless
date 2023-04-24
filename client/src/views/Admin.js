@@ -52,12 +52,12 @@ export default function Admin() {
   }, [sessionUsername, sessionToken]);
 
   useEffect(() => {
-    console.log("adminData")
+    console.log("adminData start")
     console.log(adminData);
-    console.log("collectionsByYear")
-    console.log(collectionsByYear);
-    if (adminData && collectionsByYear) {
+    if (adminData && adminData.collections_by_year && adminData.collections && adminData.users) {
       setLoaded(true);
+      console.log("adminData end")
+      console.log(adminData);
     }
   }, [adminData]);
     
@@ -72,7 +72,7 @@ export default function Admin() {
       .then(function (response) {
       console.log(response.data);
       setAdminData(response.data);
-      setCollectionsByYear(response.data.collections_by_year);
+      // setCollectionsByYear(response.data.collections_by_year);
     })
       .catch(function (error) {
         console.log(error);
@@ -105,7 +105,7 @@ export default function Admin() {
 
   const adminText = <AdminTextStats stats={adminData}></AdminTextStats>;
 
-  const adminCollectionByYear = <AdminCollectionByYear stats={collectionsByYear}></AdminCollectionByYear>;
+  const adminCollectionByYear = <AdminCollectionByYear stats={adminData.collections_by_year}></AdminCollectionByYear>;
 
   return (
     <Disclosure

@@ -2,45 +2,13 @@ import { useEffect } from "react";
 import { Line } from "react-chartjs-2";
 
 export default function AdminCollectionByYear(props) {
-  let cnt2017, cnt2018, cnt2019, cnt2020, cnt2021, cnt2022, cnt2023;
-  useEffect (() => {
-    console.log(props.stats);
-    if (props.stats) {
-      makeStats();
-    }
-  }, [props.stats]);
-  
-  function makeStats() {
-    if (props.stats) {
-      cnt2017 = props.stats[0];
-      cnt2018 = props.stats[1];
-      cnt2019 = props.stats[2];
-      cnt2020 = props.stats[3];
-      cnt2021 = props.stats[4];
-      cnt2022 = props.stats[5];
-      cnt2023 = props.stats[6];
-  }
-  else {
-    cnt2017 = 0;
-    cnt2018 = 0;
-    cnt2019 = 0;
-    cnt2020 = 0;
-    cnt2021 = 0;
-    cnt2022 = 0;
-    cnt2023 = 0;
-  }
-    console.log(cnt2017, cnt2018, cnt2019, cnt2020, cnt2021, cnt2022, cnt2023)
-  }
-
-  // 1, 1, 1, 1, 1, 1, 1
-
   const data = {
-    labels: [1, 1, 1, 1, 1, 1, 1],
+    labels: [props.stats[0].Year, props.stats[1].Year, props.stats[2].Year, props.stats[3].Year, props.stats[4].Year, props.stats[5].Year],
     datasets: [
       {
         label: "# of Collections",
 
-        data: [1, 1, 1, 1, 1, 1, 1],
+        data: [props.stats[0].Count, props.stats[1].Count, props.stats[2].Count, props.stats[3].Count, props.stats[4].Count, props.stats[5].Count],
         fill: false,
         borderColor: "#29A053",
         pointBackgroundColor: "white",

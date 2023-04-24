@@ -4,12 +4,16 @@ import LeftSide from "../components/LeftSide";
 import BarPie from "../components/BarPie";
 import ReleaseYearGraph from "../components/ReleaseYearGraph";
 import TextStats from "../components/TextStats";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Stats() {
   const navigate = useNavigate();
+  const { sessionUsername, sessionToken } = useContext(SessionContext);
+  const [userData, setUserData] = useState({});
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -20,6 +24,38 @@ export default function Stats() {
       navigate("/login");
     }
   }, []);
+
+  useEffect(() => {
+    if (sessionUsername && sessionToken) {
+      getUserStats();
+    }
+  }, [sessionUsername, sessionToken]);
+
+  useEffect(() => {
+    console.log("userData start")
+    console.log(userData);
+    if (userData && userData.collection_by_status && userData.collections_by_rating && userData.collections_by_year && userData.minutes_collection_complete && userData.minutes_collection_full && userData.minutes_collection_planned) {
+      setLoaded(true);
+      console.log("userData end")
+      console.log(userData);
+    }
+  }, [userData]);
+
+  async function getUserStats() {
+    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    await axios
+    .get(api + "user/stats", { 
+      withCredentials: true, 
+      headers: { Authorization: `Bearer ${sessionToken}` }
+     })
+      .then(function (response) {
+      console.log(response.data);
+      setUserData(response.data);
+    })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-full overflow-y-scroll no-scrollbar">
@@ -34,9 +70,18 @@ export default function Stats() {
             {/* Main Content */}
             <section class="main-content" className="flex flex-col w-3/4 my-5">
               {/* List Nav Bar */}
-              <TextStats></TextStats>
-              <BarPie></BarPie>
-              <ReleaseYearGraph></ReleaseYearGraph>
+              {loaded ? (
+                <div>
+                <TextStats stats={userData}></TextStats>
+                <BarPie stats={userData}></BarPie>
+                <ReleaseYearGraph stats={userData}></ReleaseYearGraph>
+              </div>
+              ) : (
+                <div
+                  className="flex justify-center items-center h-96"
+                  style={{ backgroundColor: "#F5F5F5" }}
+                >Loading</div>
+              )}
             </section>
           </div>
         </>

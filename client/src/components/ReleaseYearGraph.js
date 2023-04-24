@@ -1,14 +1,14 @@
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 
-export default function ReleaseYearGraph() {
+export default function ReleaseYearGraph(props) {
   const data = {
     labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"],
     datasets: [
       {
         label: "# of Collections",
 
-        data: [4, 8, 12, 16, 18, 19, 20, 3],
+        data: makeArray(),
         fill: false,
         borderColor: "#29A053",
         pointBackgroundColor: "white",
@@ -18,6 +18,14 @@ export default function ReleaseYearGraph() {
         pointRadius: 4,
       },
     ],
+  };
+
+  function makeArray() {
+    let arr = [];let array = Array.apply(null, Array(8)).map(function (x, i) { return 0; });
+    props.stats.collections_by_year.forEach((item) => {
+      array[item.Year - 2016] = item.Count;
+    })
+  return array;
   };
 
   const options = {
