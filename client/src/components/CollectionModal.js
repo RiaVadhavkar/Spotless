@@ -57,6 +57,8 @@ export default function CollectionModal(props) {
 
   const [review, setReview] = useState(props.album.Review);
 
+  const [responseLoaded, setResponseLoaded] = useState(false);
+
   const albumTracks = props.album.tracks.map((track, index) => {
     return <TrackItem track={track} index={index} />;
   });
@@ -96,9 +98,19 @@ export default function CollectionModal(props) {
     if (review != props.album.Review) {
       handleReview();
     }
-    getAlbums();
-    props.closeModal();
+    checkUpdated();
   };
+
+  function checkUpdated() {
+    console.log(responseLoaded);
+    if (responseLoaded === 'false') {
+      window.setTimeout(checkUpdated, 1000);
+    }
+    else {
+      getAlbums();
+      props.closeModal();
+    }
+  }
 
   const updateStatus = () => {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
@@ -118,6 +130,7 @@ export default function CollectionModal(props) {
       )
       .then(function (response) {
         console.log(response);
+        setResponseLoaded(true);
       })
       .catch(function (error) {
         console.log(error);
@@ -142,6 +155,7 @@ export default function CollectionModal(props) {
       )
       .then(function (response) {
         console.log(response);
+        setResponseLoaded(true);
       })
       .catch(function (error) {
         console.log(error);
@@ -166,6 +180,7 @@ export default function CollectionModal(props) {
       )
       .then(function (response) {
         console.log(response);
+        setResponseLoaded(true);
       })
       .catch(function (error) {
         console.log(error);
