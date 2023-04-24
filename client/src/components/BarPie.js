@@ -35,8 +35,9 @@ export default function BarPie(props) {
     let array = Array.apply(null, Array(6)).map(function (x, i) { return 0; });
     console.log(array);
     props.stats.collections_by_rating.forEach((item) => {
-      array[Math.floor(item.Rating)] = item.Count;
+      array[Math.floor(item.Rating)] += item.Count;
     })
+    console.log(array);
   return array;
 }
 
