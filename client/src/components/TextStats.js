@@ -23,7 +23,9 @@ export default function TextStats(props) {
         <div class="text-sm text-center">
           Songs Listened
           <h1 class="minutes" className="text-2xl text-spotless-green">
-          {props.stats.minutes_collection_complete["Number Tracks"]}
+
+        {props.stats.minutes_collection_complete["Number Tracks"]}
+
           </h1>
         </div>
       </section>

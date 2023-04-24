@@ -88,9 +88,9 @@ export default function AddCollection() {
                 <Dialog.Panel className="transform overflow-hidden rounded-2xl bg-neutral-900 p-6 text-left shadow-xl transition-all w-1/2">
                   <Dialog.Title
                     as="h3"
-                    className="text-xl text-center font-bold leading-6 text-spotless-green p-2.5"
+                    className="text-2xl text-center font-bold leading-6 text-white p-2.5"
                   >
-                    Add Collection to List
+                    <u>Add Collection to List</u>
                   </Dialog.Title>
                   <div className="p-2.5">
                     <form
@@ -104,8 +104,10 @@ export default function AddCollection() {
                           id="link"
                           ref={spotifyURL}
                           type="text"
-                          class="text-spotless-green rounded p-1 flex grow mx-2"
+                          class="bg-transparent text-white rounded p-1 flex grow mx-2 placeholder-spotless-green placeholder-opacity-50 ring-2 ring-spotless-dark-green"
                         />
+                        {/*class="bg-transparent text-white w-full rounded-2xl p-5 placeholder-spotless-green placeholder-opacity-50 h-12 ring-2 ring-spotless-dark-green"
+                         */}
                         <select
                           id="status"
                           onChange={(e) => setStatus(e.target.value)}

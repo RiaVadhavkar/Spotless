@@ -3,6 +3,7 @@ import { useContext, useState, useEffect } from "react";
 import { SessionContext } from "../App";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { CgPassword } from "react-icons/cg";
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -88,12 +89,12 @@ export default function ChangePassword() {
   return (
     <div class="flex flex-col items-center justify-center w-full">
       <form
-        class="flex flex-col items-center justify-center w-full"
+        class="flex flex-col items-center justify-center w-1/2 h-auto"
         onSubmit={handlePasswordChange}
       >
-        <label class="text-2xl mb-2">Change Password</label>
+        <label class="text-2xl m-2">Change Password</label>
         <input
-          class="text-lg mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
+          class=" m-2 bg-transparent text-white w-full rounded-2xl p-5 placeholder-spotless-green placeholder-opacity-50 h-12 ring-2 ring-spotless-dark-green"
           type="password"
           name="oldPassword"
           value={formValues.oldPassword}
@@ -102,7 +103,7 @@ export default function ChangePassword() {
           placeholder="Previous Password"
         />
         <input
-          class="text-lg mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
+          class="m-2 bg-transparent text-white w-full rounded-2xl p-5 placeholder-spotless-green placeholder-opacity-50 h-12 ring-2 ring-spotless-dark-green"
           type="password"
           name="password"
           value={formValues.password}
@@ -111,7 +112,7 @@ export default function ChangePassword() {
           placeholder="New Password"
         />
         <input
-          class="text-lg mb-2 text-spotless-dark-green rounded placeholder-neutral-900 placeholder-opacity-60 h-12"
+          class="m-2 bg-transparent text-white w-full rounded-2xl p-5 placeholder-spotless-green placeholder-opacity-50 h-12 ring-2 ring-spotless-dark-green"
           type="password"
           name="confirmedPassword"
           value={formValues.confirmedPassword}
@@ -127,9 +128,10 @@ export default function ChangePassword() {
         )}
         <button
           type="submit"
-          class="text-white bg-spotless-dark-green px-6 py-2.5 rounded-full text-lg"
+          class="flex items-center justify-center m-2 text-white bg-spotless-dark-green px-6 py-2.5 rounded-full text-lg"
         >
-          Change Password
+          <CgPassword className="h-5 w-5" aria-hidden="true" />
+          &nbsp;Change Password
         </button>
       </form>
     </div>
