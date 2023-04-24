@@ -53,11 +53,16 @@ export default function Admin() {
   }, [sessionUsername, sessionToken]);
 
   useEffect(() => {
-    console.log("adminData start")
+    console.log("adminData start");
     console.log(adminData);
-    if (adminData && adminData.collections_by_year && adminData.collections && adminData.users) {
+    if (
+      adminData &&
+      adminData.collections_by_year &&
+      adminData.collections &&
+      adminData.users
+    ) {
       setLoaded(true);
-      console.log("adminData end")
+      console.log("adminData end");
       console.log(adminData);
     }
   }, [adminData]);
@@ -65,15 +70,15 @@ export default function Admin() {
   async function getAdminStats() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios
-    .get(api + "admin/stats", { 
-      withCredentials: true, 
-      headers: { Authorization: `Bearer ${sessionToken}` }
-     })
+      .get(api + "admin/stats", {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      })
       .then(function (response) {
-      console.log(response.data);
-      setAdminData(response.data);
-      // setCollectionsByYear(response.data.collections_by_year);
-    })
+        console.log(response.data);
+        setAdminData(response.data);
+        // setCollectionsByYear(response.data.collections_by_year);
+      })
       .catch(function (error) {
         console.log(error);
       });
@@ -93,7 +98,9 @@ export default function Admin() {
     // console.log(Array.from(form));
 
     axios
-      .post(api + "register", form, {headers: { Authorization: `Bearer ${sessionToken}` }})
+      .post(api + "register", form, {
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      })
       .then(function (response) {
         console.log(response.data);
         setAdminData(response.data);
@@ -102,11 +109,15 @@ export default function Admin() {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   const adminText = <AdminTextStats stats={adminData}></AdminTextStats>;
 
-  const adminCollectionByYear = <AdminCollectionByYear stats={adminData.collections_by_year}></AdminCollectionByYear>;
+  const adminCollectionByYear = (
+    <AdminCollectionByYear
+      stats={adminData.collections_by_year}
+    ></AdminCollectionByYear>
+  );
 
   return (
     <Disclosure
@@ -129,11 +140,8 @@ export default function Admin() {
                   {adminCollectionByYear}
                 </div>
               ) : (
-                <div
-                  className="flex justify-center items-center h-96"
-                  style={{ backgroundColor: "#F5F5F5" }}
-                >
-                  Loading
+                <div class="flex justify-center items-center rounded-2xl h-96 bg-neutral-900 text-white text-2xl">
+                  Admin Statistics Loading&nbsp;...
                 </div>
               )}
               <RegisterAdmin></RegisterAdmin>
