@@ -98,14 +98,16 @@ export default function CollectionModal(props) {
     if (review != props.album.Review) {
       handleReview();
     }
-    checkUpdated();
+    else {
+      props.closeModal();
+    }
   };
 
   function checkUpdated() {
-    console.log(responseLoaded);
-    if (responseLoaded) {
+    // console.log(responseLoaded);
+    // if (responseLoaded) {
       getAlbums();  
-    }
+    // }
     props.closeModal();
   }
 
@@ -128,6 +130,7 @@ export default function CollectionModal(props) {
       .then(function (response) {
         console.log(response);
         setResponseLoaded(true);
+        checkUpdated();
       })
       .catch(function (error) {
         console.log(error);
@@ -153,6 +156,7 @@ export default function CollectionModal(props) {
       .then(function (response) {
         console.log(response);
         setResponseLoaded(true);
+        checkUpdated();
       })
       .catch(function (error) {
         console.log(error);
@@ -178,6 +182,7 @@ export default function CollectionModal(props) {
       .then(function (response) {
         console.log(response);
         setResponseLoaded(true);
+        checkUpdated();
       })
       .catch(function (error) {
         console.log(error);

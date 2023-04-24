@@ -42,6 +42,7 @@ export default function Admin() {
     const admin = sessionStorage.getItem("admin");
     console.log(admin);
     if (admin === 'false') {
+      console.log("Not an admin");
       navigate("/list");
     }
   }, []);
