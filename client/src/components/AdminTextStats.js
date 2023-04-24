@@ -9,25 +9,25 @@ export default function AdminTextStats(props) {
         <div class="text-sm text-center">
           Users
           <h1 class="minutes" className="text-2xl text-spotless-green">
-            {props.stats.users.Count}
+            {props.stats.users.Count ? props.stats.users.Count : 0}
           </h1>
         </div>
         <div class="text-sm text-center">
           Collections
           <h1 class="minutes" className="text-2xl text-spotless-green">
-            {props.stats.collections.Count}
+            {props.stats.collections.Count ? props.stats.collections.Count : 0}
           </h1>
         </div>
         <div class="text-sm text-center">
           Number of Tracks
           <h1 class="minutes" className="text-2xl text-spotless-green">
-            {props.stats.Num_tracks}
+            {props.stats.Num_tracks ? props.stats.Num_tracks : 0}
           </h1>
         </div>
         <div class="text-sm text-center">
           Total Track Minutes
           <h1 class="minutes" className="text-2xl text-spotless-green">
-            {m}
+            {m ? m : 0}
           </h1>
         </div>
       </section>

@@ -41,7 +41,7 @@ export default function Admin() {
   useEffect(() => {
     const admin = sessionStorage.getItem("admin");
     console.log(admin);
-    if (admin === false) {
+    if (admin === 'false') {
       navigate("/list");
     }
   }, []);

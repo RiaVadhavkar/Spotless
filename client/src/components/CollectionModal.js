@@ -57,7 +57,7 @@ export default function CollectionModal(props) {
 
   const [review, setReview] = useState(props.album.Review);
 
-  const [responseLoaded, setResponseLoaded] = useState(false);
+  const [responseLoaded, setResponseLoaded] = useState(true);
 
   const albumTracks = props.album.tracks.map((track, index) => {
     return <TrackItem track={track} index={index} />;
@@ -103,13 +103,10 @@ export default function CollectionModal(props) {
 
   function checkUpdated() {
     console.log(responseLoaded);
-    if (responseLoaded === 'false') {
-      window.setTimeout(checkUpdated, 1000);
+    if (responseLoaded) {
+      getAlbums();  
     }
-    else {
-      getAlbums();
-      props.closeModal();
-    }
+    props.closeModal();
   }
 
   const updateStatus = () => {
