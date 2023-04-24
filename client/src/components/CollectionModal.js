@@ -297,7 +297,7 @@ export default function CollectionModal(props) {
                     {/* Upper Right */}
                     <div
                       className="right-col-upper"
-                      class="col-span-4 col-start-2 flex flex-col justify-start pr-2.5 py-3.5 h-full"
+                      class="col-span-4 col-start-2 flex flex-col justify-start pr-2.5 pt-3.5 h-full"
                     >
                       <div class="flex flex-row w-full">
                         <div class="text-xl mb-2.5 justify-start w-3/4">
@@ -337,12 +337,23 @@ export default function CollectionModal(props) {
                           Review
                         </label>
                       </div>
+                      <div class="grid grid-cols-5 justify-items-center text-xl mt-3">
+                        <div class="col-span-1">
+                          <u>#</u>
+                        </div>
+                        <div class="col-span-3 col-start-2">
+                          <u>Name</u>
+                        </div>
+                        <div class="col-span-1 col-start-5">
+                          <u>Time</u>
+                        </div>
+                      </div>
                     </div>
 
                     {/* List of Tracks in Collection */}
                     <div
                       className="right-col-lower"
-                      class="col-span-4 col-start-2 justify-start pr-2.5 py-3.5 h-full text-center max-h-64 overflow-y-scroll no-scrollbar"
+                      class="col-span-4 col-start-2 justify-start h-full text-center max-h-64 overflow-y-scroll no-scrollbar"
                     >
                       {albumTracks}
                     </div>

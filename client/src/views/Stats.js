@@ -4,12 +4,15 @@ import LeftSide from "../components/LeftSide";
 import BarPie from "../components/BarPie";
 import ReleaseYearGraph from "../components/ReleaseYearGraph";
 import TextStats from "../components/TextStats";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { SessionContext } from "../App";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 export default function Stats() {
   const navigate = useNavigate();
+  const { sessionUsername, sessionToken } = useContext(SessionContext);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -20,6 +23,28 @@ export default function Stats() {
       navigate("/login");
     }
   }, []);
+
+  useEffect(() => {
+    if (sessionUsername && sessionToken) {
+      getUserStats();
+    }
+  }, [sessionUsername, sessionToken]);
+
+  async function getUserStats() {
+    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    await axios
+      .get(api + "user/stats", {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setUserData(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   return (
     <Disclosure as="body" className="bg-spotless-green text-white h-full overflow-y-scroll no-scrollbar">

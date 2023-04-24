@@ -14,7 +14,7 @@ const Login = () => {
   useEffect(() => {
     const token = sessionStorage.getItem("token");
     const username = sessionStorage.getItem("username");
-  
+
     if (token && username) {
       navigate("/list");
     }
@@ -89,6 +89,9 @@ const Login = () => {
                   class="flex flex-col gap-5 justify-center w-4/5"
                   onSubmit={handleSubmit}
                 >
+                  <h1 class="flex text-4xl justify-center items-center p-8">
+                    <u>LOGIN</u>
+                  </h1>
                   <div class="flex justify-center items-center">
                     <input
                       type="text"
@@ -97,7 +100,7 @@ const Login = () => {
                       onChange={handleInputChange}
                       id="username"
                       placeholder="Username"
-                      class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-50 h-12"
+                      class="bg-transparent text-white w-full rounded-2xl p-5 placeholder-spotless-green placeholder-opacity-50 h-12 ring-2 ring-spotless-dark-green"
                     />
                   </div>
                   <div class="flex justify-center items-center">
@@ -108,7 +111,7 @@ const Login = () => {
                       onChange={handleInputChange}
                       id="password"
                       placeholder="Password"
-                      class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-50 h-12"
+                      class="bg-transparent text-white w-full rounded-2xl p-5 placeholder-spotless-green placeholder-opacity-50 h-12 ring-2 ring-spotless-dark-green"
                     />
                   </div>
                   {loginError && (
@@ -123,7 +126,7 @@ const Login = () => {
                   <div class="flex justify-center items-center">
                     <button
                       type="submit"
-                      class="text-white bg-spotless-green w-4/6 py-2.5 rounded-full text-3xl"
+                      class="text-white bg-spotless-green w-1/2 py-2.5 rounded-full text-3xl"
                     >
                       Login
                     </button>

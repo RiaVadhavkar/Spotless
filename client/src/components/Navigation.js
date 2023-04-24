@@ -1,12 +1,12 @@
 import { Disclosure } from "@headlessui/react";
 
 const navigation = [
-  { name: "List", href: "/list", current: false },
-  // { name: "Favorites", href: "/favorites", current: false },
-  { name: "Stats", href: "/stats", current: false },
-  // { name: "Social", href: "/social", current: false },
-  { name: "Admin", href: "/admin", current: false },
-  { name: "Settings", href: "/settings", current: false },
+  { name: "List", href: "/list" },
+  // { name: "Favorites", href: "/favorites"},
+  { name: "Stats", href: "/stats" },
+  // { name: "Social", href: "/social"},
+  { name: "Admin", href: "/admin" },
+  { name: "Settings", href: "/settings" },
 ];
 
 function classNames(...classes) {
@@ -14,6 +14,8 @@ function classNames(...classes) {
 }
 
 export default function Navigation() {
+  const currentPath = window.location.pathname;
+
   return (
     <Disclosure
       as="nav"
@@ -26,12 +28,11 @@ export default function Navigation() {
               key={item.name}
               href={item.href}
               className={classNames(
-                item.current
+                currentPath === item.href
                   ? "underline underline-offset-8 decoration-2 decoration-spotless-green"
                   : "hover:underline hover:underline-offset-8 hover:decoration-2 hover:decoration-spotless-green",
                 "text-white px-3 py-2 text-xl font-medium"
               )}
-              aria-current={item.current ? "page" : undefined}
             >
               {item.name}
             </a>

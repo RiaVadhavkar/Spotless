@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import AdminTextStats from "../components/AdminTextStats";
 import AdminCollectionByYear from "../components/AdminCollectionByYear";
 import axios from "axios";
+import RegisterAdmin from "../components/RegisterAdmin";
 
 export default function Admin() {
   const navigate = useNavigate();
@@ -42,7 +43,7 @@ export default function Admin() {
     console.log(admin);
     if (admin === false) {
       navigate("/list");
-    }   
+    }
   }, []);
 
   useEffect(() => {
@@ -52,60 +53,37 @@ export default function Admin() {
   }, [sessionUsername, sessionToken]);
 
   useEffect(() => {
-    console.log("adminData")
+    console.log("adminData");
     console.log(adminData);
-    console.log("collectionsByYear")
+    console.log("collectionsByYear");
     console.log(collectionsByYear);
     if (adminData && collectionsByYear) {
       setLoaded(true);
     }
   }, [adminData]);
-    
 
   async function getAdminStats() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios
-    .get(api + "admin/stats", { 
-      withCredentials: true, 
-      headers: { Authorization: `Bearer ${sessionToken}` }
-     })
+      .get(api + "admin/stats", {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      })
       .then(function (response) {
-      console.log(response.data);
-      setAdminData(response.data);
-      setCollectionsByYear(response.data.collections_by_year);
-    })
+        console.log(response.data);
+        setAdminData(response.data);
+        setCollectionsByYear(response.data.collections_by_year);
+      })
       .catch(function (error) {
         console.log(error);
       });
   }
 
-  const handleSubmit = (event) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-
-    event.preventDefault();
-
-    // console.log(formValues);
-
-    const form = new FormData();
-    form.append("username", formValues.username);
-    form.append("password", formValues.password);
-
-    // console.log(Array.from(form));
-
-    axios
-      .post(api + "register", form, {headers: { Authorization: `Bearer ${sessionToken}` }})
-      .then(function (response) {
-        console.log(response);
-        navigate("/login");
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
-
   const adminText = <AdminTextStats stats={adminData}></AdminTextStats>;
 
-  const adminCollectionByYear = <AdminCollectionByYear stats={collectionsByYear}></AdminCollectionByYear>;
+  const adminCollectionByYear = (
+    <AdminCollectionByYear stats={collectionsByYear}></AdminCollectionByYear>
+  );
 
   return (
     <Disclosure
@@ -122,57 +100,21 @@ export default function Admin() {
 
             {/* Main Content */}
             <section class="main-content" className="flex flex-col w-3/4 my-5">
-              {/* List Nav Bar */}
               {loaded ? (
                 <div>
-                {adminText}
-                {adminCollectionByYear}
-              </div>
+                  {adminText}
+                  {adminCollectionByYear}
+                </div>
               ) : (
                 <div
                   className="flex justify-center items-center h-96"
                   style={{ backgroundColor: "#F5F5F5" }}
-                >Loading</div>
+                >
+                  Loading
+                </div>
               )}
+              <RegisterAdmin></RegisterAdmin>
             </section>
-          </div>
-          <div
-          >
-          <form
-        class="flex flex-col gap-5 justify-center w-4/5"
-        onSubmit={handleSubmit}
-      >
-        <div class="flex justify-center items-center">
-          <input
-            type="text"
-            name="username"
-            value={formValues.username}
-            onChange={handleInputChange}
-            id="username"
-            placeholder="Username"
-            class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-50 h-12"
-          />
-        </div>
-        <div class="flex justify-center items-center">
-          <input
-            type="password"
-            name="password"
-            value={formValues.password}
-            onChange={handleInputChange}
-            id="password"
-            placeholder="Password"
-            class="bg-white text-spotless-dark-green w-full rounded placeholder-neutral-900 placeholder-opacity-50 h-12"
-          />
-        </div>
-        <div class="flex justify-center items-center">
-          <button
-            type="submit"
-            class="text-white bg-spotless-green w-4/6 py-2.5 rounded-full text-3xl"
-          >
-            Register New Admin
-          </button>
-        </div>
-      </form>
           </div>
         </>
       )}

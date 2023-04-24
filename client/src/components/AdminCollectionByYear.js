@@ -35,12 +35,12 @@ export default function AdminCollectionByYear(props) {
   // 1, 1, 1, 1, 1, 1, 1
 
   const data = {
-    labels: [1, 1, 1, 1, 1, 1, 1],
+    labels: [2017, 2018, 2019, 2020, 2021, 2022, 2023],
     datasets: [
       {
         label: "# of Collections",
 
-        data: [1, 1, 1, 1, 1, 1, 1],
+        data: [4, 2, 4, 2, 6, 4],
         fill: false,
         borderColor: "#29A053",
         pointBackgroundColor: "white",
