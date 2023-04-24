@@ -32,11 +32,19 @@ export default function Stats() {
   }, [sessionUsername, sessionToken]);
 
   useEffect(() => {
-    console.log("userData start")
+    console.log("userData start");
     console.log(userData);
-    if (userData && userData.collection_by_status && userData.collections_by_rating && userData.collections_by_year && userData.minutes_collection_complete && userData.minutes_collection_full && userData.minutes_collection_planned) {
+    if (
+      userData &&
+      userData.collection_by_status &&
+      userData.collections_by_rating &&
+      userData.collections_by_year &&
+      userData.minutes_collection_complete &&
+      userData.minutes_collection_full &&
+      userData.minutes_collection_planned
+    ) {
       setLoaded(true);
-      console.log("userData end")
+      console.log("userData end");
       console.log(userData);
     }
   }, [userData]);
@@ -44,21 +52,24 @@ export default function Stats() {
   async function getUserStats() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios
-    .get(api + "user/stats", { 
-      withCredentials: true, 
-      headers: { Authorization: `Bearer ${sessionToken}` }
-     })
+      .get(api + "user/stats", {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      })
       .then(function (response) {
-      console.log(response.data);
-      setUserData(response.data);
-    })
+        console.log(response.data);
+        setUserData(response.data);
+      })
       .catch(function (error) {
         console.log(error);
       });
   }
 
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white h-full overflow-y-scroll no-scrollbar">
+    <Disclosure
+      as="body"
+      className="bg-spotless-green text-white h-full overflow-y-scroll no-scrollbar"
+    >
       {({ open }) => (
         <>
           <Banner></Banner>
@@ -72,15 +83,14 @@ export default function Stats() {
               {/* List Nav Bar */}
               {loaded ? (
                 <div>
-                <TextStats stats={userData}></TextStats>
-                <BarPie stats={userData}></BarPie>
-                <ReleaseYearGraph stats={userData}></ReleaseYearGraph>
-              </div>
+                  <TextStats stats={userData}></TextStats>
+                  <BarPie stats={userData}></BarPie>
+                  <ReleaseYearGraph stats={userData}></ReleaseYearGraph>
+                </div>
               ) : (
-                <div
-                  className="flex justify-center items-center h-96"
-                  style={{ backgroundColor: "#F5F5F5" }}
-                >Loading</div>
+                <div class="flex justify-center items-center rounded-2xl h-96 bg-neutral-900 text-white text-2xl">
+                  Statistics Loading&nbsp;...
+                </div>
               )}
             </section>
           </div>
