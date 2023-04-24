@@ -297,7 +297,7 @@ export default function CollectionModal(props) {
                     {/* Upper Right */}
                     <div
                       className="right-col-upper"
-                      class="col-span-4 col-start-2 flex flex-col justify-start pr-2.5 pt-3.5 h-full"
+                      class="col-span-4 col-start-2 flex flex-col justify-start pt-3.5 h-full"
                     >
                       <div class="flex flex-row w-full">
                         <div class="text-xl mb-2.5 justify-start w-3/4">

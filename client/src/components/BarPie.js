@@ -32,14 +32,20 @@ export default function BarPie(props) {
   };
 
   function makeArray() {
-    let array = Array.apply(null, Array(6)).map(function (x, i) { return 0; });
-    console.log(array);
+    let array = Array.apply(null, Array(6)).map(function (x, i) {
+      return 0;
+    });
+    console.log("bar_i" + array);
+    if (!Array.isArray(props.stats.collections_by_rating)) {
+      props.stats.collections_by_rating = [props.stats.collections_by_rating];
+      console.log("wrapped array" + props.stats.collections_by_rating);
+    }
     props.stats.collections_by_rating.forEach((item) => {
       array[Math.floor(item.Rating)] += item.Count;
-    })
-    console.log(array);
-  return array;
-}
+    });
+    console.log("bar_o" + array);
+    return array;
+  }
 
   const barOptions = {
     scales: {
@@ -87,13 +93,29 @@ export default function BarPie(props) {
     labels: ["Planning", "Complete", "Dropped"],
     datasets: [
       {
-        data: [props.stats.collection_by_status[2].Count, props.stats.collection_by_status[0].Count, props.stats.collection_by_status[1].Count],
+        data: makePie(),
         backgroundColor: ["#1f783e", "#FFFFFF", "#29A053"],
         hoverBackgroundColor: ["#1f783e", "#FFFFFF", "#29A053"],
         borderColor: ["rgb(23 23 23)"],
       },
     ],
   };
+
+  function makePie() {
+    let array = Array.apply(null, Array(3)).map(function (x, i) {
+      return 0;
+    });
+    console.log(array);
+    if (!Array.isArray(props.stats.collection_by_status)) {
+      props.stats.collection_by_status = [props.stats.collection_by_status];
+      console.log("wrapped array" + props.stats.collection_by_status);
+    }
+    props.stats.collection_by_status.forEach((item) => {
+      array.push(item.Count);
+    });
+    console.log(array);
+    return array;
+  }
 
   const pieOptions = {
     plugins: {

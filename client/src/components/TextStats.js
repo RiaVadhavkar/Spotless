@@ -5,7 +5,9 @@ export default function TextStats(props) {
         <div class="text-sm text-center">
           Minutes Planned
           <h1 class="minutes" className="text-2xl text-spotless-green">
-            {Math.floor(props.stats.minutes_collection_planned["Total Minutes Listened"])}
+            {Math.floor(
+              props.stats.minutes_collection_planned["Total Minutes Listened"]
+            )}
           </h1>
         </div>
         <div class="text-sm text-center">
@@ -17,15 +19,15 @@ export default function TextStats(props) {
         <div class="text-sm text-center">
           Minutes Listened
           <h1 class="minutes" className="text-2xl text-spotless-green">
-          {Math.floor(props.stats.minutes_collection_complete["Total Minutes Listened"])}
+            {Math.floor(
+              props.stats.minutes_collection_complete["Total Minutes Listened"]
+            )}
           </h1>
         </div>
         <div class="text-sm text-center">
           Songs Listened
           <h1 class="minutes" className="text-2xl text-spotless-green">
-
-        {props.stats.minutes_collection_complete["Number Tracks"]}
-
+            {props.stats.minutes_collection_complete["Number Tracks"]}
           </h1>
         </div>
       </section>

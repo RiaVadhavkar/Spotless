@@ -18,9 +18,9 @@ export default function UserProfile() {
       <h1 class="username" className="mt-6 text-3xl font-bold">
         {sessionUsername}
       </h1>
-      <h2 class="social-stats" className="mt-2.5 text-sm font-bold">
+      {/* <h2 class="social-stats" className="mt-2.5 text-sm font-bold">
         6 followers&nbsp;|&nbsp;18 following
-      </h2>
+      </h2> */}
       <section
         class="minutes-listened"
         className="flex flex-col my-6 text-sm items-center justify-center"

@@ -21,12 +21,20 @@ export default function ReleaseYearGraph(props) {
   };
 
   function makeArray() {
-    let arr = [];let array = Array.apply(null, Array(8)).map(function (x, i) { return 0; });
+    let array = Array.apply(null, Array(8)).map(function (x, i) {
+      return 0;
+    });
+    console.log("line_i" + array);
+    if (!Array.isArray(props.stats.collections_by_year)) {
+      props.stats.collections_by_year = [props.stats.collections_by_year];
+      console.log("wrapped array" + props.stats.collections_by_year);
+    }
     props.stats.collections_by_year.forEach((item) => {
       array[item.Year - 2016] = item.Count;
-    })
-  return array;
-  };
+    });
+    console.log("line_o" + array);
+    return array;
+  }
 
   const options = {
     scales: {
