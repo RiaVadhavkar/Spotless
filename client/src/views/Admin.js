@@ -53,22 +53,47 @@ export default function Admin() {
   }, [sessionUsername, sessionToken]);
 
   useEffect(() => {
-    console.log("adminData");
+    console.log("adminData start")
     console.log(adminData);
-    console.log("collectionsByYear");
-    console.log(collectionsByYear);
-    if (adminData && collectionsByYear) {
+    if (adminData && adminData.collections_by_year && adminData.collections && adminData.users) {
       setLoaded(true);
+      console.log("adminData end")
+      console.log(adminData);
     }
   }, [adminData]);
 
   async function getAdminStats() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios
-      .get(api + "admin/stats", {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${sessionToken}` },
-      })
+    .get(api + "admin/stats", { 
+      withCredentials: true, 
+      headers: { Authorization: `Bearer ${sessionToken}` }
+     })
+      .then(function (response) {
+      console.log(response.data);
+      setAdminData(response.data);
+      // setCollectionsByYear(response.data.collections_by_year);
+    })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
+  const handleSubmit = (event) => {
+    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+
+    event.preventDefault();
+
+    // console.log(formValues);
+
+    const form = new FormData();
+    form.append("username", formValues.username);
+    form.append("password", formValues.password);
+
+    // console.log(Array.from(form));
+
+    axios
+      .post(api + "register", form, {headers: { Authorization: `Bearer ${sessionToken}` }})
       .then(function (response) {
         console.log(response.data);
         setAdminData(response.data);
@@ -81,9 +106,7 @@ export default function Admin() {
 
   const adminText = <AdminTextStats stats={adminData}></AdminTextStats>;
 
-  const adminCollectionByYear = (
-    <AdminCollectionByYear stats={collectionsByYear}></AdminCollectionByYear>
-  );
+  const adminCollectionByYear = <AdminCollectionByYear stats={adminData.collections_by_year}></AdminCollectionByYear>;
 
   return (
     <Disclosure

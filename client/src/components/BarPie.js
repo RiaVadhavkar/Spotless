@@ -1,14 +1,14 @@
 import { Bar, Pie } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 
-export default function BarPie() {
+export default function BarPie(props) {
   const barData = {
     labels: ["0", "1", "2", "3", "4", "5"],
     // labelsColor: "#FFFFFF",
     datasets: [
       {
         label: "Rating",
-        data: [1, 4, 3, 8, 5, 2],
+        data: makeArray(),
         backgroundColor: [
           "rgba(255, 99, 132, 0.2)",
           "rgba(255, 159, 64, 0.2)",
@@ -30,6 +30,15 @@ export default function BarPie() {
       },
     ],
   };
+
+  function makeArray() {
+    let array = Array.apply(null, Array(6)).map(function (x, i) { return 0; });
+    console.log(array);
+    props.stats.collections_by_rating.forEach((item) => {
+      array[Math.floor(item.Rating)] = item.Count;
+    })
+  return array;
+}
 
   const barOptions = {
     scales: {
@@ -77,7 +86,7 @@ export default function BarPie() {
     labels: ["Planning", "Complete", "Dropped"],
     datasets: [
       {
-        data: [30, 50, 20],
+        data: [props.stats.collection_by_status[2].Count, props.stats.collection_by_status[0].Count, props.stats.collection_by_status[1].Count],
         backgroundColor: ["#1f783e", "#FFFFFF", "#29A053"],
         hoverBackgroundColor: ["#1f783e", "#FFFFFF", "#29A053"],
         borderColor: ["rgb(23 23 23)"],

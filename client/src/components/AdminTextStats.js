@@ -9,13 +9,13 @@ export default function AdminTextStats(props) {
         <div class="text-sm text-center">
           Users
           <h1 class="minutes" className="text-2xl text-spotless-green">
-            {props.stats.users}
+            {props.stats.users.Count}
           </h1>
         </div>
         <div class="text-sm text-center">
           Collections
           <h1 class="minutes" className="text-2xl text-spotless-green">
-            {props.stats.collections}
+            {props.stats.collections.Count}
           </h1>
         </div>
         <div class="text-sm text-center">

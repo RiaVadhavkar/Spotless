@@ -13,6 +13,7 @@ export default function Stats() {
   const navigate = useNavigate();
   const { sessionUsername, sessionToken } = useContext(SessionContext);
   const [userData, setUserData] = useState({});
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -30,17 +31,27 @@ export default function Stats() {
     }
   }, [sessionUsername, sessionToken]);
 
+  useEffect(() => {
+    console.log("userData start")
+    console.log(userData);
+    if (userData && userData.collection_by_status && userData.collections_by_rating && userData.collections_by_year && userData.minutes_collection_complete && userData.minutes_collection_full && userData.minutes_collection_planned) {
+      setLoaded(true);
+      console.log("userData end")
+      console.log(userData);
+    }
+  }, [userData]);
+
   async function getUserStats() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios
-      .get(api + "user/stats", {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${sessionToken}` },
-      })
+    .get(api + "user/stats", { 
+      withCredentials: true, 
+      headers: { Authorization: `Bearer ${sessionToken}` }
+     })
       .then(function (response) {
-        console.log(response.data);
-        setUserData(response.data);
-      })
+      console.log(response.data);
+      setUserData(response.data);
+    })
       .catch(function (error) {
         console.log(error);
       });
@@ -59,9 +70,18 @@ export default function Stats() {
             {/* Main Content */}
             <section class="main-content" className="flex flex-col w-3/4 my-5">
               {/* List Nav Bar */}
-              <TextStats></TextStats>
-              <BarPie></BarPie>
-              <ReleaseYearGraph></ReleaseYearGraph>
+              {loaded ? (
+                <div>
+                <TextStats stats={userData}></TextStats>
+                <BarPie stats={userData}></BarPie>
+                <ReleaseYearGraph stats={userData}></ReleaseYearGraph>
+              </div>
+              ) : (
+                <div
+                  className="flex justify-center items-center h-96"
+                  style={{ backgroundColor: "#F5F5F5" }}
+                >Loading</div>
+              )}
             </section>
           </div>
         </>
