@@ -22,6 +22,7 @@ function App() {
   const [admin, setAdmin] = useState(false);
   const [albums, setAlbums] = useState([]);
   const [albumsLength, setAlbumsLength] = useState(0);
+  const [userData, setUserData] = useState({});
   
 
   useEffect(() => {
@@ -61,6 +62,22 @@ function App() {
       });
   }
 
+  async function getUserStats() {
+    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    await axios
+      .get(api + "user/stats", {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setUserData(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
+
   return (
     // TODO: add class="font-default" to App
     <div className="App" class="h-screen">
@@ -75,6 +92,9 @@ function App() {
           getAlbums,
           admin,
           setAdmin,
+          userData,
+          setUserData,
+          getUserStats,
         }}
       >
         <BrowserRouter>
