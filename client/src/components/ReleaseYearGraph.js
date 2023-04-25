@@ -2,13 +2,30 @@ import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 
 export default function ReleaseYearGraph(props) {
+  function collectionCountByYear() {
+    let countCollections = props.stats.collections_by_year.map(function (x, i) {
+      return x.Count;
+    });
+    return countCollections;
+  }
+
+  function yearLabels() {
+    if (!Array.isArray(props.stats.collections_by_year)) {
+      props.stats.collections_by_year = [props.stats.collections_by_year];
+      console.log("wrapped array" + props.stats.collections_by_year);
+    }
+    let years = props.stats.collections_by_year.map(function (x, i) {
+      return x.Year;
+    });
+    return years;
+  }
+
   const data = {
-    labels: ["2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023"],
+    labels: yearLabels(),
     datasets: [
       {
         label: "# of Collections",
-
-        data: makeArray(),
+        data: collectionCountByYear(),
         fill: false,
         borderColor: "#29A053",
         pointBackgroundColor: "white",
@@ -20,22 +37,6 @@ export default function ReleaseYearGraph(props) {
     ],
   };
 
-  function makeArray() {
-    let array = Array.apply(null, Array(8)).map(function (x, i) {
-      return 0;
-    });
-    console.log("line_i" + array);
-    if (!Array.isArray(props.stats.collections_by_year)) {
-      props.stats.collections_by_year = [props.stats.collections_by_year];
-      console.log("wrapped array" + props.stats.collections_by_year);
-    }
-    props.stats.collections_by_year.forEach((item) => {
-      array[item.Year - 2016] = item.Count;
-    });
-    console.log("line_o" + array);
-    return array;
-  }
-
   const options = {
     scales: {
       y: {
@@ -43,18 +44,19 @@ export default function ReleaseYearGraph(props) {
         title: {
           display: true,
           text: "# of Collections",
-          font: { weight: "bold" },
+          font: { weight: "bold", size: 14 },
           color: "white",
         },
         ticks: {
           color: "white",
+          stepSize: 1,
         },
       },
       x: {
         title: {
           display: true,
           text: "Years",
-          font: { weight: "bold" },
+          font: { weight: "bold", size: 14 },
           color: "white",
         },
         ticks: {
@@ -66,9 +68,9 @@ export default function ReleaseYearGraph(props) {
       title: {
         display: true,
         text: "Release Years",
-        font: { weight: "bold", size: 18 },
+        font: { weight: "bold", size: 20 },
         color: "white",
-        padding: { bottom: 20 },
+        padding: { top: 10, bottom: 20 },
       },
       legend: {
         labels: {
