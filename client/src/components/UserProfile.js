@@ -1,9 +1,22 @@
 import user_profile from "../assets/users/ashley.jpeg";
 import { SessionContext } from "../App";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 
 export default function UserProfile() {
-  const { sessionUsername } = useContext(SessionContext);
+  const { sessionUsername, sessionToken, getUserStats, userData } = useContext(SessionContext);
+  const [minutesLoaded, setMinutesLoaded] = useState(false);
+
+  useEffect(() => {
+    if (sessionUsername && sessionToken) {
+      getUserStats();
+    }
+  }, [sessionUsername, sessionToken]);
+
+  useEffect(() => {
+    if (userData && userData.minutes_collection_complete) {
+      setMinutesLoaded(true);
+    }
+  }, [userData]);
 
   return (
     <section
@@ -27,7 +40,10 @@ export default function UserProfile() {
       >
         Total Minutes Listened
         <h1 class="minutes" className="text-2xl text-spotless-green">
-          128,936
+          {minutesLoaded ? Math.floor(userData.minutes_collection_complete["Total Minutes Listened"]) : 0}
+          {/* {Math.floor(
+              userData.minutes_collection_complete["Total Minutes Listened"] ? userData.minutes_collection_complete["Total Minutes Listened"] : 0
+          )} */}
         </h1>
       </section>
       {/* <section

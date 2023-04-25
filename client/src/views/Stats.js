@@ -11,8 +11,7 @@ import axios from "axios";
 
 export default function Stats() {
   const navigate = useNavigate();
-  const { sessionUsername, sessionToken } = useContext(SessionContext);
-  const [userData, setUserData] = useState({});
+  const { sessionUsername, sessionToken, userData, getUserStats } = useContext(SessionContext);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
@@ -48,22 +47,6 @@ export default function Stats() {
       console.log(userData);
     }
   }, [userData]);
-
-  async function getUserStats() {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-    await axios
-      .get(api + "user/stats", {
-        withCredentials: true,
-        headers: { Authorization: `Bearer ${sessionToken}` },
-      })
-      .then(function (response) {
-        console.log(response.data);
-        setUserData(response.data);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
 
   return (
     <Disclosure
