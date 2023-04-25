@@ -2,13 +2,30 @@ import { useEffect } from "react";
 import { Line } from "react-chartjs-2";
 
 export default function AdminCollectionByYear(props) {
+  function yearLabels() {
+    if (!Array.isArray(props.stats)) {
+      props.stats = [props.stats];
+      console.log("wrapped array" + props.stats);
+    }
+    let years = props.stats.map(function (x, i) {
+      return x.Year;
+    });
+    return years;
+  }
+
+  function collectionCountByYear() {
+    let countCollections = props.stats.map(function (x, i) {
+      return x.Count;
+    });
+    return countCollections;
+  }
+
   const data = {
-    labels: [props.stats[0].Year, props.stats[1].Year, props.stats[2].Year, props.stats[3].Year, props.stats[4].Year, props.stats[5].Year],
+    labels: yearLabels(),
     datasets: [
       {
         label: "# of Collections",
-
-        data: [props.stats[0].Count, props.stats[1].Count, props.stats[2].Count, props.stats[3].Count, props.stats[4].Count, props.stats[5].Count],
+        data: collectionCountByYear(),
         fill: false,
         borderColor: "#29A053",
         pointBackgroundColor: "white",
@@ -27,18 +44,19 @@ export default function AdminCollectionByYear(props) {
         title: {
           display: true,
           text: "# of Collections",
-          font: { weight: "bold" },
+          font: { weight: "bold", size: 14 },
           color: "white",
         },
         ticks: {
           color: "white",
+          stepSize: 1,
         },
       },
       x: {
         title: {
           display: true,
           text: "Years",
-          font: { weight: "bold" },
+          font: { weight: "bold", size: 14 },
           color: "white",
         },
         ticks: {
@@ -50,9 +68,9 @@ export default function AdminCollectionByYear(props) {
       title: {
         display: true,
         text: "Number of Collections by Year",
-        font: { weight: "bold", size: 18 },
+        font: { weight: "bold", size: 20 },
         color: "white",
-        padding: { bottom: 20 },
+        padding: { top: 10, bottom: 20 },
       },
       legend: {
         labels: {
