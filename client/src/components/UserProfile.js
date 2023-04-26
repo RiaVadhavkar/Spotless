@@ -3,7 +3,8 @@ import { SessionContext } from "../App";
 import { useContext, useEffect, useState } from "react";
 
 export default function UserProfile() {
-  const { sessionUsername, sessionToken, getUserStats, userData } = useContext(SessionContext);
+  const { sessionUsername, sessionToken, getUserStats, userData } =
+    useContext(SessionContext);
   const [minutesLoaded, setMinutesLoaded] = useState(false);
 
   useEffect(() => {
@@ -40,7 +41,12 @@ export default function UserProfile() {
       >
         Total Minutes Listened
         <h1 class="minutes" className="text-2xl text-spotless-green">
-          {minutesLoaded ? Math.floor(userData.minutes_collection_complete["Total Minutes Listened"]) : 0}
+          {Math.floor(
+            minutesLoaded &&
+              userData.minutes_collection_complete["Total Minutes Listened"]
+              ? userData.minutes_collection_complete["Total Minutes Listened"]
+              : 0
+          )}
           {/* {Math.floor(
               userData.minutes_collection_complete["Total Minutes Listened"] ? userData.minutes_collection_complete["Total Minutes Listened"] : 0
           )} */}
