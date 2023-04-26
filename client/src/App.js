@@ -55,7 +55,9 @@ function App() {
       .then(function (response) {
         setAlbums(response.data.collection_items);
         setAlbumsLength(response.data.collection_items.length);
-        setFilteredAlbums(response.data.collection_items);
+        setFilteredAlbums(
+          sortAlbums(selectedSort, response.data.collection_items)
+        );
         console.log(albums);
       })
       .catch(function (error) {
@@ -86,30 +88,35 @@ function App() {
     console.log(sort);
     setSelectedSort(sort);
 
-    let sortedAlbums = [...albums];
+    let sortedAlbums = [...filterAlbums];
 
+    setFilteredAlbums(sortAlbums(sort, sortedAlbums));
+    console.log("Sorted albums");
+    console.log(albums, filterAlbums);
+  };
+
+  const sortAlbums = (sort, toBeSortedAlbums) => {
+    let sortedAlbums = [];
     if (sort === "Name") {
-      sortedAlbums = albums.sort((a, b) => {
+      sortedAlbums = toBeSortedAlbums.sort((a, b) => {
         return a.Collection.localeCompare(b.Collection);
       });
     } else if (sort === "Rating") {
-      sortedAlbums = albums.sort((a, b) => {
+      sortedAlbums = toBeSortedAlbums.sort((a, b) => {
         return b.Rating - a.Rating;
       });
     } else if (sort === "Year") {
-      sortedAlbums = albums.sort((a, b) => {
+      sortedAlbums = toBeSortedAlbums.sort((a, b) => {
         let bYear = parseInt(b.Release_date.split(" ")[3]);
         let aYear = parseInt(a.Release_date.split(" ")[3]);
         return bYear - aYear;
       });
     } else if (sort === "Type") {
-      sortedAlbums = albums.sort((a, b) => {
+      sortedAlbums = toBeSortedAlbums.sort((a, b) => {
         return a.Type.localeCompare(b.Type);
       });
     }
-    setAlbums(sortedAlbums);
-    console.log("Sorted albums");
-    console.log(albums);
+    return sortedAlbums;
   };
 
   const [selectedFilter, setSelectedFilter] = useState(0);
@@ -134,7 +141,7 @@ function App() {
         return album.Status === "Dropped";
       });
     }
-    setFilteredAlbums(filteredAlbums);
+    setFilteredAlbums(sortAlbums(selectedSort, filteredAlbums));
     console.log("Filtered albums");
     console.log(albums);
   };

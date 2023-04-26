@@ -32,7 +32,10 @@ export default function ListNavigation(props) {
               class="bg-neutral-900 flex flex-row w-52 items-center justify-center rounded-2xl py-2.5 gap-1.5 mx-1.5"
             >
               <FaSearch class="h-4 w-4" aria-hidden="true" />
-              <span class="opacity-80">Name</span>
+              <input
+                placeholder="Name"
+                class="opacity-80 bg-neutral-900 w-3/4"
+              ></input>
             </section>
 
             {/* Status Tabs */}
