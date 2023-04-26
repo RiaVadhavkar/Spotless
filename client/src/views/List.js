@@ -34,7 +34,7 @@ export default function List() {
     }
   }, [sessionUsername, sessionToken]);
 
-  const listItems = albums.map((album) => {
+  let listItems = albums.map((album) => {
     return (
       <ListItem
         key={album.Collection_URI}
@@ -43,7 +43,7 @@ export default function List() {
     );
   });
 
-  const tableItems = albums.map((album) => {
+  let tableItems = albums.map((album) => {
     return (
       <TableItem
         key={album.Collection_URI}

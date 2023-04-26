@@ -78,6 +78,66 @@ function App() {
       });
   }
 
+  const sorts = ["Name", "Rating", "Year", "Type"];
+  const [selectedSort, setSelectedSort] = useState(sorts[0]);
+ 
+  const handleSort = (sort) => {
+    console.log(sort);
+    setSelectedSort(sort);
+
+    let sortedAlbums = [...albums];
+
+    if (sort === "Name") {
+      sortedAlbums = albums.sort((a, b) => {
+        return a.Collection.localeCompare(b.Collection);
+      });
+    } else if (sort === "Rating") {
+      sortedAlbums = albums.sort((a, b) => {
+        return b.Rating - a.Rating;
+      });
+    } else if (sort === "Year") {
+      sortedAlbums = albums.sort((a, b) => {
+        let bYear = parseInt(b.Release_date.split(" ")[3]);
+        let aYear = parseInt(a.Release_date.split(" ")[3]);
+        return bYear - aYear;
+      });
+    } else if (sort === "Type") {
+      sortedAlbums = albums.sort((a, b) => {
+        return a.Type.localeCompare(b.Type);
+      });
+    }
+    setAlbums(sortedAlbums);
+    console.log("Sorted albums");
+    console.log(albums);
+  };
+
+  const [selectedFilter, setSelectedFilter] = useState(0);
+
+  const handleFilter = (index) => {
+    console.log(index);
+    setSelectedFilter(index);
+    let filteredAlbums;
+    if (index === 0) {
+      getAlbums();
+      return;
+    } else if (index === 1) {
+      filteredAlbums = albums.filter((album) => {
+        return album.Status === "Planning";
+      });
+    } else if (index === 2) {
+      filteredAlbums = albums.filter((album) => {
+        return album.Status === "Complete";
+      });
+    } else if (index === 3) {
+      filteredAlbums = albums.filter((album) => {
+        return album.Status === "Dropped";
+      });
+    }
+    setAlbums(filteredAlbums);
+    console.log("Filtered albums");
+    console.log(albums);
+  };
+
   return (
     // TODO: add class="font-default" to App
     <div className="App" class="h-screen">
@@ -88,6 +148,7 @@ function App() {
           sessionUsername,
           setSessionUsername,
           albums,
+          setAlbums,
           albumsLength,
           getAlbums,
           admin,
@@ -95,6 +156,11 @@ function App() {
           userData,
           setUserData,
           getUserStats,
+          handleSort,
+          sorts, 
+          selectedSort,
+          handleFilter,
+          selectedFilter,
         }}
       >
         <BrowserRouter>

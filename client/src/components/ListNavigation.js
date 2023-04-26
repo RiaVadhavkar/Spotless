@@ -1,8 +1,19 @@
-import { Disclosure, Tab, Menu, Transition } from "@headlessui/react";
+import { Disclosure, Tab, Menu, Transition, Listbox } from "@headlessui/react";
 import { BsFillCaretDownFill } from "react-icons/bs";
 import { FaList, FaThLarge, FaSearch } from "react-icons/fa";
+import { useState, useContext } from "react";
+import { SessionContext } from "../App";
 
 export default function ListNavigation(props) {
+  const {
+    albums,
+    setAlbums,
+    handleSort,
+    sorts,
+    selectedSort,
+    handleFilter,
+  } = useContext(SessionContext);
+
   return (
     <Disclosure as="list-navigation" className="bg-spotless-green text-white">
       {({ open }) => (
@@ -23,10 +34,13 @@ export default function ListNavigation(props) {
               className="status-tabs"
               class="bg-neutral-900 rounded-2xl py-2.5 grow mx-1.5"
             >
-              <Tab.Group>
+              <Tab.Group
+                onChange={(index) => handleFilter(index)}
+              >
                 <Tab.List className="flex space-x-2 px-4 grow justify-around items-center">
+                  <Tab>All</Tab>
                   <Tab>Planning</Tab>
-                  <Tab>Complete</Tab>
+                  <Tab>Completed</Tab>
                   <Tab>Dropped</Tab>
                 </Tab.List>
               </Tab.Group>
@@ -37,28 +51,18 @@ export default function ListNavigation(props) {
               className="sort-by-menu"
               class="bg-neutral-900 text-white rounded-2xl py-2.5 px-4 mx-1.5 h-full"
             >
-              <Menu as="div">
-                <Menu.Button className="inline-flex gap-1.5 justify-center items-center">
-                  Sort By
-                  <BsFillCaretDownFill className="h-4 w-4" aria-hidden="true" />
-                </Menu.Button>
-
-                {/* <Transition
-                  enter="transition ease-out duration-100"
-                  enterFrom="transform opacity-0 scale-95"
-                  enterTo="transform opacity-100 scale-100"
-                  leave="transition ease-in duration-75"
-                  leaveFrom="transform opacity-100 scale-100"
-                  leaveTo="transform opacity-0 scale-95"
-                >
-                  <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                    <Menu.Item>Name</Menu.Item>
-                    <Menu.Item>Rating</Menu.Item>
-                    <Menu.Item>Year</Menu.Item>
-                    <Menu.Item>Type</Menu.Item>
-                  </Menu.Items>
-                </Transition> */}
-              </Menu>
+              <select
+                id="sort"
+                onChange={(e) => handleSort(e.target.value)}
+                defaultValue={selectedSort}
+                class="text-spotless-green rounded font-bold p-1"
+              >
+                {sorts.map((sort) => (
+                  <option key={sort} value={sort}>
+                    {sort}
+                  </option>
+                ))}
+              </select>
             </section>
 
             {/* Switch Views */}
