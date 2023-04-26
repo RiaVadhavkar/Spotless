@@ -6,13 +6,19 @@ import { SessionContext } from "../App";
 
 export default function ListNavigation(props) {
   const {
-    albums,
-    setAlbums,
+    filterAlbums,
+    setFilteredAlbums,
     handleSort,
     sorts,
     selectedSort,
     handleFilter,
   } = useContext(SessionContext);
+
+  let listNavItems = ["All", "Planning", "Completed", "Dropped"];
+
+  function classNames(...classes) {
+    return classes.filter(Boolean).join(" ");
+  }
 
   return (
     <Disclosure as="list-navigation" className="bg-spotless-green text-white">
@@ -34,14 +40,22 @@ export default function ListNavigation(props) {
               className="status-tabs"
               class="bg-neutral-900 rounded-2xl py-2.5 grow mx-1.5"
             >
-              <Tab.Group
-                onChange={(index) => handleFilter(index)}
-              >
+              <Tab.Group onChange={(index) => handleFilter(index)}>
                 <Tab.List className="flex space-x-2 px-4 grow justify-around items-center">
-                  <Tab>All</Tab>
-                  <Tab>Planning</Tab>
-                  <Tab>Completed</Tab>
-                  <Tab>Dropped</Tab>
+                  {listNavItems.map((item) => (
+                    <Tab
+                      key={item}
+                      className={({ selected }) =>
+                        classNames(
+                          selected
+                            ? "underline underline-offset-8 decoration-2 decoration-spotless-green"
+                            : "hover:underline hover:underline-offset-8 hover:decoration-2 hover:decoration-spotless-green"
+                        )
+                      }
+                    >
+                      {item}
+                    </Tab>
+                  ))}
                 </Tab.List>
               </Tab.Group>
             </section>
@@ -54,9 +68,12 @@ export default function ListNavigation(props) {
               <select
                 id="sort"
                 onChange={(e) => handleSort(e.target.value)}
-                defaultValue={selectedSort}
-                class="text-spotless-green rounded font-bold p-1"
+                // defaultValue={selectedSort}
+                class="text-white bg-neutral-900 rounded font-bold text-center"
               >
+                <option value="" disabled selected hidden>
+                  Sort By
+                </option>
                 {sorts.map((sort) => (
                   <option key={sort} value={sort}>
                     {sort}

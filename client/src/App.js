@@ -21,9 +21,9 @@ function App() {
   const [sessionUsername, setSessionUsername] = useState("");
   const [admin, setAdmin] = useState(false);
   const [albums, setAlbums] = useState([]);
+  const [filterAlbums, setFilteredAlbums] = useState([]);
   const [albumsLength, setAlbumsLength] = useState(0);
   const [userData, setUserData] = useState({});
-  
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -55,6 +55,7 @@ function App() {
       .then(function (response) {
         setAlbums(response.data.collection_items);
         setAlbumsLength(response.data.collection_items.length);
+        setFilteredAlbums(response.data.collection_items);
         console.log(albums);
       })
       .catch(function (error) {
@@ -80,7 +81,7 @@ function App() {
 
   const sorts = ["Name", "Rating", "Year", "Type"];
   const [selectedSort, setSelectedSort] = useState(sorts[0]);
- 
+
   const handleSort = (sort) => {
     console.log(sort);
     setSelectedSort(sort);
@@ -133,7 +134,7 @@ function App() {
         return album.Status === "Dropped";
       });
     }
-    setAlbums(filteredAlbums);
+    setFilteredAlbums(filteredAlbums);
     console.log("Filtered albums");
     console.log(albums);
   };
@@ -157,10 +158,12 @@ function App() {
           setUserData,
           getUserStats,
           handleSort,
-          sorts, 
+          sorts,
           selectedSort,
           handleFilter,
           selectedFilter,
+          filterAlbums,
+          setFilteredAlbums,
         }}
       >
         <BrowserRouter>
