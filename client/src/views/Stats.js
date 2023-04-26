@@ -39,7 +39,6 @@ export default function Stats() {
       userData.collections_by_rating &&
       userData.collections_by_year &&
       userData.minutes_collection_complete &&
-      userData.minutes_collection_full &&
       userData.minutes_collection_planned
     ) {
       setLoaded(true);
