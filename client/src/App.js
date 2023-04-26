@@ -12,7 +12,8 @@ import Settings from "./views/Settings";
 import axios from "axios";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useCallback } from "react";
+import { useDropzone } from "react-dropzone";
 
 export const SessionContext = createContext();
 
