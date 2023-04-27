@@ -26,6 +26,7 @@ function App() {
   const [albumsLength, setAlbumsLength] = useState(0);
   const [userData, setUserData] = useState({});
   const [collectionName, setCollectionName] = useState("");
+  const [userProfilePicture, setProfilePicture] = useState("");
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -58,6 +59,7 @@ function App() {
         setAlbums(response.data.collection_items);
         setAlbumsLength(response.data.collection_items.length);
         setFilteredAlbums(response.data.collection_items);
+        getUserStats();
         console.log(albums);
       })
       .catch(function (error) {
@@ -160,6 +162,22 @@ function App() {
     console.log("search list", searchList);
     setFilteredAlbums(searchList);
   };
+
+  const getUserProfile = () => {
+    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    axios
+      .get(api + "user/profile", {
+        withCredentials: true,
+        headers: { Authorization: `Bearer ${sessionToken}` },
+      })
+      .then(function (response) {
+        console.log(response.data);
+        setUserData(response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+  }
 
   return (
     // TODO: add class="font-default" to App

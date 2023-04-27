@@ -13,7 +13,8 @@ export default function ChangeProfilePic() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     const form = new FormData();
     var imageFile = acceptedFiles;
-    form.append("profile_photo", imageFile[0]);
+    form.append("image", imageFile[0]);
+    console.log(sessionToken);
     await axios
       .post(api + "update/image", form, {
         withCredentials: true,
@@ -35,27 +36,28 @@ export default function ChangeProfilePic() {
   });
   const { sessionToken, setSessionToken } = useContext(SessionContext);
 
-  const handlePhoto = async (event) => {
-    // event.preventDefault();
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-    const form = new FormData();
-    var imageFile = document.querySelector("#file");
-    form.append("profile_photo", imageFile.files[0]);
-    await axios
-      .post(api + "update/image", form, {
-        withCredentials: true,
-        headers: {
-          Authorization: `Bearer ${sessionToken}`,
-          "Content-Type": "multipart/form-data",
-        },
-      })
-      .then(function (response) {
-        console.log(response);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  };
+  // const handlePhoto = async (event) => {
+  //   // event.preventDefault();
+  //   const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+  //   const form = new FormData();
+  //   var imageFile = document.querySelector("#file");
+  //   form.append("image", imageFile.files[0]);
+  //   console.log(sessionToken);
+  //   await axios
+  //     .post(api + "update/image", form, {
+  //       withCredentials: true,
+  //       headers: {
+  //         Authorization: `Bearer ${sessionToken}`,
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     })
+  //     .then(function (response) {
+  //       console.log(response);
+  //     })
+  //     .catch(function (error) {
+  //       console.log(error);
+  //     });
+  // };
 
   return (
     <div class="flex flex-col items-center justify-center w-full">
@@ -72,7 +74,6 @@ export default function ChangeProfilePic() {
             required=""
             class="text-center opacity-0 cursor-pointer absolute z-10 w-full"
             accept="image/png, image/jpeg, image/jpg, image/gif"
-            onChange={handlePhoto}
             {...getInputProps()}
             capture
           ></input>
