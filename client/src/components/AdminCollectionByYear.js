@@ -73,9 +73,7 @@ export default function AdminCollectionByYear(props) {
         padding: { top: 10, bottom: 20 },
       },
       legend: {
-        labels: {
-          color: "#FFFFFF",
-        },
+        display: false,
       },
     },
     elements: {

@@ -81,9 +81,7 @@ export default function BarPie(props) {
         color: "#FFFFFF",
       },
       legend: {
-        labels: {
-          color: "#FFFFFF",
-        },
+          display: false,
       },
     },
   };

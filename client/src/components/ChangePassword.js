@@ -79,7 +79,7 @@ export default function ChangePassword() {
         console.log(response.data);
         setSessionToken("");
         setSessionUsername("");
-        navigate("/register");
+        navigate("/login");
       })
       .catch(function (error) {
         console.log(error);

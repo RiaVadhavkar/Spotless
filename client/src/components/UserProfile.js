@@ -41,15 +41,17 @@ export default function UserProfile() {
       >
         Total Minutes Listened
         <h1 class="minutes" className="text-2xl text-spotless-green">
-          {Math.floor(
-            minutesLoaded &&
-              userData.minutes_collection_complete["Total Minutes Listened"]
-              ? userData.minutes_collection_complete["Total Minutes Listened"]
-              : 0
+          {minutesLoaded ? (
+            userData.minutes_collection_complete["Total Minutes Listened"] ? (
+              Math.floor(
+                userData.minutes_collection_complete["Total Minutes Listened"]
+              )
+            ) : (
+              0
+            )
+          ) : (
+            <span>Loading</span>
           )}
-          {/* {Math.floor(
-              userData.minutes_collection_complete["Total Minutes Listened"] ? userData.minutes_collection_complete["Total Minutes Listened"] : 0
-          )} */}
         </h1>
       </section>
       {/* <section
