@@ -12,6 +12,9 @@ export default function ListNavigation(props) {
     sorts,
     selectedSort,
     handleFilter,
+    collectionName,
+    handleSearch,
+    setCollectionName,
   } = useContext(SessionContext);
 
   let listNavItems = ["All", "Planning", "Completed", "Dropped"];
@@ -35,6 +38,8 @@ export default function ListNavigation(props) {
               <input
                 placeholder="Name"
                 class="opacity-80 bg-neutral-900 w-3/4"
+                value={collectionName}
+                onChange={handleSearch}
               ></input>
             </section>
 

@@ -25,6 +25,7 @@ function App() {
   const [filterAlbums, setFilteredAlbums] = useState([]);
   const [albumsLength, setAlbumsLength] = useState(0);
   const [userData, setUserData] = useState({});
+  const [collectionName, setCollectionName] = useState("");
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -56,9 +57,7 @@ function App() {
       .then(function (response) {
         setAlbums(response.data.collection_items);
         setAlbumsLength(response.data.collection_items.length);
-        setFilteredAlbums(
-          sortAlbums(selectedSort, response.data.collection_items)
-        );
+        setFilteredAlbums(response.data.collection_items);
         console.log(albums);
       })
       .catch(function (error) {
@@ -84,67 +83,82 @@ function App() {
 
   const sorts = ["Name", "Rating", "Year", "Type"];
   const [selectedSort, setSelectedSort] = useState(sorts[0]);
+  const [selectedFilter, setSelectedFilter] = useState(0);
 
   const handleSort = (sort) => {
     console.log(sort);
     setSelectedSort(sort);
-
-    let sortedAlbums = [...filterAlbums];
-
-    setFilteredAlbums(sortAlbums(sort, sortedAlbums));
+    setFilteredAlbums(searchFilterSort(collectionName, filterAlbums, sort));
     console.log("Sorted albums");
     console.log(albums, filterAlbums);
   };
 
-  const sortAlbums = (sort, toBeSortedAlbums) => {
+  const handleFilter = (index) => {
+    console.log(index);
+    setSelectedFilter(index);
+    setFilteredAlbums(searchFilterSort(collectionName, index, selectedSort));
+    console.log("Filtered albums");
+    console.log(albums);
+  };
+
+  const searchFilterSort = (search, filter, sort) => {
+    console.log(filter);
+    let filteredAlbums = albums;
+    if (filter === 1) {
+      filteredAlbums = albums.filter((album) => {
+        return album.Status === "Planning";
+      });
+    } else if (filter === 2) {
+      filteredAlbums = albums.filter((album) => {
+        return album.Status === "Complete";
+      });
+    } else if (filter === 3) {
+      filteredAlbums = albums.filter((album) => {
+        return album.Status === "Dropped";
+      });
+    }
+    // setFilteredAlbums(sortAlbums(selectedSort, filteredAlbums));
+    console.log("Filtered albums");
+    console.log(albums);
+
     let sortedAlbums = [];
     if (sort === "Name") {
-      sortedAlbums = toBeSortedAlbums.sort((a, b) => {
+      sortedAlbums = filteredAlbums.sort((a, b) => {
         return a.Collection.localeCompare(b.Collection);
       });
     } else if (sort === "Rating") {
-      sortedAlbums = toBeSortedAlbums.sort((a, b) => {
+      sortedAlbums = filteredAlbums.sort((a, b) => {
         return b.Rating - a.Rating;
       });
     } else if (sort === "Year") {
-      sortedAlbums = toBeSortedAlbums.sort((a, b) => {
+      sortedAlbums = filteredAlbums.sort((a, b) => {
         let bYear = parseInt(b.Release_date.split(" ")[3]);
         let aYear = parseInt(a.Release_date.split(" ")[3]);
         return bYear - aYear;
       });
     } else if (sort === "Type") {
-      sortedAlbums = toBeSortedAlbums.sort((a, b) => {
+      sortedAlbums = filteredAlbums.sort((a, b) => {
         return a.Type.localeCompare(b.Type);
       });
     }
     return sortedAlbums;
   };
 
-  const [selectedFilter, setSelectedFilter] = useState(0);
-
-  const handleFilter = (index) => {
-    console.log(index);
-    setSelectedFilter(index);
-    let filteredAlbums;
-    if (index === 0) {
-      getAlbums();
-      return;
-    } else if (index === 1) {
-      filteredAlbums = albums.filter((album) => {
-        return album.Status === "Planning";
-      });
-    } else if (index === 2) {
-      filteredAlbums = albums.filter((album) => {
-        return album.Status === "Complete";
-      });
-    } else if (index === 3) {
-      filteredAlbums = albums.filter((album) => {
-        return album.Status === "Dropped";
-      });
-    }
-    setFilteredAlbums(sortAlbums(selectedSort, filteredAlbums));
-    console.log("Filtered albums");
-    console.log(albums);
+  const handleSearch = (search) => {
+    setCollectionName(search.target.value);
+    // albums.filter((album) => {
+    //   return album.Collection.toLowerCase().includes(search.target.value);
+    // });
+    const toBeSearchList = searchFilterSort(
+      search.target.value,
+      selectedFilter,
+      selectedSort
+    );
+    const searchList = toBeSearchList.filter((album) => {
+      return album.Collection.toLowerCase().includes(search.target.value);
+    });
+    console.log("search list", searchList);
+    setFilteredAlbums(searchList);
   };
 
   return (
@@ -172,6 +186,9 @@ function App() {
           selectedFilter,
           filterAlbums,
           setFilteredAlbums,
+          collectionName,
+          setCollectionName,
+          handleSearch,
         }}
       >
         <BrowserRouter>
