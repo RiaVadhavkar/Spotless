@@ -88,7 +88,7 @@ function App() {
   const handleSort = (sort) => {
     console.log(sort);
     setSelectedSort(sort);
-    setFilteredAlbums(searchFilterSort(collectionName, filterAlbums, sort));
+    setFilteredAlbums(searchFilterSort(collectionName, selectedFilter, sort));
     console.log("Sorted albums");
     console.log(albums, filterAlbums);
   };
@@ -98,7 +98,7 @@ function App() {
     setSelectedFilter(index);
     setFilteredAlbums(searchFilterSort(collectionName, index, selectedSort));
     console.log("Filtered albums");
-    console.log(albums);
+    console.log(albums, filterAlbums);
   };
 
   const searchFilterSort = (search, filter, sort) => {
@@ -118,8 +118,8 @@ function App() {
       });
     }
     // setFilteredAlbums(sortAlbums(selectedSort, filteredAlbums));
-    console.log("Filtered albums");
-    console.log(albums);
+    // console.log("Filtered albums");
+    // console.log(albums);
 
     let sortedAlbums = [];
     if (sort === "Name") {
