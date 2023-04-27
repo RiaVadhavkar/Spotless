@@ -236,7 +236,7 @@ export default function CollectionModal(props) {
                         className="play-on-spotify"
                         class="flex flex-row items-center justify-center"
                       >
-                        <button
+                        <a
                           href={albumLink}
                           target="_blank"
                           rel="noreferrer"
@@ -245,7 +245,7 @@ export default function CollectionModal(props) {
                         >
                           <FaSpotify className="h-5 w-5" aria-hidden="true" />
                           &nbsp;Play on Spotify
-                        </button>
+                        </a>
                       </div>
                       {/* <div
                         className="item-rating-tag"

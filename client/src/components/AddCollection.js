@@ -2,6 +2,7 @@ import { Fragment, useState, useRef, useContext } from "react";
 import { SessionContext } from "../App";
 import { Transition, Dialog } from "@headlessui/react";
 import { FaPlus } from "react-icons/fa";
+import instructions from "../assets/instructions.png";
 
 import axios from "axios";
 
@@ -93,13 +94,21 @@ export default function AddCollection() {
                     <u>Add Collection to List</u>
                   </Dialog.Title>
                   <div className="p-2.5">
+                    <div className="instructions" class="text-white">
+                      Instructions for Adding a Collection:
+                      <img
+                        className="w-auto lg:block rounded p-3"
+                        src={instructions}
+                        alt="Instructions"
+                      />
+                    </div>
                     <form
                       onSubmit={(e) =>
                         addURLtoList(spotifyURL.current.value, e)
                       }
                     >
                       <div class="flex justify-between items-center">
-                        <span class="text-white">Album URL</span>
+                        <span class="text-white font-bold">Album URL</span>
                         <input
                           id="link"
                           ref={spotifyURL}
