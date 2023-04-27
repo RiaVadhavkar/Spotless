@@ -69,7 +69,7 @@ const Login = () => {
   };
 
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white h-full">
+    <Disclosure as="body" className="bg-spotless-green text-white h-full overflow-y-scroll no-scrollbar">
       {({ open }) => (
         <>
           <div className="relative flex flex-col h-full items-center justify-center font-semibold mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">

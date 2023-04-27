@@ -7,6 +7,7 @@ import {
   FaTrashAlt,
   FaPlusCircle,
   FaMinusCircle,
+  FaCheckDouble,
 } from "react-icons/fa";
 import TrackItem from "../components/TrackItem";
 import axios from "axios";
@@ -97,8 +98,7 @@ export default function CollectionModal(props) {
     }
     if (review != props.album.Review) {
       handleReview();
-    }
-    else {
+    } else {
       props.closeModal();
     }
   };
@@ -106,7 +106,7 @@ export default function CollectionModal(props) {
   function checkUpdated() {
     // console.log(responseLoaded);
     // if (responseLoaded) {
-      getAlbums();  
+    getAlbums();
     // }
     props.closeModal();
   }
@@ -233,20 +233,21 @@ export default function CollectionModal(props) {
                         class="w-40 mb-2.5"
                       />
                       <div
-                        className="play=on-spotify"
-                        class="flex w-full flex-row items-center justify-center"
+                        className="play-on-spotify"
+                        class="flex flex-row items-center justify-center"
                       >
-                        <a
+                        <button
                           href={albumLink}
                           target="_blank"
                           rel="noreferrer"
-                          class="flex w-full flex-row items-center justify-center font-bold"
+                          class=""
+                          className="w-full flex-row inline-flex justify-center items-center rounded-md bg-white bg-opacity-25 p-1.5 font-bold text-white  hover:bg-spotless-green focus:outline-none focus:ring-2 focus:ring-white"
                         >
                           <FaSpotify className="h-5 w-5" aria-hidden="true" />
                           &nbsp;Play on Spotify
-                        </a>
+                        </button>
                       </div>
-                      <div
+                      {/* <div
                         className="item-rating-tag"
                         class="flex items-center justify-center mt-2.5"
                       >
@@ -254,11 +255,10 @@ export default function CollectionModal(props) {
                           type="button"
                           class="inline-flex justify-center items-center rounded-md bg-white bg-opacity-25 p-1.5 font-medium text-white  hover:bg-spotless-green focus:outline-none focus:ring-2 focus:ring-white"
                         >
-                          {/* TODO: add on-click functionality, FaRegHeart becomes FaHeart and stores in Favorites Tab */}
                           <FaRegHeart className="h-5 w-5" aria-hidden="true" />
                           &nbsp;Favorite
                         </button>
-                      </div>
+                      </div> */}
                       <div
                         className="item-rating-tag"
                         class="flex items-center justify-center mt-2.5 font-semibold"
