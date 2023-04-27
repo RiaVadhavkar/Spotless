@@ -1,11 +1,20 @@
 import { Disclosure } from "@headlessui/react";
 
-const navigation = [
+const navigationAdmin = [
   { name: "List", href: "/list" },
   // { name: "Favorites", href: "/favorites"},
   { name: "Stats", href: "/stats" },
   // { name: "Social", href: "/social"},
   { name: "Admin", href: "/admin" },
+  { name: "Settings", href: "/settings" },
+];
+
+const navigationNonAdmin = [
+  { name: "List", href: "/list" },
+  // { name: "Favorites", href: "/favorites"},
+  { name: "Stats", href: "/stats" },
+  // { name: "Social", href: "/social"},
+  // { name: "Admin", href: "/admin" },
   { name: "Settings", href: "/settings" },
 ];
 
@@ -15,6 +24,13 @@ function classNames(...classes) {
 
 export default function Navigation() {
   const currentPath = window.location.pathname;
+  const admin = sessionStorage.getItem("admin");
+
+  const adminCondition = (admin === "true") ? true : false;
+
+  const navigation = [
+    ...(adminCondition ? navigationAdmin : navigationNonAdmin),
+  ];
 
   return (
     <Disclosure
