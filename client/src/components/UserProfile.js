@@ -5,8 +5,13 @@ import axios from "axios";
 
 export default function UserProfile() {
   const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-  const { sessionUsername, sessionToken, getUserStats, userData, profilePicture } =
-    useContext(SessionContext);
+  const {
+    sessionUsername,
+    sessionToken,
+    getUserStats,
+    userData,
+    profilePicture,
+  } = useContext(SessionContext);
   const [minutesLoaded, setMinutesLoaded] = useState(false);
   const usern = sessionStorage.getItem("username");
   const [imageURL, setImageURL] = useState(api + "/user/image/" + usern);
@@ -15,14 +20,16 @@ export default function UserProfile() {
     if (sessionUsername && sessionToken) {
       getUserStats();
     }
-    axios.get(imageURL).then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-      console.log("using default image")
-      setImageURL(user_profile);
-    });
+    axios
+      .get(imageURL)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log("using default image");
+        setImageURL(user_profile);
+      });
   }, [sessionUsername, sessionToken]);
 
   useEffect(() => {
@@ -31,15 +38,13 @@ export default function UserProfile() {
     }
   }, [userData]);
 
-  
-
   return (
     <section
       class="user-profile"
       className="bg-neutral-900 rounded-2xl h-max w-64 -translate-y-16 flex flex-col items-center justify-center"
     >
       <img
-        className="h-44 mt-5 rounded-full w-auto lg:block"
+        class="h-44 w-44 mt-5 rounded-full lg:block"
         src={imageURL}
         alt="Spotless User"
       />

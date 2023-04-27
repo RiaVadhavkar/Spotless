@@ -71,7 +71,7 @@ export default function TableItem(props) {
           <div class="col-span-3 text-lg mb-2.5">{props.album.Collection}</div>
           <div class="text-sm mb-2.5">{props.album.Artists}</div>
           <div class="text-sm">Review:</div>
-          <div class="text-sm">{props.album.Review}</div>
+          <div class="text-sm flex-wrap break-words">{props.album.Review}</div>
         </div>
       </div>
       <CollectionModal

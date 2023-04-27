@@ -9,21 +9,24 @@ import user_profile from "../assets/users/ashley.jpeg"; //TODO: remove
 
 export default function ChangeProfilePic() {
   const api = "https://spotless-test-api.discovery.cs.vt.edu/";
-  const { sessionUsername, sessionToken, setSessionToken } = useContext(SessionContext);
+  const { sessionUsername, sessionToken, setSessionToken } =
+    useContext(SessionContext);
   const usern = sessionStorage.getItem("username");
   const [imageURL, setImageURL] = useState(api + "/user/image/" + usern);
 
   useEffect(() => {
     if (sessionUsername && sessionToken) {
-    axios.get(imageURL).then((response) => {
-      console.log(response);
-    })
-    .catch((error) => {
-      console.log(error);
-      console.log("using default image")
-      setImageURL(user_profile);
-    });
-  }
+      axios
+        .get(imageURL)
+        .then((response) => {
+          console.log(response);
+        })
+        .catch((error) => {
+          console.log(error);
+          console.log("using default image");
+          setImageURL(user_profile);
+        });
+    }
   }, [sessionUsername, sessionToken]);
 
   const onDrop = useCallback(async (acceptedFiles) => {
@@ -99,11 +102,13 @@ export default function ChangeProfilePic() {
           ></input>
           <label for="imageUpload" class="cursor-pointer block">
             Add or Drag Profile Picture Here
+            <br />
+            [Square Image]
           </label>
         </div>
         <div class="flex text-center w-[12em] min-h-[12em] justify-center items-center">
           <img
-            className="w-auto rounded lg:block"
+            className="w-fit max-h-fit rounded lg:block"
             src={imageURL}
             alt="Spotless User"
           />
