@@ -45,6 +45,7 @@ export default function ChangeProfilePic() {
       })
       .then(function (response) {
         console.log(response);
+        window.location.reload();
       })
       .catch(function (error) {
         console.log(error);
