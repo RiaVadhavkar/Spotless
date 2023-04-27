@@ -8,7 +8,27 @@ import { useDropzone } from "react-dropzone";
 import user_profile from "../assets/users/ashley.jpeg"; //TODO: remove
 
 export default function ChangeProfilePic() {
+  const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+  const { sessionUsername, sessionToken, setSessionToken } = useContext(SessionContext);
+  const usern = sessionStorage.getItem("username");
+  const [imageURL, setImageURL] = useState(api + "/user/image/" + usern);
+
+  useEffect(() => {
+    if (sessionUsername && sessionToken) {
+    axios.get(imageURL).then((response) => {
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log(error);
+      console.log("using default image")
+      setImageURL(user_profile);
+    });
+  }
+  }, [sessionUsername, sessionToken]);
+
   const onDrop = useCallback(async (acceptedFiles) => {
+    const token = sessionStorage.getItem("token");
+    console.log(token);
     console.log(acceptedFiles);
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     const form = new FormData();
@@ -19,7 +39,7 @@ export default function ChangeProfilePic() {
       .post(api + "update/image", form, {
         withCredentials: true,
         headers: {
-          Authorization: `Bearer ${sessionToken}`,
+          Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
         },
       })
@@ -34,7 +54,6 @@ export default function ChangeProfilePic() {
   const { getInputProps, getRootProps } = useDropzone({
     onDrop,
   });
-  const { sessionToken, setSessionToken } = useContext(SessionContext);
 
   // const handlePhoto = async (event) => {
   //   // event.preventDefault();
@@ -84,7 +103,7 @@ export default function ChangeProfilePic() {
         <div class="flex text-center w-[12em] min-h-[12em] justify-center items-center">
           <img
             className="w-auto rounded lg:block"
-            src={user_profile}
+            src={imageURL}
             alt="Spotless User"
           />
         </div>

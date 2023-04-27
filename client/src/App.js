@@ -10,6 +10,7 @@ import Social from "./views/Social";
 import Admin from "./views/Admin";
 import Settings from "./views/Settings";
 import axios from "axios";
+import{ Buffer } from "buffer";
 
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createContext, useState, useEffect, useCallback } from "react";
@@ -26,7 +27,7 @@ function App() {
   const [albumsLength, setAlbumsLength] = useState(0);
   const [userData, setUserData] = useState({});
   const [collectionName, setCollectionName] = useState("");
-  const [userProfilePicture, setProfilePicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
 
   useEffect(() => {
     const token = sessionStorage.getItem("token");
@@ -165,14 +166,19 @@ function App() {
 
   const getUserProfile = () => {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const username = sessionStorage.getItem("username");
     axios
-      .get(api + "user/profile", {
+      .get(api + "user/image/" + username, {
         withCredentials: true,
-        headers: { Authorization: `Bearer ${sessionToken}` },
+        responseType: "blob", // important
+        headers: { Authorization: `Bearer ${sessionToken}`},
       })
       .then(function (response) {
         console.log(response.data);
-        setUserData(response.data);
+        // const blob = new Blob([response.data], { type: "image/jpeg" , encoding: "base64"});
+        // console.log(Buffer.from(response.data, "binary").toString("base64"));
+        // const url = URL.createObjectURL(blob);
+        // console.log(url);
       })
       .catch(function (error) {
         console.log(error);
@@ -207,10 +213,12 @@ function App() {
           collectionName,
           setCollectionName,
           handleSearch,
+          profilePicture,
         }}
       >
         <BrowserRouter>
           <Header></Header>
+          {/* <button onClick={getUserProfile}>Hello</button> */}
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/register" element={<Register />} />
