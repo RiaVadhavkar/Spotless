@@ -15,7 +15,6 @@ export default function ChangeProfilePic() {
   });
   const { sessionToken, setSessionToken } = useContext(SessionContext);
 
-
   const handlePhoto = async (event) => {
     event.preventDefault();
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
@@ -38,12 +37,9 @@ export default function ChangeProfilePic() {
       });
   };
 
-  
-
   return (
-    <div class="flex items-center justify-center w-full">
-      {/* <form class="flex flex-col items-center justify-center w-full"> */}
-      {/* <label class="text-2xl mb-2">Change Profile Picture</label> */}
+    <div class="flex flex-col items-center justify-center w-full">
+      <h1 class="text-2xl mb-4">Change Profile Picture</h1>
       <div
         class="relative flex text-center border-2 border-dashed border-white rounded w-[12em] min-h-[12em] justify-center items-center"
         {...getRootProps()}
@@ -54,18 +50,15 @@ export default function ChangeProfilePic() {
           name="file"
           required=""
           class="text-center opacity-0 cursor-pointer absolute z-10 w-full"
-          // style={{ display: "none" }}
           accept="image/png, image/jpeg, image/jpg, image/gif"
           onChange={handlePhoto}
           {...getInputProps()}
           capture
         ></input>
         <label for="imageUpload" class="cursor-pointer block">
-          Add Profile Picture Here
+          Add or Drag Profile Picture Here
         </label>
-        {/* <Dropzone /> */}
       </div>
-      {/* </form> */}
     </div>
   );
 }
