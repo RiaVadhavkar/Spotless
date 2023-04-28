@@ -11,7 +11,7 @@ import Admin from "./views/Admin";
 import Settings from "./views/Settings";
 import axios from "axios";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { createContext, useState, useEffect, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 
@@ -44,6 +44,12 @@ function App() {
   }, []);
 
   useEffect(() => {
+    setFilteredAlbums(
+      searchFilterSort(collectionName, selectedFilter, selectedSort)
+    );
+  }, [albums]);
+
+  useEffect(() => {
     sessionStorage.setItem("token", sessionToken);
     sessionStorage.setItem("username", sessionUsername);
     sessionStorage.setItem("admin", admin);
@@ -65,13 +71,15 @@ function App() {
         console.log("albums length: " + response.data.collection_items);
         console.log("albums length debug: " + albumsLength);
 
-        setFilteredAlbums(response.data.collection_items);
-        console.log("f_albums: " + response.data.collection_items);
-        console.log("f_albums debug: " + filterAlbums);
+        // setFilteredAlbums(
+        //   searchFilterSort(collectionName, selectedFilter, selectedSort)
+        // );
+        // console.log("f_albums: " + response.data.collection_items);
+        // console.log("f_albums debug: " + filterAlbums);
 
-        setFilterAlbumsLength(response.data.collection_items.length);
-        console.log("f_albums length: " + response.data.collection_items);
-        console.log("f_albums length debug: " + filterAlbumsLength);
+        // setFilterAlbumsLength(response.data.collection_items.length);
+        // console.log("f_albums length: " + response.data.collection_items);
+        // console.log("f_albums length debug: " + filterAlbumsLength);
 
         getUserStats();
       })
