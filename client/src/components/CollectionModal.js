@@ -14,7 +14,7 @@ import axios from "axios";
 import { SessionContext } from "../App";
 
 export default function CollectionModal(props) {
-  const { sessionToken, getAlbums } = useContext(SessionContext);
+  const { sessionToken, getAlbums, filterAlbums } = useContext(SessionContext);
   const year = props.album.Release_date.split(" ")[3];
   const type =
     props.album.Type.charAt(0).toUpperCase() + props.album.Type.slice(1);
@@ -275,7 +275,7 @@ export default function CollectionModal(props) {
                             aria-hidden="true"
                           />
                         </button>
-                        <div>{rating}</div>
+                        <div>{rating}/5</div>
                         <button onClick={incrementRating}>
                           <FaPlusCircle
                             className="h-5 w-5"

@@ -131,7 +131,7 @@ const Login = () => {
                       Login
                     </button>
                   </div>
-                  <div class="flex justify-center items-center">OR</div>
+                  <div class="flex justify-center items-center">Don't have an account?</div>
                   <div class="flex justify-center items-center">
                     <button
                       type="submit"

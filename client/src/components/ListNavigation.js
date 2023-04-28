@@ -36,7 +36,7 @@ export default function ListNavigation(props) {
             >
               <FaSearch class="h-4 w-4" aria-hidden="true" />
               <input
-                placeholder="Name"
+                placeholder="Album Name"
                 class="opacity-80 bg-neutral-900 w-3/4"
                 value={collectionName}
                 onChange={handleSearch}

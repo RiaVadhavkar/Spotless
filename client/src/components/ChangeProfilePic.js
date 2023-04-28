@@ -11,14 +11,15 @@ export default function ChangeProfilePic() {
   const api = "https://spotless-test-api.discovery.cs.vt.edu/";
   const { sessionUsername, sessionToken, setSessionToken } =
     useContext(SessionContext);
-  const usern = sessionStorage.getItem("username");
-  const [imageURL, setImageURL] = useState(api + "/user/image/" + usern);
+  const user = sessionStorage.getItem("username");
+  const [imageURL, setImageURL] = useState(api + "/user/image/" + user);
 
   useEffect(() => {
     if (sessionUsername && sessionToken) {
       axios
         .get(imageURL)
         .then((response) => {
+          console.log(sessionStorage.getItem("admin"));
           console.log(response);
         })
         .catch((error) => {
@@ -84,10 +85,14 @@ export default function ChangeProfilePic() {
 
   return (
     <div class="flex flex-col items-center justify-center w-full">
-      <h1 class="text-2xl mb-4">Change Profile Picture</h1>
+      <h1 class="text-2xl mb-4 z-10">Change Profile Picture</h1>
+      <h2 class="mb-4 z-10 text-center">
+        Optimal Dimensions: <b>Square</b>. <br /> Non-Square Images will NOT be
+        cropped.
+      </h2>
       <div class="flex flex-row items-center justify-center w-full gap-4">
         <div
-          class="relative flex text-center border-2 border-dashed border-white rounded w-[12em] min-h-[12em] justify-center items-center"
+          class="relative cursor-pointer flex text-center border-2 border-dashed border-white rounded w-[12em] min-h-[12em] justify-center items-center"
           {...getRootProps()}
         >
           <input
@@ -96,12 +101,12 @@ export default function ChangeProfilePic() {
             name="file"
             required=""
             class="text-center opacity-0 cursor-pointer absolute z-10 w-full"
-            accept="image/png, image/jpeg, image/jpg, image/gif"
+            accept="image/*"
             {...getInputProps()}
             capture
           ></input>
           <label for="imageUpload" class="cursor-pointer block">
-            Add or Drag Profile Picture Here
+            Add Profile Picture
             <br />
             [Square Image]
           </label>

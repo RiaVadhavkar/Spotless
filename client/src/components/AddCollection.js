@@ -2,6 +2,7 @@ import { Fragment, useState, useRef, useContext } from "react";
 import { SessionContext } from "../App";
 import { Transition, Dialog } from "@headlessui/react";
 import { FaPlus } from "react-icons/fa";
+import { BsArrowRightShort } from "react-icons/bs";
 import instructions from "../assets/instructions.png";
 
 import axios from "axios";
@@ -58,7 +59,7 @@ export default function AddCollection() {
         className="bg-spotless-dark-green font-bold ring ring-white -translate-y-8 p-2.5 rounded-full h-auto w-64 flex flex-col items-center justify-center"
         onClick={openModal}
       >
-        ADD COLLECTION
+        ADD ALBUM
       </button>
 
       <Transition appear show={isOpen} as={Fragment}>
@@ -91,13 +92,30 @@ export default function AddCollection() {
                     as="h3"
                     className="text-2xl text-center font-bold leading-6 text-white p-2.5"
                   >
-                    <u>Add Collection to List</u>
+                    <u>Add Album to List</u>
                   </Dialog.Title>
                   <div className="p-2.5">
                     <div className="instructions" class="text-white">
-                      Instructions for Adding a Collection:
+                      <p class="flex">
+                        Instructions for Adding a Collection: Spotify
+                        <BsArrowRightShort
+                          className="h-6 w-6"
+                          aria-hidden="true"
+                        />
+                        Album
+                        <BsArrowRightShort
+                          className="h-6 w-6"
+                          aria-hidden="true"
+                        />
+                        Share
+                        <BsArrowRightShort
+                          className="h-6 w-6"
+                          aria-hidden="true"
+                        />
+                        Copy Album Link
+                      </p>
                       <img
-                        className="w-auto lg:block rounded p-3"
+                        className="w-auto lg:block rounded-2xl p-3"
                         src={instructions}
                         alt="Instructions"
                       />

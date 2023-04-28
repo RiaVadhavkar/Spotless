@@ -111,7 +111,7 @@ export default function Settings() {
                 <ChangeProfilePic></ChangeProfilePic>
                 <ChangePassword></ChangePassword>
               </div>
-              <div>
+              <div class="z-10">
                 {/* <h1 class="text-2xl text-center">Delete Account</h1> */}
                 <button
                   type="submit"

@@ -11,7 +11,6 @@ import Admin from "./views/Admin";
 import Settings from "./views/Settings";
 import axios from "axios";
 
-
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createContext, useState, useEffect, useCallback } from "react";
 import { useDropzone } from "react-dropzone";
@@ -23,8 +22,9 @@ function App() {
   const [sessionUsername, setSessionUsername] = useState("");
   const [admin, setAdmin] = useState(false);
   const [albums, setAlbums] = useState([]);
-  const [filterAlbums, setFilteredAlbums] = useState([]);
   const [albumsLength, setAlbumsLength] = useState(0);
+  const [filterAlbums, setFilteredAlbums] = useState([]);
+  const [filterAlbumsLength, setFilterAlbumsLength] = useState(0);
   const [userData, setUserData] = useState({});
   const [collectionName, setCollectionName] = useState("");
   const [profilePicture, setProfilePicture] = useState("");
@@ -58,10 +58,22 @@ function App() {
       })
       .then(function (response) {
         setAlbums(response.data.collection_items);
+        console.log("albums: " + response.data.collection_items);
+        console.log("albums debug: " + albums);
+
         setAlbumsLength(response.data.collection_items.length);
+        console.log("albums length: " + response.data.collection_items);
+        console.log("albums length debug: " + albumsLength);
+
         setFilteredAlbums(response.data.collection_items);
+        console.log("f_albums: " + response.data.collection_items);
+        console.log("f_albums debug: " + filterAlbums);
+
+        setFilterAlbumsLength(response.data.collection_items.length);
+        console.log("f_albums length: " + response.data.collection_items);
+        console.log("f_albums length debug: " + filterAlbumsLength);
+
         getUserStats();
-        console.log(albums);
       })
       .catch(function (error) {
         console.log(error);
@@ -106,8 +118,10 @@ function App() {
 
   const searchFilterSort = (search, filter, sort) => {
     console.log(filter);
-    let filteredAlbums = albums;
-    if (filter === 1) {
+    let filteredAlbums;
+    if (filter === 0) {
+      filteredAlbums = albums;
+    } else if (filter === 1) {
       filteredAlbums = albums.filter((album) => {
         return album.Status === "Planning";
       });
@@ -171,7 +185,7 @@ function App() {
       .get(api + "user/image/" + username, {
         withCredentials: true,
         responseType: "blob", // important
-        headers: { Authorization: `Bearer ${sessionToken}`},
+        headers: { Authorization: `Bearer ${sessionToken}` },
       })
       .then(function (response) {
         console.log(response.data);
@@ -183,7 +197,7 @@ function App() {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   return (
     // TODO: add class="font-default" to App
@@ -214,6 +228,8 @@ function App() {
           setCollectionName,
           handleSearch,
           profilePicture,
+          filterAlbumsLength,
+          setFilterAlbumsLength,
         }}
       >
         <BrowserRouter>

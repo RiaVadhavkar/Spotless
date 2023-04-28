@@ -14,7 +14,6 @@ const navigationNonAdmin = [
   // { name: "Favorites", href: "/favorites"},
   { name: "Stats", href: "/stats" },
   // { name: "Social", href: "/social"},
-  // { name: "Admin", href: "/admin" },
   { name: "Settings", href: "/settings" },
 ];
 
@@ -25,6 +24,9 @@ function classNames(...classes) {
 export default function Navigation() {
   const currentPath = window.location.pathname;
   const admin = sessionStorage.getItem("admin");
+  console.log("current path: " + currentPath);
+  console.log("storage: " + sessionStorage);
+  console.log("is an admin??" + admin);
 
   const adminCondition = (admin === "true") ? true : false;
 
