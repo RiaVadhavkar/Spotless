@@ -1,16 +1,35 @@
 import user_profile from "../assets/users/ashley.jpeg";
 import { SessionContext } from "../App";
 import { useContext, useEffect, useState } from "react";
+import axios from "axios";
 
 export default function UserProfile() {
-  const { sessionUsername, sessionToken, getUserStats, userData } =
-    useContext(SessionContext);
+  const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+  const {
+    sessionUsername,
+    sessionToken,
+    getUserStats,
+    userData,
+    profilePicture,
+  } = useContext(SessionContext);
   const [minutesLoaded, setMinutesLoaded] = useState(false);
+  const usern = sessionStorage.getItem("username");
+  const [imageURL, setImageURL] = useState(api + "/user/image/" + usern);
 
   useEffect(() => {
     if (sessionUsername && sessionToken) {
       getUserStats();
     }
+    axios
+      .get(imageURL)
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+        console.log("using default image");
+        setImageURL(user_profile);
+      });
   }, [sessionUsername, sessionToken]);
 
   useEffect(() => {
@@ -25,8 +44,8 @@ export default function UserProfile() {
       className="bg-neutral-900 rounded-2xl h-max w-64 -translate-y-16 flex flex-col items-center justify-center"
     >
       <img
-        className="h-44 mt-5 rounded-full w-auto lg:block"
-        src={user_profile}
+        class="h-44 w-44 mt-5 rounded-full lg:block"
+        src={imageURL}
         alt="Spotless User"
       />
       <h1 class="username" className="mt-6 text-3xl font-bold">
@@ -41,15 +60,17 @@ export default function UserProfile() {
       >
         Total Minutes Listened
         <h1 class="minutes" className="text-2xl text-spotless-green">
-          {Math.floor(
-            minutesLoaded &&
-              userData.minutes_collection_complete["Total Minutes Listened"]
-              ? userData.minutes_collection_complete["Total Minutes Listened"]
-              : 0
+          {minutesLoaded ? (
+            userData.minutes_collection_complete["Total Minutes Listened"] ? (
+              Math.floor(
+                userData.minutes_collection_complete["Total Minutes Listened"]
+              )
+            ) : (
+              0
+            )
+          ) : (
+            <span>Loading</span>
           )}
-          {/* {Math.floor(
-              userData.minutes_collection_complete["Total Minutes Listened"] ? userData.minutes_collection_complete["Total Minutes Listened"] : 0
-          )} */}
         </h1>
       </section>
       {/* <section

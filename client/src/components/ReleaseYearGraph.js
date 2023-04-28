@@ -73,9 +73,7 @@ export default function ReleaseYearGraph(props) {
         padding: { top: 10, bottom: 20 },
       },
       legend: {
-        labels: {
-          color: "#FFFFFF",
-        },
+        display: false,
       },
     },
     elements: {

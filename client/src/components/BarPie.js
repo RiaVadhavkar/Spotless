@@ -17,7 +17,7 @@ export default function BarPie(props) {
   }
 
   const barData = {
-    labels: ["0", "1", "2", "3", "4", "5"],
+    labels: ["No Rating", "1", "2", "3", "4", "5"],
     // labelsColor: "#FFFFFF",
     datasets: [
       {
@@ -81,9 +81,7 @@ export default function BarPie(props) {
         color: "#FFFFFF",
       },
       legend: {
-        labels: {
-          color: "#FFFFFF",
-        },
+          display: false,
       },
     },
   };

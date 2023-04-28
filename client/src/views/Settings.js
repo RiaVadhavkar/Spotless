@@ -96,7 +96,7 @@ export default function Settings() {
   };
 
   return (
-    <Disclosure as="body" className="bg-spotless-green text-white h-full">
+    <Disclosure as="body" className="bg-spotless-green text-white h-full overflow-y-scroll no-scrollbar">
       {({ open }) => (
         <>
           <div className="relative flex h-full items-center justify-center font-semibold mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
@@ -111,7 +111,7 @@ export default function Settings() {
                 <ChangeProfilePic></ChangeProfilePic>
                 <ChangePassword></ChangePassword>
               </div>
-              <div>
+              <div class="z-10">
                 {/* <h1 class="text-2xl text-center">Delete Account</h1> */}
                 <button
                   type="submit"

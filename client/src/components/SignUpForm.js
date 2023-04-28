@@ -79,7 +79,7 @@ export default function SignUpForm() {
             Sign Up
           </button>
         </div>
-        <div class="flex justify-center items-center">OR</div>
+        <div class="flex justify-center items-center">Have an account?</div>
         <div class="flex justify-center items-center">
           <button
             type="submit"
