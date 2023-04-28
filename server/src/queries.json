@@ -1,0 +1,50 @@
+{
+    "stats": {
+        "collections_by_year_query": "SELECT YEAR(c.Release_date) AS 'Year', COUNT(*) AS 'Count' FROM Artist a JOIN Has_Collection hc ON a.Artist_URI = hc.HasC_artist_URI JOIN Collection c ON hc.HasC_collection_URI = c.Collection_URI JOIN U_Collection uc ON uc.Collection_URI = c.Collection_URI LEFT JOIN U_Review ur ON ur.Reivew_collection_URI= uc.Collection_URI AND ur.U_review = uc.Collection_username LEFT JOIN U_Rate urt ON urt.Rate_collection_URI= uc.Collection_URI AND urt.Rate_username = uc.Collection_username WHERE uc.Collection_username = %s GROUP BY YEAR(c.Release_date)",
+        "collections_by_rating_query": "SELECT urt.Rating AS Rating, COUNT(*) AS Count FROM Artist a JOIN Has_Collection hc ON a.Artist_URI = hc.HasC_artist_URI JOIN Collection c ON hc.HasC_collection_URI = c.Collection_URI JOIN U_Collection uc ON uc.Collection_URI = c.Collection_URI LEFT JOIN U_Review ur ON ur.Reivew_collection_URI= uc.Collection_URI AND ur.U_review = uc.Collection_username LEFT JOIN U_Rate urt ON urt.Rate_collection_URI= uc.Collection_URI AND urt.Rate_username = uc.Collection_username WHERE uc.Collection_username = %s GROUP BY urt.Rating",
+        "collection_count_by_status_query": "SELECT s.Status, COUNT(*) AS 'Count' FROM Artist a JOIN Has_Collection hc ON a.Artist_URI = hc.HasC_artist_URI JOIN Collection c ON hc.HasC_collection_URI = c.Collection_URI JOIN U_Collection uc ON uc.Collection_URI = c.Collection_URI JOIN U_Collection_Status s ON uc.Collection_URI = s.Collection_URI AND s.Collection_username = uc.Collection_username WHERE uc.Collection_username = %s GROUP BY s.status",
+        "total_minutes_listened_by_collection_status_complete_query": "SELECT SUM(t.Track_length) / (1000 * 60) AS 'Total Minutes Listened', COUNT(*) AS 'Number Tracks' FROM U_Collection uc JOIN Collection c ON uc.Collection_URI = c.Collection_URI JOIN Track_In_Collection tic ON c.Collection_URI = tic.TiC_collect_URI JOIN Track t ON tic.TiC_track_URI = t.Track_URI JOIN U_Collection_Status s ON uc.Collection_URI = s.Collection_URI AND s.Status = 'Complete' AND s.Collection_username = uc.Collection_username WHERE uc.Collection_username = %s GROUP BY uc.Collection_username",
+        "total_minutes_listened_by_collection_status_planned_query": "SELECT SUM(t.Track_length) / (1000 * 60) AS 'Total Minutes Listened', COUNT(*) AS 'Number Tracks' FROM U_Collection uc JOIN Collection c ON uc.Collection_URI = c.Collection_URI JOIN Track_In_Collection tic ON c.Collection_URI = tic.TiC_collect_URI JOIN Track t ON tic.TiC_track_URI = t.Track_URI JOIN U_Collection_Status s ON uc.Collection_URI = s.Collection_URI AND s.Status = 'Planning' AND s.Collection_username = uc.Collection_username WHERE uc.Collection_username = %s GROUP BY uc.Collection_username",
+        
+        "total_tracks_and_lengths_in_db_query": "SELECT SUM(t.Track_length) AS Track_length, COUNT(*) AS Num_tracks FROM Track t;",
+        "total_collections_in_db_query": "SELECT COUNT(*) AS 'Count' FROM Collection c;",
+        "total_collections_in_db_by_year_query": "SELECT YEAR(c.Release_date) AS 'Year', COUNT(*) AS 'Count' FROM Collection c GROUP BY YEAR(c.Release_date);",        
+        "total_users_in_query": "SELECT COUNT(*) AS 'Count' FROM User;"
+    },
+    "collections": {
+        "collection_query": "INSERT IGNORE INTO Collection (Collection_URI, Collection_name, Type, Cover_image, Release_date) VALUES (%s, %s, %s, %s, %s)",
+        "user_collection_query": "INSERT IGNORE INTO U_Collection (Collection_username, Collection_URI) VALUES (%s, %s)",
+        "user_status_query": "INSERT IGNORE INTO U_Collection_Status (Collection_username, Collection_URI, Status) VALUES (%s, %s, %s)",
+        "user_rate_query": "INSERT IGNORE INTO U_Rate (Rate_username, Rate_collection_URI, Rating) VALUES (%s, %s, %s)",
+        "user_review_query": "INSERT IGNORE INTO U_Review (U_Review, Reivew_collection_URI, Review) VALUES (%s, %s, %s)",
+        "track_query": "INSERT IGNORE INTO Track (Track_URI, Track_name, Track_length, Track_no) VALUES (%s, %s, %s, %s)",
+        "artist_query": "INSERT IGNORE INTO Artist (Artist_URI, Artist_name, Image) VALUES (%s, %s, %s)",   
+        "has_track_query": "INSERT IGNORE INTO Has_Track (HasT_artist_URI, HasT_track_URI) VALUES (%s, %s)",
+        "collection_genre_query": "INSERT IGNORE INTO Collection_Genre (CG_collection_URI, Collec_genre) VALUES (%s, %s)",
+        "has_collection_query": "INSERT IGNORE INTO Has_Collection (HasC_artist_URI, HasC_collection_URI) VALUES (%s, %s)",
+        "track_collection_query": "INSERT IGNORE INTO Track_In_Collection (TiC_track_URI, TiC_collect_URI) VALUES (%s, %s)",
+        "user_list_query_all": "SELECT GROUP_CONCAT(DISTINCT a.Artist_name ORDER BY a.Artist_name ASC SEPARATOR ', ') AS Artists, c.Collection_name AS Collection, c.Collection_URI, c.Type, c.Cover_image, c.Release_date, ucs.Status, ur.Review AS Review, urt.Rating AS Rating FROM Artist a JOIN Has_Collection hc ON a.Artist_URI = hc.HasC_artist_URI JOIN Collection c ON hc.HasC_collection_URI = c.Collection_URI JOIN U_Collection uc ON uc.Collection_URI = c.Collection_URI LEFT JOIN U_Review ur ON ur.Reivew_collection_URI = uc.Collection_URI AND ur.U_review = uc.Collection_username LEFT JOIN U_Rate urt ON urt.Rate_collection_URI = uc.Collection_URI AND urt.Rate_username = uc.Collection_username LEFT JOIN U_Collection_Status ucs ON ucs.Collection_URI = uc.Collection_URI AND ucs.Collection_username = uc.Collection_username WHERE uc.Collection_username = %s GROUP BY uc.Collection_username, c.Collection_name, c.Collection_URI, c.Type, c.Cover_image, c.Release_date, ur.Review, urt.Rating, ucs.Status;",
+        "tracks_by_collection_query": "SELECT t.Track_URI, GROUP_CONCAT(DISTINCT a.Artist_name ORDER BY a.Artist_name ASC SEPARATOR ', ') AS Artists, t.Track_name, t.Track_length, t.Track_no FROM Artist a JOIN Has_Collection hc ON a.Artist_URI = hc.HasC_artist_URI JOIN Collection c ON hc.HasC_collection_URI = c.Collection_URI JOIN Track_In_Collection tic ON c.Collection_URI = tic.TiC_collect_URI JOIN Track t ON tic.TiC_track_URI = t.Track_URI WHERE c.Collection_URI = %s GROUP BY t.Track_no, t.Track_URI, t.Track_name, t.Track_length;"
+    },
+    "update": {
+        "update_review_query": "UPDATE U_Review SET Review = %s WHERE U_review = %s AND Reivew_collection_URI = %s;",
+        "update_rate_query": "UPDATE U_Rate SET Rating = %s WHERE Rate_username = %s AND Rate_collection_URI = %s;",
+        "update_status_query": "UPDATE U_Collection_Status SET Status = %s WHERE Collection_username = %s AND Collection_URI = %s;",
+        "update_password_query": "UPDATE User SET Password = %s WHERE Username = %s AND Password = %s",
+        "update_image_query": "UPDATE User SET User_profile_pic = %s WHERE Username = %s"
+    },
+    "credentials": {
+        "user_in_db_query": "SELECT Username, Password, U_admin FROM User LEFT JOIN U_admin ua ON ua.U_admin = User.Username WHERE User.Username = %s;",
+        "register_query": "INSERT IGNORE INTO User (Username, Password, User_profile_pic) VALUES (%s, %s, %s)",
+        "login_query": "SELECT Username, Password FROM User WHERE Username = %s AND Password = %s",
+        "delete_user_query": "DELETE FROM User WHERE Username = %s",
+        "user_in_admin_query": "SELECT * FROM U_admin WHERE U_admin = %s;",
+        "register_admin_query": "INSERT IGNORE INTO U_admin (U_admin) VALUES (%s);"
+    },
+    "delete": {
+        "delete_u_collection_query": "DELETE FROM U_Collection WHERE `Collection_username` = %s AND `Collection_URI` = %s",
+        "delete_u_collection_status_query": "DELETE FROM `U_Collection_Status` WHERE `Collection_username` = %s AND `Collection_URI` = %s",
+        "delete_u_collection_rate_query": "DELETE FROM `U_Rate` WHERE `Rate_username` = %s AND `Rate_collection_URI` = %s",
+        "delete_u_collection_review_query": "DELETE FROM `U_Review` WHERE `U_Review` = %s AND `Reivew_collection_URI` = %s"
+    }
+}
