@@ -30,12 +30,12 @@ export default function Navigation() {
     console.log("admin: " + admin);
   }, [admin]);
   const currentPath = window.location.pathname;
-  // const admin = sessionStorage.getItem("admin");
+  const sessionAdmin = sessionStorage.getItem("admin");
   // console.log("current path: " + currentPath);
   // console.log("storage: " + sessionStorage);
   // console.log("is an admin??" + admin);
 
-  const adminCondition = (admin === "true") ? true : false;
+  const adminCondition = (admin === "true" || sessionAdmin === "true") ? true : false;
 
   const navigation = [
     ...(adminCondition ? navigationAdmin : navigationNonAdmin),
