@@ -1,4 +1,6 @@
 import { Disclosure } from "@headlessui/react";
+import { useEffect, useContext } from "react";
+import { SessionContext } from "../App";
 
 const navigationAdmin = [
   { name: "List", href: "/list" },
@@ -22,11 +24,16 @@ function classNames(...classes) {
 }
 
 export default function Navigation() {
+  const { admin } = useContext(SessionContext);
+
+  useEffect (() => {
+    console.log("admin: " + admin);
+  }, [admin]);
   const currentPath = window.location.pathname;
-  const admin = sessionStorage.getItem("admin");
-  console.log("current path: " + currentPath);
-  console.log("storage: " + sessionStorage);
-  console.log("is an admin??" + admin);
+  // const admin = sessionStorage.getItem("admin");
+  // console.log("current path: " + currentPath);
+  // console.log("storage: " + sessionStorage);
+  // console.log("is an admin??" + admin);
 
   const adminCondition = (admin === "true") ? true : false;
 
