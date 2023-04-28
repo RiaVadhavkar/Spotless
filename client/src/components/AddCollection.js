@@ -41,7 +41,7 @@ export default function AddCollection() {
         },
         {
           headers: { Authorization: `Bearer ${sessionToken}` },
-          withCredentials: true,
+          withCredentials: false,
         }
       )
       .then(function (response) {

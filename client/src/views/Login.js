@@ -44,7 +44,7 @@ const Login = () => {
 
     await axios
       .post(api + "login", form, {
-        withCredentials: true,
+        withCredentials: false,
       })
       .then(function (response) {
         console.log(response);

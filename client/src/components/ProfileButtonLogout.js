@@ -16,7 +16,7 @@ export default function ProfileButtonLogout() {
 
     axios
       .get(api + "logout", {
-        withCredentials: true,
+        withCredentials: false,
         headers: { Authorization: `Bearer ${sessionToken}` },
       })
       .then(function (response) {

@@ -56,7 +56,7 @@ export default function Settings() {
     form.append("new_password", formValues.password);
     await axios
       .post(api + "update/password", form, {
-        withCredentials: true,
+        withCredentials: false,
         headers: { Authorization: `Bearer ${sessionToken}` },
       })
       .then(function (response) {
@@ -80,7 +80,7 @@ export default function Settings() {
 
     await axios
       .get(api + "user/delete", {
-        withCredentials: true,
+        withCredentials: false,
         headers: { Authorization: `Bearer ${sessionToken}` },
       })
       .then(function (response) {

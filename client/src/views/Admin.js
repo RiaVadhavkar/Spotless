@@ -72,7 +72,7 @@ export default function Admin() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios
       .get(api + "admin/stats", {
-        withCredentials: true,
+        withCredentials: false,
         headers: { Authorization: `Bearer ${sessionToken}` },
       })
       .then(function (response) {

@@ -59,7 +59,7 @@ function App() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios
       .get(api + "user/collection", {
-        withCredentials: true,
+        withCredentials: false,
         headers: { Authorization: `Bearer ${sessionToken}` },
       })
       .then(function (response) {
@@ -92,7 +92,7 @@ function App() {
     const api = "https://spotless-test-api.discovery.cs.vt.edu/";
     await axios
       .get(api + "user/stats", {
-        withCredentials: true,
+        withCredentials: false,
         headers: { Authorization: `Bearer ${sessionToken}` },
       })
       .then(function (response) {
@@ -191,7 +191,7 @@ function App() {
     const username = sessionStorage.getItem("username");
     axios
       .get(api + "user/image/" + username, {
-        withCredentials: true,
+        withCredentials: false,
         responseType: "blob", // important
         headers: { Authorization: `Bearer ${sessionToken}` },
       })

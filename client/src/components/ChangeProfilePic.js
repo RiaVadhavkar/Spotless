@@ -41,7 +41,7 @@ export default function ChangeProfilePic() {
     console.log(sessionToken);
     await axios
       .post(api + "update/image", form, {
-        withCredentials: true,
+        withCredentials: false,
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
@@ -69,7 +69,7 @@ export default function ChangeProfilePic() {
   //   console.log(sessionToken);
   //   await axios
   //     .post(api + "update/image", form, {
-  //       withCredentials: true,
+  //       withCredentials: false,
   //       headers: {
   //         Authorization: `Bearer ${sessionToken}`,
   //         "Content-Type": "multipart/form-data",

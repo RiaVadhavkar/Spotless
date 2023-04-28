@@ -76,7 +76,7 @@ export default function CollectionModal(props) {
         },
         {
           headers: { Authorization: `Bearer ${sessionToken}` },
-          withCredentials: true,
+          withCredentials: false,
         }
       )
       .then(function (response) {
@@ -124,7 +124,7 @@ export default function CollectionModal(props) {
         },
         {
           headers: { Authorization: `Bearer ${sessionToken}` },
-          withCredentials: true,
+          withCredentials: false,
         }
       )
       .then(function (response) {
@@ -150,7 +150,7 @@ export default function CollectionModal(props) {
         },
         {
           headers: { Authorization: `Bearer ${sessionToken}` },
-          withCredentials: true,
+          withCredentials: false,
         }
       )
       .then(function (response) {
@@ -176,7 +176,7 @@ export default function CollectionModal(props) {
         },
         {
           headers: { Authorization: `Bearer ${sessionToken}` },
-          withCredentials: true,
+          withCredentials: false,
         }
       )
       .then(function (response) {
