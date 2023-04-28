@@ -4,6 +4,7 @@ import { SessionContext } from "../App";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { CgPassword } from "react-icons/cg";
+import { RiErrorWarningFill } from "react-icons/ri";
 
 export default function ChangePassword() {
   const navigate = useNavigate();
@@ -121,10 +122,16 @@ export default function ChangePassword() {
           placeholder="Confirm New Password"
         />
         {error && (
-          <p class="text-red-600 text-xl mb-2">Passwords Do Not Match</p>
+          <p class="text-red-600 text-lg mb-2 flex justify-center items-center">
+            <RiErrorWarningFill className="h-5 w-5" aria-hidden="true" />
+            &nbsp;Passwords Do Not Match
+          </p>
         )}
         {wrongPasswordError && (
-          <p class="text-red-600 text-xl mb-2">Wrong Password</p>
+          <p class="text-red-600 text-lg mb-2 flex justify-center items-center">
+            <RiErrorWarningFill className="h-5 w-5" aria-hidden="true" />
+            &nbsp;Wrong Password
+          </p>
         )}
         <button
           type="submit"
