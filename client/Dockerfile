@@ -18,5 +18,8 @@ COPY tailwind.config.js ./
 # Build the production version of the application
 RUN npm run build
 
+# Expose the port to be used outside the docker container
+EXPOSE 3000
+
 # Set the command to start the application
 CMD ["npm", "start"]
