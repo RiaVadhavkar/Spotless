@@ -25,7 +25,7 @@ export default function ChangePassword() {
   const [wrongPasswordError, setWrongPasswordError] = useState(false);
 
   const [formValues, setFormValues] = useState({
-    olddPassword: "",
+    oldPassword: "",
     password: "",
     confirmedPassword: "",
   });
