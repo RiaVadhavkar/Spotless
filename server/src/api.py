@@ -530,6 +530,7 @@ def get_user_list():
         return Response("Bad Token.", status=403)
     user_id = user.get_id()
     
+    user_collections_list = []
     with mysql.connect() as conn, conn.cursor() as cursor:
         # Get user collections
         query = queries['collections'].get('user_list_query')
