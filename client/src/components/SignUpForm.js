@@ -17,7 +17,7 @@ export default function SignUpForm() {
     });
   };
   const handleSubmit = (event) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     event.preventDefault();
 

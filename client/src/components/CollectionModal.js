@@ -66,7 +66,7 @@ export default function CollectionModal(props) {
 
   const handleDelete = async (event) => {
     event.preventDefault();
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     await axios
       .post(
@@ -112,7 +112,7 @@ export default function CollectionModal(props) {
   }
 
   const updateStatus = () => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     axios
       .post(
@@ -138,7 +138,7 @@ export default function CollectionModal(props) {
   };
 
   const updateRating = () => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     axios
       .post(
@@ -164,7 +164,7 @@ export default function CollectionModal(props) {
   };
 
   const handleReview = () => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     axios
       .post(

@@ -12,11 +12,11 @@ load_dotenv()
 
 # MySQL Configurations
 app.secret_key = os.getenv('app_key')
-app.config['MYSQL_DATABASE_USER'] = os.getenv('Spotless_user')
-app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('Spotless_pass')
-app.config['MYSQL_DATABASE_DB'] = os.getenv('Spotless_DB')
-app.config['MYSQL_DATABASE_HOST'] = os.getenv('Spotless_host')
-app.config['images_dir'] = os.getenv('images_dir')
+app.config['MYSQL_DATABASE_USER'] = os.getenv('SPOTLESS_USER')
+app.config['MYSQL_DATABASE_PASSWORD'] = os.getenv('SPOTLESS_PASS')
+app.config['MYSQL_DATABASE_DB'] = os.getenv('SPOTLESS_DB')
+app.config['MYSQL_DATABASE_HOST'] = os.getenv('SPOTLESS_HOST')
+app.config['images_dir'] = os.getenv('IMAGES_DIR')
 
 login_manager = LoginManager()
 

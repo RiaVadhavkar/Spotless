@@ -56,7 +56,7 @@ function App() {
   }, [sessionToken, sessionUsername, admin]);
 
   async function getAlbums() {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
     await axios
       .get(api + "user/collection", {
         withCredentials: false,
@@ -89,7 +89,7 @@ function App() {
   }
 
   async function getUserStats() {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
     await axios
       .get(api + "user/stats", {
         withCredentials: false,
@@ -187,7 +187,7 @@ function App() {
   };
 
   const getUserProfile = () => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
     const username = sessionStorage.getItem("username");
     axios
       .get(api + "user/image/" + username, {

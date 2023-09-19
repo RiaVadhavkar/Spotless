@@ -39,7 +39,7 @@ export default function ChangePassword() {
   };
 
   const handlePasswordChange = async (event) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
     event.preventDefault();
     if (formValues.password !== formValues.confirmedPassword) {
       setError(true);
@@ -67,7 +67,7 @@ export default function ChangePassword() {
   };
 
   const handleDelete = async (event) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     event.preventDefault();
 

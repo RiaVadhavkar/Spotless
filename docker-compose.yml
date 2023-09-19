@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  client:
+    build: ./client
+    ports:
+     - "3000:3000"
+    networks:
+      - spotless-network  # Connect the client service to the custom network
+
+  api:
+    build: ./server
+    ports:
+      - "5001:5000"
+    networks:
+      - spotless-network  # Connect the api service to the custom network
+    environment:
+      - SPOTLESS_USER=${MYSQL_USER}
+      - SPOTLESS_PASS=${MYSQL_PASSWORD}
+      - SPOTLESS_DB=${MYSQL_PASSWORD}
+      - SPOTLESS_HOST=db # Use the service name of the db container
+      - CLIENT_ID=${CLIENT_ID}
+      - CLIENT_SECRET=${CLIENT_SECRET}
+      - IMAGES_DIR=/var/lib/mysql/db-data
+
+  db:
+    image: mysql:5.7.14
+    platform: linux/x86_64
+    ports:
+      - "3306:3306"
+    expose:
+      - 3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    volumes:
+      - db-data:/var/lib/mysql
+      - ./server/sql-scripts:/docker-entrypoint-initdb.d
+    networks:
+      - spotless-network  # Connect the db service to the custom network
+
+volumes:
+  db-data:
+
+networks:
+  spotless-network:  # Define the custom network

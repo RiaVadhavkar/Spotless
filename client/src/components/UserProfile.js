@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 
 export default function UserProfile() {
-  const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+  const api = "https://api:5001/";
   const {
     sessionUsername,
     sessionToken,

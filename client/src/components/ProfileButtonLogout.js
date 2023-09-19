@@ -10,7 +10,7 @@ export default function ProfileButtonLogout() {
     useContext(SessionContext);
 
   const handleLogout = async (event) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     event.preventDefault();
 

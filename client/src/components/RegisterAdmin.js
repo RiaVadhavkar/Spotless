@@ -58,7 +58,7 @@ export default function RegisterAdmin() {
   }, [adminData]);
 
   async function getAdminStats() {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
     await axios
       .get(api + "admin/stats", {
         withCredentials: false,
@@ -75,7 +75,7 @@ export default function RegisterAdmin() {
   }
 
   const handleSubmit = (event) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     event.preventDefault();
 

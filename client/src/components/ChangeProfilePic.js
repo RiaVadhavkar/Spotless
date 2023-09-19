@@ -8,7 +8,7 @@ import { useDropzone } from "react-dropzone";
 import user_profile from "../assets/users/ashley.jpeg"; //TODO: remove
 
 export default function ChangeProfilePic() {
-  const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+  const api = "https://api:5001/";
   const { sessionUsername, sessionToken, setSessionToken } =
     useContext(SessionContext);
   const user = sessionStorage.getItem("username");
@@ -34,7 +34,7 @@ export default function ChangeProfilePic() {
     const token = sessionStorage.getItem("token");
     console.log(token);
     console.log(acceptedFiles);
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
     const form = new FormData();
     var imageFile = acceptedFiles;
     form.append("image", imageFile[0]);
@@ -62,7 +62,7 @@ export default function ChangeProfilePic() {
 
   // const handlePhoto = async (event) => {
   //   // event.preventDefault();
-  //   const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+  //   const api = "https://api:5001/";
   //   const form = new FormData();
   //   var imageFile = document.querySelector("#file");
   //   form.append("image", imageFile.files[0]);

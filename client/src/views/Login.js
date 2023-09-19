@@ -34,7 +34,7 @@ const Login = () => {
     });
   };
   const handleSubmit = async (event) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "http://api:5000/";
 
     event.preventDefault();
 

@@ -26,7 +26,7 @@ export default function AddCollection() {
   const spotifyURL = useRef("");
 
   const addURLtoList = (URL, e) => {
-    const api = "https://spotless-test-api.discovery.cs.vt.edu/";
+    const api = "https://api:5001/";
 
     console.log(sessionToken);
     console.log(URL);
